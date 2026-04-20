@@ -135,24 +135,17 @@
             gap: 22px;
             font-size: 15px;
             color: var(--muted);
-            flex-wrap: wrap;
         }
 
         .hero {
             padding: 56px 0 28px;
         }
 
-        .hero-grid,
-        .prices-wrap,
-        .contact-grid,
-        .about-wrap {
-            display: grid;
-            gap: 36px;
-        }
-
         .hero-grid {
+            display: grid;
             grid-template-columns: 1.1fr 0.9fr;
             align-items: center;
+            gap: 36px;
         }
 
         .hero-card,
@@ -167,17 +160,8 @@
             box-shadow: var(--shadow);
         }
 
-        .hero-card,
-        .price-card,
-        .form-card,
-        .info-card.large {
-            padding: 40px;
-        }
-
-        .card,
-        .review-card,
-        .info-card {
-            padding: 28px;
+        .hero-card {
+            padding: 52px;
         }
 
         .eyebrow {
@@ -211,10 +195,7 @@
             margin-bottom: 28px;
         }
 
-        .hero-points,
-        .services-grid,
-        .benefits-grid,
-        .reviews-grid {
+        .hero-points {
             display: grid;
             gap: 14px;
         }
@@ -248,6 +229,7 @@
 
         .hero-image {
             position: relative;
+            min-height: 100%;
             overflow: hidden;
             border-radius: 28px;
             background: linear-gradient(180deg, #e9d7cf 0%, #cfae9e 100%);
@@ -276,115 +258,215 @@
             box-shadow: var(--shadow);
         }
 
-        .floating-box strong,
-        .price-card h3,
-        .card h3,
-        .info-card h3,
-        .form-card h3 {
+        .floating-box strong {
             display: block;
-            margin: 0 0 8px;
-            font-size: 22px;
+            margin-bottom: 6px;
+            font-size: 17px;
+        }
+
+        .floating-box p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
         }
 
         .services-grid,
+        .reviews-grid,
         .benefits-grid,
-        .reviews-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            margin-top: 30px;
+        .contact-grid,
+        .gallery-grid {
+            display: grid;
+            gap: 22px;
+        }
+
+        .services-grid {
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 34px;
+        }
+
+        .card {
+            padding: 28px;
         }
 
         .service-icon {
-            font-size: 30px;
-            margin-bottom: 14px;
+            width: 54px;
+            height: 54px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: #f4e7df;
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .card h3,
+        .price-card h3,
+        .review-card h3,
+        .info-card h3,
+        .form-card h3 {
+            margin: 0 0 10px;
+            font-size: 24px;
+        }
+
+        .card p,
+        .price-card p,
+        .review-card p,
+        .info-card p {
+            margin: 0;
+            color: var(--muted);
         }
 
         .prices-wrap {
-            grid-template-columns: 1fr 0.9fr;
-            margin-top: 30px;
-        }
-
-        .price-list,
-        .contact-list {
             display: grid;
-            gap: 16px;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 24px;
+            margin-top: 34px;
         }
 
-        .price-item,
-        .contact-item {
+        .price-card {
+            padding: 30px;
+        }
+
+        .price-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .price-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 18px;
-            padding: 18px 0;
+            gap: 20px;
+            padding: 15px 0;
             border-bottom: 1px solid var(--line);
         }
 
-        .price-item:last-child,
-        .contact-item:last-child {
+        .price-item:last-child {
             border-bottom: none;
+            padding-bottom: 0;
         }
 
         .price-name {
             font-weight: 700;
-            margin-bottom: 4px;
         }
 
         .price-sub {
             color: var(--muted);
             font-size: 14px;
+            margin-top: 4px;
         }
 
         .price-value {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 800;
             white-space: nowrap;
         }
 
+        .benefits-grid {
+            grid-template-columns: repeat(4, 1fr);
+            margin-top: 34px;
+        }
+
+        .info-card {
+            padding: 24px;
+        }
+
         .gallery-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr 0.9fr;
-            gap: 18px;
-            margin-top: 30px;
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 34px;
         }
 
         .gallery-grid img {
-            height: 340px;
+            height: 290px;
             object-fit: cover;
             width: 100%;
         }
 
+        .reviews-grid {
+            grid-template-columns: repeat(3, 1fr);
+            margin-top: 34px;
+        }
+
+        .review-card {
+            padding: 26px;
+        }
+
+        .review-card > div:first-child {
+            font-size: 18px;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            color: var(--accent);
+        }
+
+        .review-card strong {
+            margin-top: 18px;
+            font-weight: 700;
+            display: block;
+        }
+
         .about-wrap {
-            grid-template-columns: 0.88fr 1.12fr;
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 28px;
             align-items: center;
-            margin-top: 30px;
+            margin-top: 34px;
         }
 
         .about-image img {
             width: 100%;
             height: 100%;
-            min-height: 520px;
+            min-height: 500px;
             object-fit: cover;
-            border-radius: 28px;
-            box-shadow: var(--shadow);
+        }
+
+        .about-box {
+            padding: 34px;
         }
 
         .about-list {
             margin: 22px 0 0;
-            padding-left: 18px;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 14px;
         }
 
-        .about-list li + li {
-            margin-top: 10px;
+        .about-list li {
+            padding-left: 28px;
+            position: relative;
+            color: var(--muted);
+        }
+
+        .about-list li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            top: 0;
+            color: var(--accent);
+            font-size: 24px;
+            line-height: 1;
         }
 
         .contact-grid {
-            grid-template-columns: 1fr 0.95fr;
-            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            margin-top: 34px;
             align-items: start;
         }
 
+        .form-card,
+        .info-card.large {
+            padding: 32px;
+        }
+
+        form {
+            display: grid;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
         .map-box {
-            margin-top: 24px;
+            margin-top: 18px;
             overflow: hidden;
             border-radius: 20px;
             border: 1px solid var(--line);
@@ -392,15 +474,14 @@
 
         .map-box iframe {
             width: 100%;
-            height: 280px;
+            height: 260px;
             border: 0;
         }
 
         .form-row {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 14px;
-            margin-bottom: 14px;
         }
 
         input,
@@ -408,76 +489,229 @@
         textarea {
             width: 100%;
             border: 1px solid var(--line);
-            border-radius: 16px;
-            padding: 14px 16px;
-            font-size: 16px;
             background: #fff;
+            border-radius: 16px;
+            padding: 15px 16px;
+            font-size: 15px;
             color: var(--text);
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border: 1px solid var(--line);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(182, 132, 107, 0.12);
         }
 
         textarea {
-            min-height: 140px;
+            min-height: 130px;
             resize: vertical;
-            margin-bottom: 16px;
+        }
+
+        .contact-list {
+            display: grid;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: #fcf8f5;
+        }
+
+        .contact-item strong {
+            display: block;
+            margin-bottom: 6px;
         }
 
         footer {
-            padding: 0 0 40px;
+            padding: 28px 0 50px;
+            color: var(--muted);
+            font-size: 14px;
         }
 
         .footer-box {
             display: flex;
             justify-content: space-between;
             gap: 20px;
-            color: var(--muted);
-            font-size: 14px;
+            align-items: center;
+            padding-top: 26px;
             border-top: 1px solid var(--line);
-            padding-top: 28px;
         }
 
-        @media (max-width: 980px) {
+        @media (max-width: 1080px) {
             .hero-grid,
             .prices-wrap,
-            .contact-grid,
             .about-wrap,
-            .gallery-grid,
-            .hero-points,
-            .services-grid,
-            .benefits-grid,
-            .reviews-grid,
-            .form-row {
+            .contact-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .services-grid,
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-card {
+                padding: 36px;
             }
 
             .hero-image img,
             .about-image img {
                 min-height: 420px;
             }
+        }
+
+        @media (max-width: 760px) {
+            .topbar {
+                position: static;
+            }
 
             .nav {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
+                gap: 14px;
+                padding: 14px 0;
             }
-        }
 
-        @media (max-width: 640px) {
+            .logo {
+                text-align: center;
+                font-size: 24px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px 14px;
+                font-size: 14px;
+            }
+
+            .nav-links a {
+                padding: 8px 10px;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.72);
+                border: 1px solid var(--line);
+            }
+
+            .nav > .btn {
+                width: 100%;
+            }
+
+            .hero {
+                padding: 24px 0 10px;
+            }
+
             .hero-card,
             .price-card,
-            .form-card,
-            .info-card.large,
             .card,
             .review-card,
-            .info-card {
-                padding: 24px;
+            .info-card,
+            .form-card,
+            .info-card.large,
+            .about-box {
+                padding: 22px;
+                border-radius: 20px;
+            }
+
+            .hero-points,
+            .services-grid,
+            .reviews-grid,
+            .benefits-grid,
+            .gallery-grid,
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 34px;
+            }
+
+            .hero-text,
+            .section-text,
+            .card p,
+            .price-card p,
+            .review-card p,
+            .info-card p {
+                font-size: 15px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .hero-actions .btn,
+            .form-card .btn {
+                width: 100%;
+            }
+
+            .hero-image {
+                padding: 14px;
+                border-radius: 22px;
+            }
+
+            .hero-image img,
+            .about-image img {
+                min-height: 280px;
+                border-radius: 16px;
             }
 
             .section {
-                padding: 64px 0;
+                padding: 52px 0;
             }
 
-            .footer-box,
-            .price-item,
+            .section-title {
+                font-size: 30px;
+            }
+
+            .floating-box {
+                position: static;
+                margin-top: 14px;
+                max-width: none;
+            }
+
+            .price-item {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .price-value {
+                font-size: 20px;
+            }
+
+            .gallery-grid img {
+                height: 220px;
+            }
+
+            input,
+            select,
+            textarea {
+                font-size: 16px;
+                padding: 14px 15px;
+            }
+
             .contact-item {
+                padding: 16px;
+            }
+
+            .map-box iframe {
+                height: 220px;
+            }
+
+            .footer-box {
                 flex-direction: column;
                 align-items: flex-start;
             }
@@ -706,7 +940,7 @@
                         <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80" alt="Майстер масажу">
                     </div>
 
-                    <div class="hero-card">
+                    <div class="hero-card about-box">
                         <h3>Турбота, комфорт і індивідуальний підхід</h3>
                         <p class="section-text" style="max-width:none; margin-top:14px;">
                             Я працюю для того, щоб клієнт відчував не лише фізичне полегшення, а й спокій, довіру та
