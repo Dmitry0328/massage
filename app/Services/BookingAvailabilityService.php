@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Appointment;
+use App\Models\BookingSetting;
 use App\Models\Master;
+use App\Models\MassageService;
 use App\Models\ScheduleBlock;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
@@ -14,7 +16,7 @@ class BookingAvailabilityService
     {
         $normalizedDate = Carbon::parse($date, config('app.timezone'))->toDateString();
 
-        return collect(config('booking.slots'))
+        return collect(BookingSetting::current()->slots())
             ->filter(fn (string $slot): bool => $this->isAvailable($master, $normalizedDate, $slot, $serviceKeys))
             ->values()
             ->all();
@@ -57,7 +59,13 @@ class BookingAvailabilityService
         $dateTime = Carbon::parse(sprintf('%s %s', $date, $time), config('app.timezone'));
         $endDateTime = $dateTime->copy()->addMinutes($this->resolveDurationInMinutes($serviceKeys));
 
-        if (! in_array($dateTime->format('H:i'), config('booking.slots'), true)) {
+        $settings = BookingSetting::current();
+
+        if (! in_array($dateTime->format('H:i'), $settings->slots(), true)) {
+            return false;
+        }
+
+        if (! in_array((int) $dateTime->isoWeekday(), $settings->workingDays(), true)) {
             return false;
         }
 
@@ -75,7 +83,6 @@ class BookingAvailabilityService
 
         $appointments = Appointment::query()
             ->activeSlot()
-            ->where('master_id', $master->id)
             ->whereDate('appointment_date', $dateTime->toDateString())
             ->when($ignoreAppointmentId, fn ($query) => $query->whereKeyNot($ignoreAppointmentId))
             ->get();
@@ -108,7 +115,7 @@ class BookingAvailabilityService
             ...$selectedAdditionalServices,
         ])));
 
-        return collect(array_keys(config('booking.services')))
+        return collect(MassageService::activeKeys($master->id))
             ->reject(fn (string $serviceKey): bool => in_array($serviceKey, $currentServices, true))
             ->filter(function (string $candidateService) use ($master, $date, $time, $currentServices, $ignoreAppointmentId): bool {
                 return $this->isAvailable(
@@ -126,8 +133,12 @@ class BookingAvailabilityService
     private function isBlockedBySchedule(Master $master, CarbonInterface $start, CarbonInterface $end): bool
     {
         return ScheduleBlock::query()
-            ->where('master_id', $master->id)
             ->whereDate('block_date', $start->toDateString())
+            ->where(function ($query) use ($master): void {
+                $query
+                    ->whereNull('master_id')
+                    ->orWhere('master_id', $master->id);
+            })
             ->get()
             ->contains(function (ScheduleBlock $block) use ($start, $end): bool {
                 if ($block->is_full_day) {
@@ -139,11 +150,11 @@ class BookingAvailabilityService
                 }
 
                 $blockStart = Carbon::parse(
-                    sprintf('%s %s', $block->block_date->toDateString(), substr($block->start_time, 0, 5)),
+                    sprintf('%s %s', $block->block_date->toDateString(), substr((string) $block->start_time, 0, 5)),
                     config('app.timezone'),
                 );
                 $blockEnd = Carbon::parse(
-                    sprintf('%s %s', $block->block_date->toDateString(), substr($block->end_time, 0, 5)),
+                    sprintf('%s %s', $block->block_date->toDateString(), substr((string) $block->end_time, 0, 5)),
                     config('app.timezone'),
                 );
 
@@ -172,17 +183,15 @@ class BookingAvailabilityService
 
     private function serviceDurationInMinutes(string $serviceKey): int
     {
-        $duration = (string) data_get(config('booking.services'), sprintf('%s.duration', $serviceKey), '');
-        $normalizedDuration = preg_replace('/[^\d]/', '', $duration) ?: '0';
-
-        return max((int) $normalizedDuration, 0);
+        return MassageService::durationFor($serviceKey);
     }
 
     private function dayBoundary(CarbonInterface $dateTime): CarbonInterface
     {
-        $slots = collect(config('booking.slots'))->values();
+        $settings = BookingSetting::current();
+        $slots = collect($settings->slots())->values();
         $lastSlot = (string) $slots->last();
-        $stepInMinutes = 60;
+        $stepInMinutes = max((int) $settings->slot_step_minutes, 1);
 
         if ($slots->count() > 1) {
             $first = Carbon::parse((string) $slots->get(0), config('app.timezone'));

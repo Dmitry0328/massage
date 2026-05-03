@@ -320,10 +320,156 @@
       padding: 30px;
     }
 
+    .price-menu-card {
+      text-align: center;
+    }
+
+    .price-menu-card > h3 {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .price-note {
+      display: inline-block;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fffaf7;
+      padding: 14px 18px;
+      color: var(--text);
+      font-size: 17px;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .price-switch-label {
+      margin: 20px 0 0;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 800;
+      text-align: center;
+    }
+
     .price-list {
       margin-top: 18px;
       display: grid;
       gap: 14px;
+      text-align: left;
+    }
+
+    .price-master-switch {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .price-master-tab {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 16px 18px;
+      text-align: left;
+      cursor: pointer;
+      transform: translateY(0);
+      transition: 0.18s ease;
+      animation: priceTabFloat 3.8s ease-in-out infinite;
+    }
+
+    .price-master-tab:nth-child(2n) {
+      animation-delay: 0.7s;
+    }
+
+    .price-master-tab::after {
+      content: '';
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      width: 13px;
+      height: 13px;
+      border-radius: 999px;
+      background: rgba(47, 149, 173, 0.24);
+      box-shadow: 0 0 0 0 rgba(47, 149, 173, 0.22);
+      animation: priceTapPulse 2.4s ease-out infinite;
+    }
+
+    .price-master-tab:hover {
+      border-color: #2f95ad;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(47, 149, 173, 0.12);
+    }
+
+    .price-master-tab strong,
+    .price-master-tab span {
+      display: block;
+    }
+
+    .price-master-tab strong {
+      font-size: 18px;
+    }
+
+    .price-master-tab span {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .price-master-tab.active {
+      border-color: #2f95ad;
+      background: #2f95ad;
+      color: #fff;
+      box-shadow: 0 18px 36px rgba(47, 149, 173, 0.18);
+    }
+
+    .price-master-tab.active strong {
+      color: #fff;
+    }
+
+    .price-master-tab.active span {
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .price-master-tab.active::after {
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.16);
+    }
+
+    @keyframes priceTabFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    @keyframes priceTapPulse {
+      0% { transform: scale(0.7); box-shadow: 0 0 0 0 rgba(47, 149, 173, 0.22); opacity: 0.8; }
+      70% { transform: scale(1); box-shadow: 0 0 0 13px rgba(47, 149, 173, 0); opacity: 1; }
+      100% { transform: scale(0.7); box-shadow: 0 0 0 0 rgba(47, 149, 173, 0); opacity: 0.8; }
+    }
+
+    .price-master-group {
+      display: grid;
+      gap: 20px;
+    }
+
+    .price-master-group h4 {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      margin: 10px auto 10px;
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      background: rgba(182, 132, 107, 0.12);
+      color: var(--accent-dark);
+      padding: 9px 16px;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .price-empty {
+      margin: 0;
+      color: var(--muted);
     }
 
     .price-item {
@@ -340,8 +486,25 @@
       padding-bottom: 0;
     }
 
+    .price-item-apparatus {
+      align-items: stretch;
+      border: 1px solid rgba(182, 132, 107, 0.28);
+      border-radius: 18px;
+      padding: 18px 18px 24px;
+      margin: 16px 0 6px;
+      background: rgba(182, 132, 107, 0.05);
+    }
+
     .price-name {
       font-weight: 700;
+    }
+
+    .price-apparatus-list {
+      display: grid;
+      gap: 7px;
+      margin: 10px 0 8px;
+      color: var(--text);
+      font-size: 15px;
     }
 
     .price-sub {
@@ -360,6 +523,12 @@
       display: grid;
       justify-items: end;
       gap: 10px;
+    }
+
+    .price-item-apparatus .price-side {
+      align-content: center;
+      min-width: 156px;
+      padding-bottom: 2px;
     }
 
     .price-book-btn {
@@ -555,6 +724,61 @@
       padding-left: 18px;
     }
 
+    .message-popup {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .message-popup-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(30, 24, 20, 0.45);
+    }
+
+    .message-popup-dialog {
+      position: relative;
+      z-index: 1;
+      width: min(420px, 100%);
+      display: grid;
+      gap: 14px;
+      padding: 22px;
+      border-radius: 20px;
+      background: #fffaf6;
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 70px rgba(30, 24, 20, 0.22);
+    }
+
+    .message-popup-dialog strong {
+      font-size: 20px;
+    }
+
+    .message-popup-dialog p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    .message-popup-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .message-popup-actions.has-confirm {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 520px) {
+      .message-popup-actions.has-confirm {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .slot-hint {
       font-size: 13px;
       color: var(--muted);
@@ -677,6 +901,43 @@
       font-size: 14px;
     }
 
+    .apparatus-duration-box {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fffaf7;
+      padding: 14px;
+    }
+
+    .apparatus-duration-options {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .apparatus-duration-option,
+    .apparatus-discuss-btn {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .apparatus-duration-option.active,
+    .apparatus-discuss-btn.active {
+      border-color: #2f95ad;
+      background: #2f95ad;
+      color: #fff;
+    }
+
+    .apparatus-duration-box small {
+      color: var(--muted);
+    }
+
     .additional-service-box {
       margin-top: 14px;
       display: grid;
@@ -692,6 +953,11 @@
       padding: 10px 18px;
       font-size: 14px;
       line-height: 1;
+    }
+
+    .add-service-trigger.is-unavailable {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
 
     .selected-services-list,
@@ -801,6 +1067,14 @@
       margin-top: 14px;
     }
 
+    .month-picker.is-nav-hidden {
+      justify-content: center;
+    }
+
+    .date-slider.is-nav-hidden {
+      grid-template-columns: 1fr;
+    }
+
     .days-grid {
       display: grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -900,6 +1174,11 @@
       color: var(--muted);
     }
 
+    .booking-summary p,
+    #summary-duration {
+      white-space: pre-line;
+    }
+
     .booking-summary strong {
       font-size: 20px;
     }
@@ -920,6 +1199,10 @@
       padding: 28px 0 50px;
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .mobile-booking-cta {
+      display: none;
     }
 
     .footer-box {
@@ -964,7 +1247,8 @@
 
     @media (max-width: 760px) {
       .topbar {
-        position: static;
+        position: sticky;
+        top: 0;
       }
 
       .nav {
@@ -995,7 +1279,7 @@
       }
 
       .nav > .btn {
-        width: 100%;
+        display: none;
       }
 
       .hero {
@@ -1049,6 +1333,14 @@
       .hero-actions .btn,
       .form-card .btn {
         width: 100%;
+      }
+
+      .hero-actions .btn {
+        justify-content: center;
+      }
+
+      .form-card {
+        scroll-margin-top: 18px;
       }
 
       .hero-image {
@@ -1117,6 +1409,27 @@
       .footer-box {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .mobile-booking-cta {
+        position: fixed;
+        left: 14px;
+        right: 14px;
+        bottom: calc(14px + env(safe-area-inset-bottom));
+        z-index: 80;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        border-radius: 999px;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 800;
+        box-shadow: 0 18px 44px rgba(140, 88, 62, 0.28);
+      }
+
+      footer {
+        padding-bottom: 92px;
       }
     }
   </style>
@@ -1219,54 +1532,62 @@
         </p>
 
         <div class="prices-wrap">
-          <div class="price-card">
-            <h3>Прайс</h3>
-            <p>Прозора вартість без прихованих доплат.</p>
+          <div class="price-card price-menu-card">
+            <h3>Прайс за послуги майстрів</h3>
+            <p class="price-note">У кожного майстра можуть бути свої послуги, тривалість і ціни.</p>
+
+            <div class="price-switch-label">Обери майстра та оглянь його прайс:</div>
+
+            <div class="price-master-switch" id="price-master-switch">
+              @foreach ($masters as $master)
+                <button
+                  type="button"
+                  class="price-master-tab {{ $loop->first ? 'active' : '' }}"
+                  data-price-master="{{ $master->id }}"
+                >
+                  <strong>{{ $master->name }}</strong>
+                  <span>{{ $master->phone ?: 'Онлайн запис' }}</span>
+                </button>
+              @endforeach
+            </div>
 
             <div class="price-list">
-              <div class="price-item">
-                <div>
-                  <div class="price-name">Класичний масаж</div>
-                  <div class="price-sub">60 хвилин</div>
-                </div>
-                <div class="price-side">
-                  <div class="price-value">500 грн</div>
-                  <a class="btn btn-primary price-book-btn" href="#booking" data-service-target="classic">Записатися</a>
-                </div>
-              </div>
+              @foreach ($masters as $master)
+                <div class="price-master-group" data-price-master-group="{{ $master->id }}" {{ $loop->first ? '' : 'hidden' }}>
+                  @php
+                    $priceOwnerName = match ($master->name) {
+                        'Олеся' => 'Олесі',
+                        'Сергій' => 'Сергія',
+                        default => $master->name,
+                    };
+                  @endphp
+                  <h4>Прайс {{ $priceOwnerName }}:</h4>
 
-              <div class="price-item">
-                <div>
-                  <div class="price-name">Класичний масаж + УЗД</div>
-                  <div class="price-sub">60 хвилин</div>
+                  @forelse (($priceServicesByMaster[(string) $master->id] ?? collect()) as $service)
+                    <div class="price-item {{ ! empty($service['is_apparatus_group']) ? 'price-item-apparatus' : '' }}">
+                      <div>
+                        <div class="price-name">{{ $service['display_label'] ?? $service['label'] }}</div>
+                        @if (! empty($service['is_apparatus_group']) && ! empty($service['apparatus_items']))
+                          <div class="price-apparatus-list">
+                            @foreach ($service['apparatus_items'] as $apparatusItem)
+                              <span>{{ $apparatusItem }}</span>
+                            @endforeach
+                          </div>
+                        @endif
+                        @if (! empty($service['duration_label']))
+                          <div class="price-sub">{{ $service['duration_label'] }}</div>
+                        @endif
+                      </div>
+                      <div class="price-side">
+                        <div class="price-value">{{ $service['price_label'] }}</div>
+                        <a class="btn btn-primary price-book-btn" href="#booking" data-master-target="{{ $master->id }}" data-service-target="{{ $service['key'] }}" @if($service['is_apparatus']) data-apparatus-target="{{ $service['apparatus_base'] }}" @endif>Записатися</a>
+                      </div>
+                    </div>
+                  @empty
+                    <p class="price-empty">Послуги для цього майстра ще не додані.</p>
+                  @endforelse
                 </div>
-                <div class="price-side">
-                  <div class="price-value">600 грн</div>
-                  <a class="btn btn-primary price-book-btn" href="#booking" data-service-target="classic_usd">Записатися</a>
-                </div>
-              </div>
-
-              <div class="price-item">
-                <div>
-                  <div class="price-name">Апаратний масаж</div>
-                  <div class="price-sub">60 хвилин</div>
-                </div>
-                <div class="price-side">
-                  <div class="price-value">600 грн</div>
-                  <a class="btn btn-primary price-book-btn" href="#booking" data-service-target="hardware">Записатися</a>
-                </div>
-              </div>
-
-              <div class="price-item">
-                <div>
-                  <div class="price-name">Апаратний масаж + УЗД</div>
-                  <div class="price-sub">60 хвилин</div>
-                </div>
-                <div class="price-side">
-                  <div class="price-value">800 грн</div>
-                  <a class="btn btn-primary price-book-btn" href="#booking" data-service-target="hardware_usd">Записатися</a>
-                </div>
-              </div>
+              @endforeach
             </div>
           </div>
 
@@ -1401,7 +1722,7 @@
               </div>
               <div class="contact-item">
                 <strong>Графік</strong>
-                <span>Пн–Сб: 10:00 – 19:00</span>
+                <span>{{ $bookingConfig['scheduleLabel'] }}</span>
               </div>
             </div>
 
@@ -1412,21 +1733,7 @@
 
           <div class="form-card" id="booking">
             <h3>Записатися на прийом</h3>
-            <p>Оберіть послугу, майстра, день і час у форматі, схожому на Booksy. Після цього залиште контакти для підтвердження.</p>
-
-            @if (session('booking_success'))
-              <div class="notice">{{ session('booking_success') }}</div>
-            @endif
-
-            @if ($errors->any())
-              <div class="error-list">
-                <ul>
-                  @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                  @endforeach
-                </ul>
-              </div>
-            @endif
+            <p>Оберіть майстра, послугу, день і час для запису на прийом. Після цього залиште контакти для підтвердження прийому.</p>
 
             <form id="bookingForm" method="POST" action="{{ route('booking.store') }}">
               @csrf
@@ -1435,35 +1742,11 @@
               <input type="hidden" name="master_id" id="master_id" value="{{ old('master_id') }}">
               <input type="hidden" name="appointment_date" id="appointment_date" value="{{ old('appointment_date') }}">
               <input type="hidden" name="appointment_time" id="appointment_time" value="{{ old('appointment_time') }}">
+              <input type="hidden" name="apparatus_discuss" id="apparatus_discuss" value="{{ old('apparatus_discuss') }}">
 
               <div class="booking-flow">
                 <div class="booking-block">
-                  <h4>1. Оберіть послугу</h4>
-                  <div class="services-picker" id="services-picker">
-                    @foreach ($services as $service)
-                      <button
-                        type="button"
-                        class="service-option {{ old('service') === $service['key'] ? 'active' : '' }}"
-                        data-service-key="{{ $service['key'] }}"
-                        data-service-label="{{ $service['label'] }}"
-                        data-service-price="{{ $service['price'] }}"
-                        data-service-duration="{{ $service['duration'] }}"
-                      >
-                        <strong>{{ $service['label'] }}</strong>
-                        <div class="service-meta">
-                          <span>{{ number_format($service['price'], 0, ',', ' ') }} грн</span>
-                          <span>{{ $service['duration'] }}</span>
-                          <span class="service-badge">{{ $service['badge'] }}</span>
-                        </div>
-                        <p>{{ $service['description'] }}</p>
-                      </button>
-                    @endforeach
-                  </div>
-
-                </div>
-
-                <div class="booking-block">
-                  <h4>2. Оберіть майстра</h4>
+                  <h4>1. Оберіть майстра</h4>
                   <div class="masters-picker" id="masters-picker">
                     @foreach ($masters as $master)
                       <button
@@ -1482,7 +1765,44 @@
                   </div>
                 </div>
 
-                <div class="booking-block">
+                <div class="booking-block" id="services-block" {{ old('master_id') ? '' : 'hidden' }}>
+                  <h4>2. Оберіть послугу</h4>
+                  <div class="services-picker" id="services-picker">
+                    @foreach ($serviceCards as $service)
+                      <button
+                        type="button"
+                        class="service-option {{ old('service') === $service['key'] ? 'active' : '' }}"
+                        data-master-id="{{ $service['master_id'] }}"
+                        data-service-key="{{ $service['key'] }}"
+                        data-service-kind="{{ $service['is_apparatus'] ? 'apparatus' : 'regular' }}"
+                        data-apparatus-base="{{ $service['apparatus_base'] }}"
+                        data-apparatus-variants='@json($service['variants'])'
+                        data-service-label="{{ $service['label'] }}"
+                        data-service-price="{{ $service['price'] }}"
+                        data-service-duration="{{ $service['duration'] }}"
+                      >
+                        <strong>{{ $service['display_label'] ?? $service['label'] }}</strong>
+                        <div class="service-meta">
+                          <span>{{ $service['is_apparatus'] ? '1 хв - ' . $service['price'] . ' грн' : number_format($service['price'], 0, ',', ' ') . ' грн' }}</span>
+                          <span>{{ $service['duration'] }}</span>
+                          @if (! empty($service['badge']))
+                            <span class="service-badge">{{ $service['badge'] }}</span>
+                          @endif
+                        </div>
+                        <p>{{ $service['description'] }}</p>
+                      </button>
+                    @endforeach
+                  </div>
+                  <div class="empty-state" id="services-empty" hidden>Для цього майстра послуги ще не додані.</div>
+                  <div class="apparatus-duration-box" id="apparatus-duration-box" hidden>
+                    <strong id="apparatus-duration-title">Оберіть тривалість апаратного масажу</strong>
+                    <div class="apparatus-duration-options" id="apparatus-duration-options"></div>
+                    <button type="button" class="apparatus-discuss-btn" id="apparatus-discuss-btn">Обговорити час з майстром на прийомі</button>
+                    <small>Якщо обрати “обговорити час”, вікно буде заброньовано на 60 хв.</small>
+                  </div>
+                </div>
+
+                <div class="booking-block" id="date-time-block" {{ old('master_id') && old('service') ? '' : 'hidden' }}>
                   <div class="booking-block-header">
                     <h4 style="margin: 0;">3. Оберіть дату та час</h4>
                     <small id="calendar-range-label"></small>
@@ -1500,12 +1820,12 @@
                     <button type="button" class="calendar-nav" id="days-next" aria-label="Наступні дні">›</button>
                   </div>
 
-                  <div class="slot-hint" id="slot-hint" style="margin-top: 14px;">Оберіть майстра вище, щоб побачити доступний час.</div>
+                  <div class="slot-hint" id="slot-hint" style="margin-top: 14px;">Оберіть майстра, а потім послугу, щоб побачити доступний час.</div>
 
                   <div class="time-grid is-disabled" id="time-grid"></div>
                 </div>
 
-                <div class="booking-block" id="additional-services-block">
+                <div class="booking-block" id="additional-services-block" {{ old('master_id') && old('service') ? '' : 'hidden' }}>
                   <div class="booking-block-header">
                     <h4 style="margin: 0;">4. Додаткові послуги</h4>
                     <button type="button" class="btn btn-secondary add-service-trigger" id="add-service-trigger">+ Додати ще послугу</button>
@@ -1545,7 +1865,7 @@
 
                   <div class="booking-total">
                     <small id="summary-duration">Тривалість буде показана після вибору послуги</small>
-                    <small>Онлайн бронювання</small>
+                    <small></small>
                   </div>
                 </div>
 
@@ -1553,13 +1873,13 @@
                   <h4>5. Контактні дані</h4>
                   <div class="contact-fields">
                     <div class="form-row">
-                      <input type="text" name="client_name" placeholder="Ваше ім’я" value="{{ old('client_name') }}" required />
-                      <input type="tel" name="phone" placeholder="Номер телефону" value="{{ old('phone') }}" required />
+                      <input type="text" name="client_name" placeholder="Ваше ім’я" value="{{ old('client_name') }}" autocomplete="name" minlength="2" maxlength="80" required />
+                      <input type="tel" name="phone" placeholder="+380XXXXXXXXX" value="{{ old('phone', '+380') }}" autocomplete="tel" inputmode="tel" maxlength="13" required />
                     </div>
 
                     <div class="form-row">
                       <input type="text" name="social_contact" placeholder="Instagram або Telegram (необов’язково)" value="{{ old('social_contact') }}" />
-                      <input type="text" value="Пн-Сб: 10:00 - 19:00" disabled />
+                      <input type="text" value="{{ $bookingConfig['scheduleLabel'] }}" disabled />
                     </div>
 
                     <textarea name="message" placeholder="Коментар до запису">{{ old('message') }}</textarea>
@@ -1568,11 +1888,25 @@
                 </div>
               </div>
             </form>
+
+            <div class="message-popup" id="booking-message-popup" hidden role="dialog" aria-modal="true" aria-labelledby="booking-message-title">
+              <div class="message-popup-backdrop" data-popup-close></div>
+              <div class="message-popup-dialog">
+                <strong id="booking-message-title">Повідомлення</strong>
+                <p id="booking-message-text"></p>
+                <div class="message-popup-actions" id="booking-message-actions">
+                  <button type="button" class="btn btn-secondary" id="booking-message-confirm" hidden>Все вірно, записатись</button>
+                  <button type="button" class="btn btn-primary" id="booking-message-close">Зрозуміло</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </main>
+
+  <a class="mobile-booking-cta" href="#booking">Записатися онлайн</a>
 
   <footer>
     <div class="container footer-box">
@@ -1600,7 +1934,9 @@
     const masterInput = document.getElementById('master_id');
     const dateInput = document.getElementById('appointment_date');
     const timeInput = document.getElementById('appointment_time');
+    const apparatusDiscussInput = document.getElementById('apparatus_discuss');
     const slotHint = document.getElementById('slot-hint');
+    const servicesBlock = document.getElementById('services-block');
     const serviceCards = document.querySelectorAll('.service-option');
     const masterCards = document.querySelectorAll('.master-option');
     const dayGrid = document.getElementById('days-grid');
@@ -1611,6 +1947,8 @@
     const monthLabel = document.getElementById('month-label');
     const timeGrid = document.getElementById('time-grid');
     const rangeLabel = document.getElementById('calendar-range-label');
+    const monthPicker = monthPrev.closest('.month-picker');
+    const dateSlider = daysPrev.closest('.date-slider');
     const summaryService = document.getElementById('summary-service');
     const summaryAdditional = document.getElementById('summary-additional');
     const summaryMaster = document.getElementById('summary-master');
@@ -1622,6 +1960,7 @@
 
     const makeDate = (value) => new Date(`${value}T00:00:00`);
     const formatMonthKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    const formatDateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     const minDate = makeDate(bookingConfig.minDate);
     const maxDate = makeDate(bookingConfig.maxDate);
     const monthKeys = [];
@@ -1633,7 +1972,7 @@
       cursor.setMonth(cursor.getMonth() + 1);
     }
 
-    const initialDate = oldValues.appointment_date || bookingConfig.minDate;
+    const initialDate = oldValues.service ? (oldValues.appointment_date || bookingConfig.minDate) : '';
     const initialMonthKey = monthKeys.includes(formatMonthKey(makeDate(initialDate)))
       ? formatMonthKey(makeDate(initialDate))
       : monthKeys[0];
@@ -1673,7 +2012,7 @@
 
       while (current.getMonth() === month) {
         items.push({
-          iso: current.toISOString().slice(0, 10),
+          iso: formatDateKey(current),
           dayName: new Intl.DateTimeFormat('uk-UA', { weekday: 'short' }).format(current),
           dayNumber: new Intl.DateTimeFormat('uk-UA', { day: 'numeric' }).format(current),
           monthName: new Intl.DateTimeFormat('uk-UA', { month: 'short' }).format(current),
@@ -1721,7 +2060,23 @@
       });
     };
 
+    const renderServicesBlockVisibility = () => {
+      servicesBlock.hidden = !state.masterId;
+    };
+
     const renderDays = () => {
+      setCalendarNavVisible(Boolean(state.service && state.masterId));
+
+      if (!state.service || !state.masterId) {
+        dayGrid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">${state.masterId ? 'Оберіть послугу, щоб побачити дату та час.' : 'Оберіть майстра.'}</div>`;
+        daysPrev.disabled = true;
+        daysNext.disabled = true;
+        monthPrev.disabled = true;
+        monthNext.disabled = true;
+        slotHint.textContent = state.masterId ? 'Після вибору послуги відкриються доступні дати та час.' : 'Спочатку оберіть майстра.';
+        return;
+      }
+
       const allDays = getMonthDays(state.monthKey);
       const start = state.dayPage * pageSizeDays;
       const visibleDays = allDays.slice(start, start + pageSizeDays);
@@ -1730,6 +2085,16 @@
       dayGrid.innerHTML = '';
       monthLabel.textContent = new Intl.DateTimeFormat('uk-UA', { month: 'long', year: 'numeric' }).format(monthDate);
       rangeLabel.textContent = `Доступно до ${bookingConfig.maxDate}`;
+
+      if (!state.service) {
+        dayGrid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">Спочатку оберіть послугу, щоб побачити правильні дати.</div>';
+        daysPrev.disabled = true;
+        daysNext.disabled = true;
+        monthPrev.disabled = true;
+        monthNext.disabled = true;
+        slotHint.textContent = 'Дати та час відкриються після вибору послуги.';
+        return;
+      }
 
       visibleDays.forEach((day) => {
         const dayMeta = state.availableDays[day.iso];
@@ -1750,6 +2115,7 @@
             return;
           }
 
+          clearBookingError();
           state.date = day.iso;
           dateInput.value = day.iso;
           state.time = '';
@@ -1768,8 +2134,24 @@
     };
 
     const renderTimes = () => {
+      if (!state.service || !state.masterId) {
+        timeGrid.classList.add('is-disabled');
+        timeGrid.innerHTML = '';
+        slotHint.textContent = state.masterId ? 'Після вибору послуги відкриється доступний час.' : 'Спочатку оберіть майстра.';
+        renderAdditionalServices();
+        return;
+      }
+
       timeGrid.innerHTML = '';
       const consumedSlots = getConsumedSlots();
+
+      if (!state.service) {
+        timeGrid.classList.add('is-disabled');
+        timeGrid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">Спочатку оберіть послугу.</div>';
+        slotHint.textContent = 'Дати та час відкриються після вибору послуги.';
+        renderAdditionalServices();
+        return;
+      }
 
       if (!state.masterId) {
         timeGrid.classList.add('is-disabled');
@@ -1839,7 +2221,7 @@
     const loadMonthAvailability = async () => {
       state.availableDays = {};
 
-      if (!state.masterId) {
+      if (!state.service || !state.masterId) {
         renderDays();
         renderTimes();
         updateSummary();
@@ -1883,7 +2265,7 @@
     };
 
     const loadAvailability = async () => {
-      if (!state.masterId || !state.date) {
+      if (!state.service || !state.masterId || !state.date) {
         state.availableSlots = [];
         state.time = '';
         timeInput.value = '';
@@ -1966,6 +2348,12 @@
       });
     });
 
+    priceMasterTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        renderPriceMasterGroups(tab.dataset.priceMaster || '');
+      });
+    });
+
     document.querySelectorAll('[data-service-target]').forEach((button) => {
       button.addEventListener('click', () => {
         const service = button.getAttribute('data-service-target');
@@ -2022,7 +2410,19 @@
 
     if (state.service) {
       serviceInput.value = state.service;
-      setActiveCard(serviceCards, (element) => element.dataset.serviceKey === state.service);
+      const initialService = servicesByKey[state.service];
+
+      if (initialService?.apparatus_base) {
+        const apparatusCard = [...serviceCards].find((element) => (
+          element.dataset.masterId === state.masterId && element.dataset.apparatusBase === initialService.apparatus_base
+        ));
+        state.apparatusBase = initialService.apparatus_base;
+        state.apparatusVariants = apparatusCard ? JSON.parse(apparatusCard.dataset.apparatusVariants || '[]') : [];
+        state.apparatusDiscuss = apparatusDiscussInput.value === '1';
+        setActiveCard(serviceCards, (element) => element === apparatusCard);
+      } else {
+        setActiveCard(serviceCards, (element) => element.dataset.serviceKey === state.service);
+      }
     }
 
     state.additionalService = state.additionalService || '';
@@ -2060,14 +2460,36 @@
       appointment_date: @json(old('appointment_date')),
       appointment_time: @json(old('appointment_time')),
     };
+    const serverMessages = {
+      success: @json(session('booking_success')),
+      errors: @json($errors->all()),
+    };
 
+    const bookingForm = document.getElementById('bookingForm');
+    const bookingMessagePopup = document.getElementById('booking-message-popup');
+    const bookingMessageTitle = document.getElementById('booking-message-title');
+    const bookingMessageText = document.getElementById('booking-message-text');
+    const bookingMessageClose = document.getElementById('booking-message-close');
+    const bookingMessageConfirm = document.getElementById('booking-message-confirm');
+    const bookingMessageActions = document.getElementById('booking-message-actions');
     const serviceInput = document.getElementById('service_input');
     const masterInput = document.getElementById('master_id');
     const dateInput = document.getElementById('appointment_date');
     const timeInput = document.getElementById('appointment_time');
+    const apparatusDiscussInput = document.getElementById('apparatus_discuss');
     const slotHint = document.getElementById('slot-hint');
+    const servicesBlock = document.getElementById('services-block');
+    const dateTimeBlock = document.getElementById('date-time-block');
+    const additionalServicesBlock = document.getElementById('additional-services-block');
+    const servicesEmpty = document.getElementById('services-empty');
+    const apparatusDurationBox = document.getElementById('apparatus-duration-box');
+    const apparatusDurationTitle = document.getElementById('apparatus-duration-title');
+    const apparatusDurationOptions = document.getElementById('apparatus-duration-options');
+    const apparatusDiscussBtn = document.getElementById('apparatus-discuss-btn');
     const serviceCards = document.querySelectorAll('.service-option');
     const masterCards = document.querySelectorAll('.master-option');
+    const priceMasterTabs = document.querySelectorAll('.price-master-tab');
+    const priceMasterGroups = document.querySelectorAll('[data-price-master-group]');
     const dayGrid = document.getElementById('days-grid');
     const daysPrev = document.getElementById('days-prev');
     const daysNext = document.getElementById('days-next');
@@ -2076,6 +2498,8 @@
     const monthLabel = document.getElementById('month-label');
     const timeGrid = document.getElementById('time-grid');
     const rangeLabel = document.getElementById('calendar-range-label');
+    const monthPicker = monthPrev.closest('.month-picker');
+    const dateSlider = daysPrev.closest('.date-slider');
     const summaryService = document.getElementById('summary-service');
     const summaryAdditional = document.getElementById('summary-additional');
     const summaryMaster = document.getElementById('summary-master');
@@ -2090,12 +2514,20 @@
     const availableServicesLabel = document.getElementById('available-services-label');
     const additionalServicesPicker = document.getElementById('additional-services-picker');
     const additionalPickerList = document.getElementById('additional-picker-list');
+    const clientNameInput = bookingForm.elements.client_name;
+    const phoneInput = bookingForm.elements.phone;
+    let isBookingConfirmed = false;
 
     const servicesByKey = Object.fromEntries(services.map((service) => [service.key, service]));
     const mastersById = Object.fromEntries(masters.map((master) => [String(master.id), master]));
 
+    summaryDatetime.previousElementSibling.textContent = 'Дата і час процедури (ви маєте прийти на прийом до майстра)';
+    summaryAdditional.previousElementSibling.textContent = 'Додаткові послуги (якщо обирали)';
+    summaryDuration.nextElementSibling.textContent = '';
+
     const makeDate = (value) => new Date(`${value}T00:00:00`);
     const formatMonthKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    const formatDateKey = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     const minDate = makeDate(bookingConfig.minDate);
     const maxDate = makeDate(bookingConfig.maxDate);
     const monthKeys = [];
@@ -2117,7 +2549,7 @@
       )];
     };
 
-    const initialDate = oldValues.appointment_date || bookingConfig.minDate;
+    const initialDate = oldValues.service ? (oldValues.appointment_date || bookingConfig.minDate) : '';
     const initialMonthKey = monthKeys.includes(formatMonthKey(makeDate(initialDate)))
       ? formatMonthKey(makeDate(initialDate))
       : monthKeys[0];
@@ -2132,8 +2564,12 @@
       dayPage: 0,
       availableSlots: [],
       availableAdditionalServiceKeys: [],
+      hasLoadedAdditionalAvailability: false,
       availableDays: {},
       isAdditionalPickerOpen: false,
+      apparatusBase: '',
+      apparatusVariants: [],
+      apparatusDiscuss: false,
     };
 
     const pageSizeDays = 7;
@@ -2151,6 +2587,54 @@
     const getDurationMinutes = (service) => {
       const numericValue = Number.parseInt(String(service?.duration || '').replace(/[^\d]/g, ''), 10);
       return Number.isFinite(numericValue) ? numericValue : 0;
+    };
+
+    const formatServiceSummaryName = (service) => {
+      if (!service) {
+        return 'Послугу ще не обрано';
+      }
+
+      if (state.apparatusDiscuss && service.apparatus_base) {
+        return `${service.apparatus_base} (обговорити час з майстром, бронь 60 хв)`;
+      }
+
+      return service.badge ? `${service.label} (${service.badge} знижка)` : service.label;
+    };
+
+    const formatDurationValue = (minutes) => {
+      if (!minutes) {
+        return '0 хв';
+      }
+
+      const hours = Math.floor(minutes / 60);
+      const restMinutes = minutes % 60;
+      const parts = [];
+
+      if (hours) {
+        const hourWord = hours === 1 ? 'година' : (hours >= 2 && hours <= 4 ? 'години' : 'годин');
+        parts.push(`${hours} ${hourWord}`);
+      }
+
+      if (restMinutes) {
+        parts.push(`${restMinutes} хв`);
+      }
+
+      return parts.join(' ');
+    };
+
+    const addMinutesToTime = (time, minutes) => {
+      if (!time) {
+        return '';
+      }
+
+      const [hours, mins] = time.split(':').map(Number);
+      const date = new Date(2000, 0, 1, hours, mins + minutes);
+
+      return date.toLocaleTimeString('uk-UA', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
     };
 
     const formatTotalDuration = (minutes) => {
@@ -2175,7 +2659,7 @@
 
       while (current.getMonth() === month) {
         items.push({
-          iso: current.toISOString().slice(0, 10),
+          iso: formatDateKey(current),
           dayName: new Intl.DateTimeFormat('uk-UA', { weekday: 'short' }).format(current),
           dayNumber: new Intl.DateTimeFormat('uk-UA', { day: 'numeric' }).format(current),
           monthName: new Intl.DateTimeFormat('uk-UA', { month: 'short' }).format(current),
@@ -2186,11 +2670,138 @@
       return items;
     };
 
+    const setCalendarNavVisible = (isVisible) => {
+      [daysPrev, daysNext, monthPrev, monthNext].forEach((button) => {
+        button.hidden = !isVisible;
+      });
+
+      monthPicker.classList.toggle('is-nav-hidden', !isVisible);
+      dateSlider.classList.toggle('is-nav-hidden', !isVisible);
+    };
+
     const setActiveCard = (collection, predicate) => {
       collection.forEach((element) => {
         element.classList.toggle('active', predicate(element));
       });
     };
+
+    const renderPriceMasterGroups = (masterId) => {
+      const selectedMasterId = masterId || priceMasterTabs[0]?.dataset.priceMaster || '';
+
+      priceMasterTabs.forEach((tab) => {
+        tab.classList.toggle('active', tab.dataset.priceMaster === selectedMasterId);
+      });
+
+      priceMasterGroups.forEach((group) => {
+        const isVisible = group.dataset.priceMasterGroup === selectedMasterId;
+        group.hidden = !isVisible;
+        group.style.display = isVisible ? '' : 'none';
+      });
+    };
+
+    const setBlockVisible = (element, isVisible) => {
+      if (!element) {
+        return;
+      }
+
+      element.hidden = !isVisible;
+      element.style.display = isVisible ? '' : 'none';
+    };
+
+    const renderBookingStepVisibility = () => {
+      const hasMaster = Boolean(state.masterId);
+      const hasMasterAndService = Boolean(state.masterId && state.service);
+
+      setBlockVisible(servicesBlock, hasMaster);
+      setBlockVisible(dateTimeBlock, hasMasterAndService);
+      setBlockVisible(additionalServicesBlock, hasMasterAndService);
+    };
+
+    const renderServicesForMaster = () => {
+      let visibleCount = 0;
+
+      serviceCards.forEach((card) => {
+        const isVisible = Boolean(state.masterId && String(card.dataset.masterId) === String(state.masterId));
+
+        card.hidden = !isVisible;
+        card.style.display = isVisible ? '' : 'none';
+        card.disabled = !isVisible;
+
+        if (isVisible) {
+          visibleCount++;
+        }
+      });
+
+      servicesEmpty.hidden = !state.masterId || visibleCount > 0;
+    };
+
+    const renderApparatusDurationPicker = () => {
+      const shouldShow = Boolean(state.masterId && state.apparatusBase && state.apparatusVariants.length);
+
+      apparatusDurationBox.hidden = !shouldShow;
+      apparatusDurationBox.style.display = shouldShow ? 'grid' : 'none';
+      apparatusDurationOptions.innerHTML = '';
+
+      if (!shouldShow) {
+        return;
+      }
+
+      apparatusDurationTitle.textContent = `${state.apparatusBase}: оберіть час процедури`;
+
+      state.apparatusVariants.forEach((variant) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `apparatus-duration-option${state.service === variant.key && !state.apparatusDiscuss ? ' active' : ''}`;
+        button.textContent = `${variant.duration_minutes} хв - ${formatPrice(variant.price)}`;
+        button.addEventListener('click', () => {
+          selectApparatusVariant(variant, false);
+        });
+        apparatusDurationOptions.appendChild(button);
+      });
+
+      apparatusDiscussBtn.classList.toggle('active', Boolean(state.apparatusDiscuss));
+    };
+
+    const resetApparatusSelection = () => {
+      state.apparatusBase = '';
+      state.apparatusVariants = [];
+      state.apparatusDiscuss = false;
+      apparatusDiscussInput.value = '';
+      renderApparatusDurationPicker();
+    };
+
+    const resetSelectedDateTime = () => {
+      state.date = '';
+      dateInput.value = '';
+      state.time = '';
+      timeInput.value = '';
+      resetAdditionalServices();
+    };
+
+    const selectServiceKey = (serviceKey) => {
+      const serviceChanged = state.service !== serviceKey;
+      state.service = serviceKey;
+      serviceInput.value = serviceKey;
+      state.additionalServices = normalizeAdditionalServices(state.additionalServices, state.service);
+
+      if (serviceChanged) {
+        resetSelectedDateTime();
+      }
+
+      syncAdditionalServiceInputs();
+    };
+
+    function selectApparatusVariant(variant, discuss) {
+      selectServiceKey(variant.key);
+      state.apparatusDiscuss = discuss;
+      apparatusDiscussInput.value = discuss ? '1' : '';
+      setActiveCard(serviceCards, (element) => element.dataset.apparatusBase === state.apparatusBase);
+      renderApparatusDurationPicker();
+      renderBookingStepVisibility();
+      renderAdditionalServices();
+      updateSummary();
+      loadMonthAvailability();
+    }
 
     const syncAdditionalServiceInputs = () => {
       additionalServicesInputs.innerHTML = '';
@@ -2205,26 +2816,28 @@
     };
 
     const getAvailableAdditionalServices = () => {
-      const allowedKeys = state.time
-        ? (state.availableAdditionalServiceKeys.length
-          ? state.availableAdditionalServiceKeys
-          : services
-            .map((service) => service.key)
-            .filter((serviceKey) => serviceKey !== state.service && !state.additionalServices.includes(serviceKey)))
-        : services
-          .map((service) => service.key)
-          .filter((serviceKey) => serviceKey !== state.service && !state.additionalServices.includes(serviceKey));
+      const remainingKeys = services
+        .filter((service) => String(service.master_id) === state.masterId)
+        .map((service) => service.key)
+        .filter((serviceKey) => serviceKey !== state.service && !state.additionalServices.includes(serviceKey));
 
-      return services.filter((service) => allowedKeys.includes(service.key));
+      if (state.time && state.service && state.hasLoadedAdditionalAvailability) {
+        return services.filter((service) => (
+          remainingKeys.includes(service.key) && state.availableAdditionalServiceKeys.includes(service.key)
+        ));
+      }
+
+      return services.filter((service) => remainingKeys.includes(service.key));
     };
 
     const getRemainingAdditionalServices = () => services.filter((service) => (
-      service.key !== state.service && !state.additionalServices.includes(service.key)
+      String(service.master_id) === state.masterId && service.key !== state.service && !state.additionalServices.includes(service.key)
     ));
 
     const resetAdditionalServices = () => {
       state.additionalServices = [];
       state.availableAdditionalServiceKeys = [];
+      state.hasLoadedAdditionalAvailability = false;
       state.isAdditionalPickerOpen = false;
       syncAdditionalServiceInputs();
     };
@@ -2237,6 +2850,91 @@
       state.additionalServices.forEach((serviceKey) => {
         params.append('additional_services[]', serviceKey);
       });
+    };
+
+    const normalizePhone = (value) => value.replace(/[\s\-()]/g, '');
+    const validNamePattern = /^[А-Яа-яЁёІіЇїЄєҐґ'’ʼ`\-\s]{2,80}$/u;
+    const validPhonePattern = /^\+380\d{9}$/;
+
+    const validateContacts = () => {
+      const clientName = clientNameInput.value.trim().replace(/\s+/g, ' ');
+      const phone = normalizePhone(phoneInput.value.trim());
+
+      clientNameInput.value = clientName;
+      phoneInput.value = phone;
+
+      if (!validNamePattern.test(clientName)) {
+        return 'Вкажіть ім’я українською або російською мовою. Можна використовувати літери, пробіли, апостроф і дефіс.';
+      }
+
+      if (!validPhonePattern.test(phone)) {
+        return 'Вкажіть номер телефону у форматі +380XXXXXXXXX. Після +380 має бути рівно 9 цифр.';
+      }
+
+      return '';
+    };
+
+    const buildConfirmationMessage = () => [
+      `Ім’я: ${clientNameInput.value}`,
+      `Телефон: ${phoneInput.value}`,
+      `Послуга: ${summaryService.textContent}`,
+      `Майстер: ${summaryMaster.textContent.replace(/^Майстер:\s*/i, '')}`,
+      `Дата і час: ${summaryDatetime.textContent}`,
+      `Додатково: ${summaryAdditional.textContent}`,
+      `Разом: ${summaryPrice.textContent}`,
+      '',
+      'Перевірте дані. Якщо все правильно, підтвердіть запис.',
+    ].join('\n');
+
+    const showBookingMessage = (message, title = 'Повідомлення', options = {}) => {
+      bookingMessageTitle.textContent = title;
+      bookingMessageText.textContent = message;
+      bookingMessageConfirm.hidden = !options.confirm;
+      bookingMessageClose.textContent = options.confirm ? 'Повернутися та змінити' : 'Зрозуміло';
+      bookingMessageActions.classList.toggle('has-confirm', Boolean(options.confirm));
+      bookingMessagePopup.hidden = false;
+      (options.confirm ? bookingMessageConfirm : bookingMessageClose).focus();
+    };
+
+    const closeBookingMessage = () => {
+      bookingMessagePopup.hidden = true;
+      bookingMessageText.textContent = '';
+      bookingMessageConfirm.hidden = true;
+      bookingMessageClose.textContent = 'Зрозуміло';
+      bookingMessageActions.classList.remove('has-confirm');
+    };
+
+    const clearBookingError = () => {
+      closeBookingMessage();
+    };
+
+    const checkSelectedSlotAvailability = async () => {
+      const params = new URLSearchParams({
+        master_id: state.masterId,
+        date: state.date,
+      });
+      appendServiceSelection(params);
+
+      if (state.time) {
+        params.set('time', state.time);
+      }
+
+      const response = await fetch(`${availabilityUrl}?${params.toString()}`, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Availability request failed');
+      }
+
+      const payload = await response.json();
+      state.availableSlots = payload.slots ?? [];
+      state.availableAdditionalServiceKeys = payload.available_additional_services ?? [];
+      state.hasLoadedAdditionalAvailability = Object.prototype.hasOwnProperty.call(payload, 'available_additional_services');
+
+      return state.availableSlots.includes(state.time);
     };
 
     const updateSummary = () => {
@@ -2253,7 +2951,36 @@
         ? selectedAdditionalServices.map((service) => service.label).join(', ')
         : 'Без додаткових послуг';
       summaryPrice.textContent = formatPrice(totalPrice);
-      summaryDuration.textContent = formatTotalDuration(totalDuration);
+      summaryService.textContent = formatServiceSummaryName(selectedService);
+
+      if (selectedAdditionalServices.length && state.time) {
+        let offsetMinutes = selectedService ? getDurationMinutes(selectedService) : 0;
+        summaryAdditional.textContent = selectedAdditionalServices
+          .map((service) => {
+            const serviceTime = addMinutesToTime(state.time, offsetMinutes);
+            offsetMinutes += getDurationMinutes(service);
+
+            return `${service.label}: ${serviceTime}`;
+          })
+          .join('\n');
+      } else {
+        summaryAdditional.textContent = 'Без додаткових послуг';
+      }
+
+      if (selectedService) {
+        const durationLines = [
+          `Основна процедура: ${selectedService.label} (${formatDurationValue(getDurationMinutes(selectedService))})`,
+          ...selectedAdditionalServices.map((service) => (
+            `Додаткова послуга: ${service.label} (${formatDurationValue(getDurationMinutes(service))})`
+          )),
+          `Загальний час процедур: ${formatDurationValue(totalDuration)}`,
+        ];
+
+        summaryDuration.textContent = durationLines.join('\n');
+      } else {
+        summaryDuration.textContent = 'Тривалість буде показана після вибору послуги';
+      }
+      // Detailed duration is rendered above.
       summaryDatetime.textContent = state.date && state.time
         ? `${formatSelectedDate(state.date)}, ${state.time}`
         : 'Оберіть дату та вільний слот';
@@ -2313,8 +3040,12 @@
       const canAddServices = Boolean(state.service && state.time);
       const availableAdditionalServices = getAvailableAdditionalServices();
       const remainingAdditionalServices = getRemainingAdditionalServices();
+      const hasUnavailableAdditionalServices = canAddServices
+        && availableAdditionalServices.length === 0
+        && remainingAdditionalServices.length > 0;
 
-      addServiceTrigger.disabled = !canAddServices || availableAdditionalServices.length === 0;
+      addServiceTrigger.disabled = !canAddServices;
+      addServiceTrigger.classList.toggle('is-unavailable', hasUnavailableAdditionalServices);
       addServiceTrigger.textContent = state.isAdditionalPickerOpen && canAddServices
         ? 'Закрити список послуг'
         : '+ Додати ще послугу';
@@ -2339,7 +3070,7 @@
       }
 
       if (state.time && !availableAdditionalServices.length && remainingAdditionalServices.length) {
-        additionalServicesHint.textContent = 'На вибраний час уже не вистачає безперервного вікна для ще однієї послуги. Можна записати її окремо на інший час.';
+        additionalServicesHint.textContent = 'На вибраний час не можна додати ще одну послугу, тому що салон зайнятий іншим клієнтом. Оберіть інший час для двох або більше процедур, або залиште запис тільки на основну процедуру.';
       }
 
       state.additionalServices
@@ -2402,6 +3133,18 @@
     };
 
     const renderDays = () => {
+      setCalendarNavVisible(Boolean(state.service && state.masterId));
+
+      if (!state.service || !state.masterId) {
+        dayGrid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">${state.service ? 'Оберіть майстра, щоб побачити дату та час.' : 'Оберіть послугу та майстра.'}</div>`;
+        daysPrev.disabled = true;
+        daysNext.disabled = true;
+        monthPrev.disabled = true;
+        monthNext.disabled = true;
+        slotHint.textContent = '';
+        return;
+      }
+
       const allDays = getMonthDays(state.monthKey);
       const start = state.dayPage * pageSizeDays;
       const visibleDays = allDays.slice(start, start + pageSizeDays);
@@ -2410,6 +3153,16 @@
       dayGrid.innerHTML = '';
       monthLabel.textContent = new Intl.DateTimeFormat('uk-UA', { month: 'long', year: 'numeric' }).format(monthDate);
       rangeLabel.textContent = `Доступно до ${bookingConfig.maxDate}`;
+
+      if (!state.service) {
+        dayGrid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">Спочатку оберіть послугу, щоб побачити правильні дати.</div>';
+        daysPrev.disabled = true;
+        daysNext.disabled = true;
+        monthPrev.disabled = true;
+        monthNext.disabled = true;
+        slotHint.textContent = 'Дати та час відкриються після вибору послуги.';
+        return;
+      }
 
       visibleDays.forEach((day) => {
         const dayMeta = state.availableDays[day.iso];
@@ -2450,8 +3203,24 @@
     };
 
     const renderTimes = () => {
+      if (!state.service || !state.masterId) {
+        timeGrid.classList.add('is-disabled');
+        timeGrid.innerHTML = '';
+        slotHint.textContent = '';
+        renderAdditionalServices();
+        return;
+      }
+
       timeGrid.innerHTML = '';
       const consumedSlots = getConsumedSlots();
+
+      if (!state.service) {
+        timeGrid.classList.add('is-disabled');
+        timeGrid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">Спочатку оберіть послугу.</div>';
+        slotHint.textContent = 'Дати та час відкриються після вибору послуги.';
+        renderAdditionalServices();
+        return;
+      }
 
       if (!state.masterId) {
         timeGrid.classList.add('is-disabled');
@@ -2497,6 +3266,7 @@
             return;
           }
 
+          clearBookingError();
           const previousTime = state.time;
           state.time = slot;
           timeInput.value = slot;
@@ -2548,7 +3318,7 @@
     const loadMonthAvailability = async () => {
       state.availableDays = {};
 
-      if (!state.masterId) {
+      if (!state.service || !state.masterId) {
         renderDays();
         renderTimes();
         updateSummary();
@@ -2588,11 +3358,12 @@
         renderDays();
         renderTimes();
         slotHint.textContent = 'Не вдалося завантажити календар доступності. Оновіть сторінку або спробуйте ще раз.';
+        showBookingMessage('Не вдалося завантажити календар доступності. Оновіть сторінку або спробуйте ще раз.', 'Помилка');
       }
     };
 
     const loadAvailability = async () => {
-      if (!state.masterId || !state.date) {
+      if (!state.service || !state.masterId || !state.date) {
         state.availableSlots = [];
         state.availableAdditionalServiceKeys = [];
         state.time = '';
@@ -2629,6 +3400,7 @@
         const payload = await response.json();
         state.availableSlots = payload.slots ?? [];
         state.availableAdditionalServiceKeys = payload.available_additional_services ?? [];
+        state.hasLoadedAdditionalAvailability = Object.prototype.hasOwnProperty.call(payload, 'available_additional_services');
 
         if (!state.availableSlots.includes(state.time)) {
           state.time = '';
@@ -2646,30 +3418,46 @@
         resetAdditionalServices();
         renderTimes();
         slotHint.textContent = 'Сталася помилка під час завантаження слотів. Оновіть сторінку або спробуйте ще раз.';
+        showBookingMessage('Сталася помилка під час завантаження слотів. Оновіть сторінку або спробуйте ще раз.', 'Помилка');
       }
     };
 
     serviceCards.forEach((card) => {
       card.addEventListener('click', () => {
-        const nextService = card.dataset.serviceKey || '';
-        const serviceChanged = state.service !== nextService;
-        state.service = nextService;
-        serviceInput.value = state.service;
-        state.additionalServices = normalizeAdditionalServices(state.additionalServices, state.service);
+        clearBookingError();
+        const isApparatus = card.dataset.serviceKind === 'apparatus';
 
-        if (serviceChanged) {
-          syncAdditionalServiceInputs();
+        if (isApparatus) {
+          state.apparatusBase = card.dataset.apparatusBase || '';
+          state.apparatusVariants = JSON.parse(card.dataset.apparatusVariants || '[]');
+          state.service = '';
+          serviceInput.value = '';
+          state.apparatusDiscuss = false;
+          apparatusDiscussInput.value = '';
+          resetSelectedDateTime();
+          setActiveCard(serviceCards, (element) => element === card);
+          renderApparatusDurationPicker();
+          renderBookingStepVisibility();
           renderAdditionalServices();
-          loadMonthAvailability();
+          updateSummary();
+          return;
         }
 
+        resetApparatusSelection();
+        selectServiceKey(card.dataset.serviceKey || '');
         setActiveCard(serviceCards, (element) => element.dataset.serviceKey === state.service);
+        renderBookingStepVisibility();
+        renderServicesForMaster();
+        renderApparatusDurationPicker();
+        renderAdditionalServices();
         updateSummary();
+        loadMonthAvailability();
       });
     });
 
     masterCards.forEach((card) => {
       card.addEventListener('click', () => {
+        clearBookingError();
         const nextMasterId = card.dataset.masterId || '';
         const masterChanged = state.masterId !== nextMasterId;
         state.masterId = nextMasterId;
@@ -2678,29 +3466,80 @@
         timeInput.value = '';
 
         if (masterChanged) {
+          state.service = '';
+          serviceInput.value = '';
+          resetApparatusSelection();
           resetAdditionalServices();
+          resetSelectedDateTime();
         }
 
         setActiveCard(masterCards, (element) => element.dataset.masterId === state.masterId);
+        setActiveCard(serviceCards, () => false);
+        renderBookingStepVisibility();
+        renderServicesForMaster();
+        renderApparatusDurationPicker();
         renderAdditionalServices();
         updateSummary();
         loadMonthAvailability();
       });
     });
 
+    priceMasterTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        renderPriceMasterGroups(tab.dataset.priceMaster || '');
+      });
+    });
+
+    apparatusDiscussBtn.addEventListener('click', () => {
+      const sixtyMinuteVariant = state.apparatusVariants.find((variant) => Number(variant.duration_minutes) === 60)
+        || state.apparatusVariants[state.apparatusVariants.length - 1];
+
+      if (sixtyMinuteVariant) {
+        selectApparatusVariant(sixtyMinuteVariant, true);
+      }
+    });
+
     document.querySelectorAll('[data-service-target]').forEach((button) => {
       button.addEventListener('click', () => {
+        clearBookingError();
         const service = button.getAttribute('data-service-target');
+        const apparatusTarget = button.getAttribute('data-apparatus-target') || '';
+        const masterTarget = button.getAttribute('data-master-target') || '';
 
-        if (!service) {
+        if (masterTarget) {
+          state.masterId = masterTarget;
+          masterInput.value = masterTarget;
+          setActiveCard(masterCards, (element) => element.dataset.masterId === state.masterId);
+          renderPriceMasterGroups(masterTarget);
+        }
+
+        if (apparatusTarget) {
+          renderServicesForMaster();
+          const apparatusCard = [...serviceCards].find((card) => (
+            card.dataset.masterId === state.masterId && card.dataset.apparatusBase === apparatusTarget
+          ));
+
+          if (apparatusCard) {
+            apparatusCard.click();
+          }
+
           return;
         }
 
-        state.service = service;
-        serviceInput.value = service;
-        state.additionalServices = normalizeAdditionalServices(state.additionalServices, state.service);
-        syncAdditionalServiceInputs();
+        if (!service) {
+          resetApparatusSelection();
+          renderBookingStepVisibility();
+          renderServicesForMaster();
+          renderAdditionalServices();
+          updateSummary();
+          return;
+        }
+
+        resetApparatusSelection();
+        selectServiceKey(service);
         setActiveCard(serviceCards, (element) => element.dataset.serviceKey === service);
+        renderBookingStepVisibility();
+        renderServicesForMaster();
         renderAdditionalServices();
         updateSummary();
         loadMonthAvailability();
@@ -2708,13 +3547,97 @@
     });
 
     addServiceTrigger.addEventListener('click', () => {
+      clearBookingError();
+
       if (addServiceTrigger.disabled) {
+        return;
+      }
+
+      if (!getAvailableAdditionalServices().length) {
+        state.isAdditionalPickerOpen = false;
+        renderAdditionalServices();
+        showBookingMessage('На вибраний час не можна додати ще одну послугу, тому що салон зайнятий іншим клієнтом. Оберіть інший час для двох або більше процедур, або залиште запис тільки на основну процедуру.', 'Додаткова послуга недоступна');
         return;
       }
 
       state.isAdditionalPickerOpen = !state.isAdditionalPickerOpen;
       addServiceTrigger.textContent = state.isAdditionalPickerOpen ? 'Закрити список послуг' : '+ Додати ще послугу';
       renderAdditionalServices();
+    });
+
+    bookingForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearBookingError();
+
+      if (!state.service) {
+        showBookingMessage('Оберіть послугу.', 'Зверніть увагу');
+        return;
+      }
+
+      if (!state.masterId) {
+        showBookingMessage('Оберіть майстра.', 'Зверніть увагу');
+        return;
+      }
+
+      if (!state.date) {
+        showBookingMessage('Оберіть дату запису.', 'Зверніть увагу');
+        return;
+      }
+
+      if (!state.time) {
+        showBookingMessage('Оберіть вільний час запису.', 'Зверніть увагу');
+        return;
+      }
+
+      const contactError = validateContacts();
+
+      if (contactError) {
+        showBookingMessage(contactError, 'Перевірте контактні дані');
+        return;
+      }
+
+      if (!isBookingConfirmed) {
+        showBookingMessage(buildConfirmationMessage(), 'Перевірте запис', { confirm: true });
+        return;
+      }
+
+      isBookingConfirmed = false;
+
+      try {
+        const isSelectedSlotAvailable = await checkSelectedSlotAvailability();
+        renderTimes();
+        renderAdditionalServices();
+        updateSummary();
+
+        if (!isSelectedSlotAvailable) {
+          timeInput.value = '';
+          state.time = '';
+          showBookingMessage('Обраний час уже зайнятий або не підходить для тривалості запису. Оберіть інший час.', 'Час недоступний');
+          renderTimes();
+          renderAdditionalServices();
+          updateSummary();
+          return;
+        }
+
+        bookingForm.submit();
+      } catch (error) {
+        showBookingMessage('Не вдалося перевірити доступність часу. Оновіть сторінку або спробуйте ще раз.', 'Помилка');
+      }
+    });
+
+    bookingMessageConfirm.addEventListener('click', () => {
+      isBookingConfirmed = true;
+      closeBookingMessage();
+      bookingForm.requestSubmit();
+    });
+    bookingMessageClose.addEventListener('click', closeBookingMessage);
+    document.querySelectorAll('[data-popup-close]').forEach((element) => {
+      element.addEventListener('click', closeBookingMessage);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !bookingMessagePopup.hidden) {
+        closeBookingMessage();
+      }
     });
 
     monthPrev.addEventListener('click', () => {
@@ -2779,10 +3702,20 @@
     dateInput.value = state.date || '';
     timeInput.value = state.time || '';
     addServiceTrigger.textContent = '+ Додати ще послугу';
+    renderPriceMasterGroups(state.masterId);
+    renderBookingStepVisibility();
+    renderServicesForMaster();
+    renderApparatusDurationPicker();
     renderDays();
     renderAdditionalServices();
     updateSummary();
     loadMonthAvailability();
+
+    if (serverMessages.success) {
+      showBookingMessage(serverMessages.success, 'Готово');
+    } else if (Array.isArray(serverMessages.errors) && serverMessages.errors.length) {
+      showBookingMessage(serverMessages.errors.join('\n'), 'Зверніть увагу');
+    }
   </script>
 </body>
 </html>

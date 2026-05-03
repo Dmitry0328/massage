@@ -36,7 +36,6 @@ class Master extends Model
     {
         $query
             ->where('is_active', true)
-            ->orderBy('sort_order')
             ->orderBy('name');
     }
 
@@ -45,8 +44,9 @@ class Master extends Model
         return $this->hasMany(Appointment::class);
     }
 
-    public function scheduleBlocks()
+    public function services()
     {
-        return $this->hasMany(ScheduleBlock::class);
+        return $this->hasMany(MassageService::class);
     }
+
 }

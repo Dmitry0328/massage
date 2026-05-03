@@ -13,23 +13,22 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use UnitEnum;
 
 class AppointmentResource extends Resource
 {
     protected static ?string $model = Appointment::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
     protected static ?string $recordTitleAttribute = 'client_name';
 
-    protected static ?string $navigationLabel = 'Заявки';
+    protected static ?string $navigationLabel = 'Записи клієнтів';
 
-    protected static ?string $modelLabel = 'заявка';
+    protected static ?string $modelLabel = 'запис клієнта';
 
-    protected static ?string $pluralModelLabel = 'заявки';
+    protected static ?string $pluralModelLabel = 'записи клієнтів';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Запис';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {
@@ -43,9 +42,7 @@ class AppointmentResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

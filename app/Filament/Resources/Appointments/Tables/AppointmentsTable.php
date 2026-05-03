@@ -3,10 +3,12 @@
 namespace App\Filament\Resources\Appointments\Tables;
 
 use App\Models\Appointment;
+use App\Models\MassageService;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -18,34 +20,37 @@ class AppointmentsTable
         return $table
             ->columns([
                 TextColumn::make('client_name')
-                    ->label("Клієнт")
+                    ->label('Клієнт')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('master.name')
                     ->label('Майстер')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
                 TextColumn::make('service')
-                    ->label('Послуга')
-                    ->formatStateUsing(fn (string $state): string => config("booking.services.{$state}.label", $state))
+                    ->label('Основна послуга')
+                    ->formatStateUsing(fn (string $state): string => MassageService::labelFor($state))
                     ->wrap(),
-                TextColumn::make('additional_service')
-                    ->label('Додатково')
-                    ->formatStateUsing(fn (?string $state): string => $state ? config("booking.services.{$state}.label", $state) : '—')
-                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('additional_services')
                     ->label('Додаткові послуги')
-                    ->formatStateUsing(function (?array $state): string {
-                        if (! filled($state)) {
+                    ->formatStateUsing(function (?array $state, Appointment $record): string {
+                        $services = array_values(array_unique(array_filter([
+                            $record->additional_service,
+                            ...($state ?? []),
+                        ])));
+
+                        if (! filled($services)) {
                             return '—';
                         }
 
-                        return collect($state)
-                            ->map(fn (string $service): string => config("booking.services.{$service}.label", $service))
+                        return collect($services)
+                            ->map(fn (string $service): string => MassageService::labelFor($service))
                             ->join(', ');
                     })
                     ->wrap()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable()
+                    ->visibleFrom('lg'),
                 TextColumn::make('appointment_date')
                     ->label('Дата')
                     ->date('d.m.Y')
@@ -57,7 +62,8 @@ class AppointmentsTable
                 TextColumn::make('phone')
                     ->label('Телефон')
                     ->searchable()
-                    ->copyable(),
+                    ->copyable()
+                    ->visibleFrom('md'),
                 TextColumn::make('status')
                     ->label('Статус')
                     ->badge()
@@ -68,7 +74,8 @@ class AppointmentsTable
                         Appointment::STATUS_COMPLETED => 'info',
                         Appointment::STATUS_CANCELLED => 'danger',
                         default => 'gray',
-                    }),
+                    })
+                    ->visibleFrom('md'),
                 TextColumn::make('created_at')
                     ->label('Створено')
                     ->dateTime('d.m.Y H:i')
@@ -84,6 +91,7 @@ class AppointmentsTable
                     ->options(Appointment::statusOptions()),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([
@@ -92,7 +100,6 @@ class AppointmentsTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('appointment_date')
-            ->defaultSort('appointment_time');
+            ->defaultSort('appointment_date');
     }
 }

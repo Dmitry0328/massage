@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Appointments\Schemas;
 
 use App\Models\Appointment;
+use App\Models\MassageService;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -24,27 +25,15 @@ class AppointmentForm
                     ->required(),
                 Select::make('service')
                     ->label('Послуга')
-                    ->options(
-                        collect(config('booking.services'))
-                            ->mapWithKeys(fn (array $service, string $key): array => [$key => $service['label']])
-                            ->all()
-                    )
+                    ->options(fn (): array => MassageService::optionsWithMaster())
                     ->required(),
                 Select::make('additional_service')
                     ->label('Додаткова послуга')
-                    ->options(
-                        collect(config('booking.services'))
-                            ->mapWithKeys(fn (array $service, string $key): array => [$key => $service['label']])
-                            ->all()
-                    ),
+                    ->options(fn (): array => MassageService::optionsWithMaster()),
                 Select::make('additional_services')
                     ->label('Додаткові послуги')
                     ->multiple()
-                    ->options(
-                        collect(config('booking.services'))
-                            ->mapWithKeys(fn (array $service, string $key): array => [$key => $service['label']])
-                            ->all()
-                    ),
+                    ->options(fn (): array => MassageService::optionsWithMaster()),
                 DatePicker::make('appointment_date')
                     ->label('Дата')
                     ->native(false)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\BookingSetting;
 use App\Models\Master;
+use App\Models\MassageService;
 use App\Services\BookingAvailabilityService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -24,29 +25,52 @@ class BookingController extends Controller
     public function index()
     {
         $settings = BookingSetting::current();
-        $services = collect(config('booking.services'))
-            ->map(fn (array $service, string $key): array => $service + ['key' => $key])
-            ->values();
         $activeMasters = Master::active()->get();
-        $maxDate = now()->addMonthsNoOverflow($settings->max_advance_months)->endOfDay();
+        $rawServices = MassageService::query()
+            ->with('master')
+            ->active()
+            ->get();
+        $fallbackServices = $rawServices->whereNull('master_id')->values();
+        $services = $rawServices
+            ->when($fallbackServices->isNotEmpty() && $rawServices->whereNotNull('master_id')->isEmpty(), function ($collection) use ($activeMasters, $fallbackServices) {
+                return $activeMasters->flatMap(function (Master $master) use ($fallbackServices) {
+                    return $fallbackServices->map(function (MassageService $service) use ($master): MassageService {
+                        $service = clone $service;
+                        $service->master_id = $master->id;
+                        $service->setRelation('master', $master);
+
+                        return $service;
+                    });
+                });
+            })
+            ->map(fn (MassageService $service): array => $service->toBookingArray())
+            ->values();
+        $servicesByMaster = $services
+            ->filter(fn (array $service): bool => ! empty($service['master_id']))
+            ->groupBy('master_id');
+        $serviceCards = $this->serviceCards($services);
+        $priceServicesByMaster = $this->priceServicesByMaster($services);
+        $maxDate = $this->maxBookingDate((int) $settings->max_advance_months);
 
         return view('welcome', [
             'masters' => $activeMasters,
             'services' => $services,
+            'serviceCards' => $serviceCards,
+            'servicesByMaster' => $servicesByMaster,
+            'priceServicesByMaster' => $priceServicesByMaster,
             'mastersForUi' => $activeMasters
                 ->map(fn (Master $master): array => [
                     'id' => (string) $master->id,
                     'name' => $master->name,
                 ])
                 ->values(),
-            'serviceOptions' => collect(config('booking.services'))
-                ->mapWithKeys(fn (array $service, string $key): array => [$key => $service['label']])
-                ->all(),
+            'serviceOptions' => MassageService::options(),
             'bookingConfig' => [
                 'minDate' => now()->toDateString(),
                 'maxDate' => $maxDate->toDateString(),
                 'maxAdvanceMonths' => $settings->max_advance_months,
-                'slots' => array_values(config('booking.slots')),
+                'slots' => $settings->slots(),
+                'scheduleLabel' => $settings->scheduleLabel(),
             ],
         ]);
     }
@@ -56,14 +80,14 @@ class BookingController extends Controller
         $data = $request->validate([
             'master_id' => ['required', 'integer', Rule::exists('masters', 'id')->where('is_active', true)],
             'month' => ['required', 'date_format:Y-m'],
-            'service' => ['nullable', Rule::in(array_keys(config('booking.services')))],
+            'service' => ['nullable', Rule::in(MassageService::activeKeys($request->input('master_id')))],
             'additional_services' => ['nullable', 'array'],
-            'additional_services.*' => [Rule::in(array_keys(config('booking.services')))],
+            'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
         ]);
 
         $settings = BookingSetting::current();
         $today = now()->startOfDay();
-        $maxDate = now()->addMonthsNoOverflow($settings->max_advance_months)->endOfDay();
+        $maxDate = $this->maxBookingDate((int) $settings->max_advance_months);
         $monthStart = Carbon::createFromFormat('Y-m', $data['month'], config('app.timezone'))->startOfMonth();
         $monthEnd = $monthStart->copy()->endOfMonth();
 
@@ -83,9 +107,9 @@ class BookingController extends Controller
             'master_id' => ['required', 'integer', Rule::exists('masters', 'id')->where('is_active', true)],
             'date' => ['required', 'date'],
             'time' => ['nullable', 'date_format:H:i'],
-            'service' => ['nullable', Rule::in(array_keys(config('booking.services')))],
+            'service' => ['nullable', Rule::in(MassageService::activeKeys($request->input('master_id')))],
             'additional_services' => ['nullable', 'array'],
-            'additional_services.*' => [Rule::in(array_keys(config('booking.services')))],
+            'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
         ]);
 
         $master = Master::query()->findOrFail($data['master_id']);
@@ -109,17 +133,41 @@ class BookingController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        if ($request->has('phone')) {
+            $request->merge([
+                'phone' => preg_replace('/[\s\-\(\)]/', '', (string) $request->input('phone')),
+            ]);
+        }
+
+        if ($request->has('client_name')) {
+            $request->merge([
+                'client_name' => trim(preg_replace('/\s+/', ' ', (string) $request->input('client_name'))),
+            ]);
+        }
+
         $validated = $request->validate([
-            'client_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255'],
+            'client_name' => ['required', 'string', 'min:2', 'max:80', 'regex:/^[А-Яа-яЁёІіЇїЄєҐґ\'’ʼ`\-\s]+$/u'],
+            'phone' => ['required', 'string', 'regex:/^\+380\d{9}$/'],
             'master_id' => ['required', 'integer', Rule::exists('masters', 'id')->where('is_active', true)],
-            'service' => ['required', Rule::in(array_keys(config('booking.services')))],
+            'service' => ['required', Rule::in(MassageService::activeKeys($request->input('master_id')))],
             'additional_services' => ['nullable', 'array'],
-            'additional_services.*' => [Rule::in(array_keys(config('booking.services')))],
+            'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
             'appointment_date' => ['required', 'date'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'social_contact' => ['nullable', 'string', 'max:255'],
             'message' => ['nullable', 'string', 'max:2000'],
+            'apparatus_discuss' => ['nullable', 'boolean'],
+        ], [
+            'client_name.required' => 'Вкажіть ваше ім’я.',
+            'client_name.min' => 'Ім’я має містити щонайменше 2 символи.',
+            'client_name.regex' => 'Вкажіть ім’я українською або російською мовою.',
+            'phone.required' => 'Вкажіть номер телефону.',
+            'phone.regex' => 'Вкажіть номер телефону у форматі +380XXXXXXXXX.',
+            'master_id.required' => 'Оберіть майстра.',
+            'service.required' => 'Оберіть послугу.',
+            'appointment_date.required' => 'Оберіть дату запису.',
+            'appointment_time.required' => 'Оберіть вільний час запису.',
+            'appointment_time.date_format' => 'Оберіть час у правильному форматі.',
         ]);
 
         $additionalServices = collect($validated['additional_services'] ?? [])
@@ -143,8 +191,14 @@ class BookingController extends Controller
 
             if (! $isAvailable) {
                 throw ValidationException::withMessages([
-                    'appointment_time' => 'Обраний час уже недоступний для такої тривалості запису. Спробуйте інший слот.',
+                    'appointment_time' => 'Обраний час уже недоступний для такої тривалості запису. Оберіть інший час або залиште запис на одну процедуру.',
                 ]);
+            }
+
+            $message = $validated['message'] ?? null;
+
+            if (! empty($validated['apparatus_discuss'])) {
+                $message = trim(($message ? "{$message}\n\n" : '') . 'Клієнт обрав: обговорити час апаратного масажу з майстром на прийомі. Вікно заброньовано на 60 хв.');
             }
 
             Appointment::query()->create([
@@ -157,7 +211,7 @@ class BookingController extends Controller
                 'appointment_date' => $validated['appointment_date'],
                 'appointment_time' => $time,
                 'social_contact' => $validated['social_contact'] ?? null,
-                'message' => $validated['message'] ?? null,
+                'message' => $message ?: null,
                 'status' => Appointment::STATUS_PENDING,
                 'source' => 'website',
             ]);
@@ -175,5 +229,96 @@ class BookingController extends Controller
             ->unique()
             ->values()
             ->all();
+    }
+
+    private function maxBookingDate(int $maxAdvanceMonths): Carbon
+    {
+        return now(config('app.timezone'))
+            ->addMonthsNoOverflow(max($maxAdvanceMonths - 1, 0))
+            ->endOfMonth();
+    }
+
+    private function serviceCards($services)
+    {
+        return $services
+            ->groupBy(fn (array $service): string => $service['is_apparatus']
+                ? "{$service['master_id']}|{$service['apparatus_base']}"
+                : "service|{$service['key']}")
+            ->map(function ($group): array {
+                $first = $group->first();
+
+                if (! $first['is_apparatus']) {
+                    return $first + ['variants' => []];
+                }
+
+                $variants = $group
+                    ->sortBy('duration_minutes')
+                    ->values()
+                    ->map(fn (array $service): array => [
+                        'key' => $service['key'],
+                        'duration_minutes' => $service['duration_minutes'],
+                        'price' => $service['price'],
+                        'duration' => $service['duration'],
+                    ])
+                    ->all();
+
+                return [
+                    ...$first,
+                    'key' => '',
+                    'label' => $first['apparatus_base'],
+                    'display_label' => $first['apparatus_base'],
+                    'duration' => 'Оберіть час',
+                    'price' => $first['minute_price'] ?? 10,
+                    'description' => 'Апаратний масаж: 1 хв - ' . ($first['minute_price'] ?? 10) . ' грн.',
+                    'variants' => $variants,
+                ];
+            })
+            ->values();
+    }
+
+    private function priceServicesByMaster($services)
+    {
+        return $services
+            ->groupBy('master_id')
+            ->map(function ($masterServices) {
+                $regularServices = $masterServices
+                    ->filter(fn (array $service): bool => ! $service['is_apparatus'])
+                    ->map(fn (array $service): array => $service + [
+                        'price_label' => number_format($service['price'], 0, ',', ' ') . ' грн',
+                        'duration_label' => $service['duration'],
+                        'is_apparatus_group' => false,
+                    ]);
+
+                $apparatusServices = $masterServices
+                    ->filter(fn (array $service): bool => $service['is_apparatus'])
+                    ->groupBy('apparatus_base')
+                    ->map(fn ($group) => $group->first())
+                    ->values();
+
+                if ($apparatusServices->isEmpty()) {
+                    return $regularServices->values();
+                }
+
+                $firstApparatus = $apparatusServices->first();
+                $apparatusSummary = [
+                    ...$firstApparatus,
+                    'key' => '',
+                    'label' => 'Апаратні масажі:',
+                    'display_label' => 'Апаратні масажі:',
+                    'price_label' => '1 хв - ' . ($firstApparatus['minute_price'] ?? 10) . ' грн',
+                    'duration_label' => '',
+                    'is_apparatus_group' => true,
+                    'apparatus_base' => '',
+                    'apparatus_items' => $apparatusServices
+                        ->pluck('apparatus_base')
+                        ->filter()
+                        ->values()
+                        ->all(),
+                ];
+
+                return $regularServices
+                    ->push($apparatusSummary)
+                    ->values();
+            });
     }
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\BookingSetting;
+use App\Models\MassageService;
 use App\Models\Master;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -23,6 +24,19 @@ class DatabaseSeeder extends Seeder
         BookingSetting::query()->firstOrCreate([], [
             'max_advance_months' => 2,
         ]);
+
+        collect(config('booking.services', []))->each(function (array $service, string $key): void {
+            MassageService::query()->firstOrCreate([
+                'key' => $key,
+            ], [
+                'label' => $service['label'] ?? $key,
+                'duration_minutes' => (int) (preg_replace('/[^\d]/', '', (string) ($service['duration'] ?? '60')) ?: 60),
+                'price' => (int) ($service['price'] ?? 0),
+                'discount_percent' => (int) (preg_replace('/[^\d]/', '', (string) ($service['badge'] ?? '')) ?: 0),
+                'description' => $service['description'] ?? null,
+                'is_active' => true,
+            ]);
+        });
 
         collect([
             ['name' => 'Анна', 'phone' => '+380 67 000 00 01', 'bio' => 'Класичний та розслабляючий масаж.', 'sort_order' => 1],

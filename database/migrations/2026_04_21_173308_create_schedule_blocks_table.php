@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('schedule_blocks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('master_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('master_id')->nullable()->constrained()->cascadeOnDelete();
             $table->date('block_date');
             $table->boolean('is_full_day')->default(false);
             $table->time('start_time')->nullable();

@@ -3,7 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Appointment;
+use App\Models\BookingSetting;
 use App\Models\Master;
+use App\Models\MassageService;
+use App\Models\ScheduleBlock;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,7 +23,7 @@ class BookingTest extends TestCase
             'sort_order' => 1,
         ]);
 
-        $date = now()->addDay()->toDateString();
+        $date = $this->nextWorkingDate();
 
         $response = $this->post(route('booking.store'), [
             'client_name' => 'Іван',
@@ -67,7 +70,7 @@ class BookingTest extends TestCase
             'sort_order' => 1,
         ]);
 
-        $date = now()->addDay()->toDateString();
+        $date = $this->nextWorkingDate();
 
         Appointment::query()->create([
             'master_id' => $master->id,
@@ -93,5 +96,362 @@ class BookingTest extends TestCase
         $availabilityResponse->assertOk();
         $this->assertContains('11:00', $availabilityResponse->json('slots'));
         $this->assertSame([], $availabilityResponse->json('available_additional_services'));
+    }
+
+    public function test_appointment_blocks_slot_for_other_masters(): void
+    {
+        $firstMaster = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $secondMaster = Master::query()->create([
+            'name' => 'Serhii',
+            'slug' => 'serhii',
+            'is_active' => true,
+            'sort_order' => 2,
+        ]);
+
+        $date = now()->addDay()->toDateString();
+
+        Appointment::query()->create([
+            'master_id' => $firstMaster->id,
+            'client_name' => 'Клієнт',
+            'phone' => '+380671110001',
+            'service' => 'classic',
+            'additional_service' => 'hardware',
+            'additional_services' => ['hardware'],
+            'appointment_date' => $date,
+            'appointment_time' => '14:00',
+            'status' => Appointment::STATUS_PENDING,
+            'source' => 'website',
+        ]);
+
+        $availabilityResponse = $this->getJson(route('booking.availability', [
+            'master_id' => $secondMaster->id,
+            'date' => $date,
+            'service' => 'classic',
+        ]));
+
+        $availabilityResponse->assertOk();
+        $this->assertNotContains('14:00', $availabilityResponse->json('slots'));
+        $this->assertNotContains('15:00', $availabilityResponse->json('slots'));
+    }
+
+    public function test_missing_time_uses_human_readable_validation_message(): void
+    {
+        $master = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-validation',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->from(route('booking.index'))->post(route('booking.store'), [
+            'client_name' => 'Клієнт',
+            'phone' => '+380671110002',
+            'master_id' => $master->id,
+            'service' => 'classic',
+            'appointment_date' => $this->nextWorkingDate(),
+        ]);
+
+        $response
+            ->assertRedirect(route('booking.index'))
+            ->assertSessionHasErrors([
+                'appointment_time' => 'Оберіть вільний час запису.',
+            ]);
+    }
+
+    public function test_contact_fields_require_cyrillic_name_and_ukrainian_phone(): void
+    {
+        $master = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-contact-validation',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->from(route('booking.index'))->post(route('booking.store'), [
+            'client_name' => 'John',
+            'phone' => '+3806711100029',
+            'master_id' => $master->id,
+            'service' => 'classic',
+            'appointment_date' => $this->nextWorkingDate(),
+            'appointment_time' => '10:00',
+        ]);
+
+        $response
+            ->assertRedirect(route('booking.index'))
+            ->assertSessionHasErrors(['client_name', 'phone']);
+
+        $this->assertSame(0, Appointment::query()->count());
+    }
+
+    public function test_phone_is_normalized_before_validation(): void
+    {
+        $master = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-phone-normalized',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->from(route('booking.index'))->post(route('booking.store'), [
+            'client_name' => 'Марія',
+            'phone' => '+380 67 111 00 22',
+            'master_id' => $master->id,
+            'service' => 'classic',
+            'appointment_date' => $this->nextWorkingDate(),
+            'appointment_time' => '10:00',
+        ]);
+
+        $response
+            ->assertRedirect(route('booking.index'))
+            ->assertSessionHas('booking_success');
+
+        $this->assertSame('+380671110022', Appointment::query()->value('phone'));
+    }
+
+    public function test_store_rejects_occupied_slot_for_other_master(): void
+    {
+        $firstMaster = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-store',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $secondMaster = Master::query()->create([
+            'name' => 'Serhii',
+            'slug' => 'serhii-store',
+            'is_active' => true,
+            'sort_order' => 2,
+        ]);
+
+        $date = now()->addDay()->toDateString();
+
+        Appointment::query()->create([
+            'master_id' => $firstMaster->id,
+            'client_name' => 'Існуючий Клієнт',
+            'phone' => '+380671110003',
+            'service' => 'classic',
+            'additional_service' => null,
+            'additional_services' => [],
+            'appointment_date' => $date,
+            'appointment_time' => '11:00',
+            'status' => Appointment::STATUS_PENDING,
+            'source' => 'website',
+        ]);
+
+        $response = $this->from(route('booking.index'))->post(route('booking.store'), [
+            'client_name' => 'Новий Клієнт',
+            'phone' => '+380671110004',
+            'master_id' => $secondMaster->id,
+            'service' => 'classic',
+            'appointment_date' => $date,
+            'appointment_time' => '11:00',
+        ]);
+
+        $response
+            ->assertRedirect(route('booking.index'))
+            ->assertSessionHasErrors('appointment_time');
+
+        $this->assertSame(1, Appointment::query()->count());
+    }
+
+    public function test_calendar_marks_day_unavailable_when_all_salon_slots_are_occupied(): void
+    {
+        $firstMaster = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-full-day',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $secondMaster = Master::query()->create([
+            'name' => 'Serhii',
+            'slug' => 'serhii-full-day',
+            'is_active' => true,
+            'sort_order' => 2,
+        ]);
+
+        $date = now()->addDay();
+
+        foreach (config('booking.slots') as $slot) {
+            Appointment::query()->create([
+                'master_id' => $firstMaster->id,
+                'client_name' => "Client {$slot}",
+                'phone' => '+380671110005',
+                'service' => 'classic',
+                'additional_service' => null,
+                'additional_services' => [],
+                'appointment_date' => $date->toDateString(),
+                'appointment_time' => $slot,
+                'status' => Appointment::STATUS_PENDING,
+                'source' => 'website',
+            ]);
+        }
+
+        $response = $this->getJson(route('booking.calendar', [
+            'master_id' => $secondMaster->id,
+            'month' => $date->format('Y-m'),
+            'service' => 'classic',
+        ]));
+
+        $response->assertOk();
+
+        $day = collect($response->json('days'))->firstWhere('date', $date->toDateString());
+        $this->assertNotNull($day);
+        $this->assertFalse($day['available']);
+        $this->assertSame(0, $day['slots_count']);
+    }
+
+    public function test_salon_block_hides_slot_for_all_masters(): void
+    {
+        $master = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-block',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $date = now()->addDay()->toDateString();
+
+        ScheduleBlock::query()->create([
+            'master_id' => null,
+            'block_date' => $date,
+            'is_full_day' => false,
+            'start_time' => '12:00',
+            'end_time' => '13:00',
+            'note' => 'Test block',
+        ]);
+
+        $response = $this->getJson(route('booking.availability', [
+            'master_id' => $master->id,
+            'date' => $date,
+            'service' => 'classic',
+        ]));
+
+        $response->assertOk();
+        $this->assertNotContains('12:00', $response->json('slots'));
+    }
+
+    public function test_one_month_setting_allows_only_current_calendar_month(): void
+    {
+        BookingSetting::current()->update([
+            'max_advance_months' => 1,
+        ]);
+
+        Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-setting',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->get(route('booking.index'));
+
+        $response->assertOk();
+        $response->assertSee('"maxAdvanceMonths":1', false);
+        $response->assertSee('"maxDate":"' . now()->endOfMonth()->toDateString() . '"', false);
+    }
+
+    public function test_work_schedule_setting_controls_public_slots(): void
+    {
+        BookingSetting::current()->update([
+            'working_days' => [1, 2, 3, 4, 5, 6, 7],
+            'work_start_time' => '09:00',
+            'work_end_time' => '11:00',
+            'slot_step_minutes' => 30,
+        ]);
+
+        $master = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-work-schedule',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $date = now()->addDay()->toDateString();
+
+        $response = $this->getJson(route('booking.availability', [
+            'master_id' => $master->id,
+            'date' => $date,
+            'service' => 'classic',
+        ]));
+
+        $response->assertOk();
+        $this->assertSame(['09:00', '09:30', '10:00'], $response->json('slots'));
+        $this->assertNotContains('11:00', $response->json('slots'));
+    }
+
+    public function test_service_must_belong_to_selected_master(): void
+    {
+        MassageService::query()->delete();
+
+        $firstMaster = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-services',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $secondMaster = Master::query()->create([
+            'name' => 'Serhii',
+            'slug' => 'serhii-services',
+            'is_active' => true,
+            'sort_order' => 2,
+        ]);
+
+        MassageService::query()->create([
+            'master_id' => $firstMaster->id,
+            'key' => 'olesia-classic',
+            'label' => 'Classic Olesia',
+            'duration_minutes' => 60,
+            'price' => 500,
+            'is_active' => true,
+        ]);
+
+        MassageService::query()->create([
+            'master_id' => $secondMaster->id,
+            'key' => 'serhii-hardware',
+            'label' => 'Hardware Serhii',
+            'duration_minutes' => 60,
+            'price' => 700,
+            'is_active' => true,
+        ]);
+
+        $this->get(route('booking.index'))
+            ->assertOk()
+            ->assertSee('"master_id":"' . $firstMaster->id . '"', false)
+            ->assertSee('"master_id":"' . $secondMaster->id . '"', false);
+
+        $response = $this->from(route('booking.index'))->post(route('booking.store'), [
+            'client_name' => 'Марія',
+            'phone' => '+380671110033',
+            'master_id' => $firstMaster->id,
+            'service' => 'serhii-hardware',
+            'appointment_date' => $this->nextWorkingDate(),
+            'appointment_time' => '10:00',
+        ]);
+
+        $response
+            ->assertRedirect(route('booking.index'))
+            ->assertSessionHasErrors('service');
+
+        $this->assertSame(0, Appointment::query()->count());
+    }
+
+    private function nextWorkingDate(): string
+    {
+        $date = now()->addDay();
+
+        while ((int) $date->isoWeekday() === 7) {
+            $date->addDay();
+        }
+
+        return $date->toDateString();
     }
 }
