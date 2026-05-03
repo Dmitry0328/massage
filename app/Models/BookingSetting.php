@@ -23,7 +23,7 @@ class BookingSetting extends Model
     {
         return self::query()->firstOrCreate([], [
             'max_advance_months' => 2,
-            'working_days' => [1, 2, 3, 4, 5, 6],
+            'working_days' => [1, 2, 3, 4, 5, 6, 7],
             'work_start_time' => '10:00',
             'work_end_time' => '18:00',
             'slot_step_minutes' => 60,
@@ -32,7 +32,7 @@ class BookingSetting extends Model
 
     public function workingDays(): array
     {
-        return array_values(array_map('intval', $this->working_days ?: [1, 2, 3, 4, 5, 6]));
+        return array_values(array_map('intval', $this->working_days ?: [1, 2, 3, 4, 5, 6, 7]));
     }
 
     public function slots(): array
