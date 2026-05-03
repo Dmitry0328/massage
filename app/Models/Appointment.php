@@ -19,6 +19,7 @@ class Appointment extends Model
         'service',
         'additional_service',
         'additional_services',
+        'service_durations',
         'appointment_date',
         'appointment_time',
         'social_contact',
@@ -30,6 +31,7 @@ class Appointment extends Model
     protected $casts = [
         'appointment_date' => 'date',
         'additional_services' => 'array',
+        'service_durations' => 'array',
     ];
 
     public static function statusOptions(): array

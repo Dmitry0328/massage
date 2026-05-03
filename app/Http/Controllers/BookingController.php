@@ -81,6 +81,7 @@ class BookingController extends Controller
             'master_id' => ['required', 'integer', Rule::exists('masters', 'id')->where('is_active', true)],
             'month' => ['required', 'date_format:Y-m'],
             'service' => ['nullable', Rule::in(MassageService::activeKeys($request->input('master_id')))],
+            'apparatus_duration_minutes' => ['nullable', 'integer', Rule::in([15, 30, 45, 60])],
             'additional_services' => ['nullable', 'array'],
             'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
         ]);
@@ -95,9 +96,10 @@ class BookingController extends Controller
 
         $master = Master::query()->findOrFail($data['master_id']);
         $serviceKeys = $this->selectedServiceKeys($data['service'] ?? null, $data['additional_services'] ?? []);
+        $durationOverrides = $this->durationOverrides($data['service'] ?? null, $data['apparatus_duration_minutes'] ?? null);
 
         return response()->json([
-            'days' => $this->availabilityService->availableDays($master, $monthStart, $monthEnd, $today, $maxDate, $serviceKeys),
+            'days' => $this->availabilityService->availableDays($master, $monthStart, $monthEnd, $today, $maxDate, $serviceKeys, $durationOverrides),
         ]);
     }
 
@@ -108,14 +110,16 @@ class BookingController extends Controller
             'date' => ['required', 'date'],
             'time' => ['nullable', 'date_format:H:i'],
             'service' => ['nullable', Rule::in(MassageService::activeKeys($request->input('master_id')))],
+            'apparatus_duration_minutes' => ['nullable', 'integer', Rule::in([15, 30, 45, 60])],
             'additional_services' => ['nullable', 'array'],
             'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
         ]);
 
         $master = Master::query()->findOrFail($data['master_id']);
         $serviceKeys = $this->selectedServiceKeys($data['service'] ?? null, $data['additional_services'] ?? []);
+        $durationOverrides = $this->durationOverrides($data['service'] ?? null, $data['apparatus_duration_minutes'] ?? null);
         $payload = [
-            'slots' => $this->availabilityService->availableSlots($master, $data['date'], $serviceKeys),
+            'slots' => $this->availabilityService->availableSlots($master, $data['date'], $serviceKeys, $durationOverrides),
         ];
 
         if (! empty($data['time']) && ! empty($data['service'])) {
@@ -125,6 +129,8 @@ class BookingController extends Controller
                 $data['time'],
                 $data['service'],
                 $data['additional_services'] ?? [],
+                null,
+                $durationOverrides,
             );
         }
 
@@ -152,6 +158,7 @@ class BookingController extends Controller
             'service' => ['required', Rule::in(MassageService::activeKeys($request->input('master_id')))],
             'additional_services' => ['nullable', 'array'],
             'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
+            'apparatus_duration_minutes' => ['nullable', 'integer', Rule::in([15, 30, 45, 60])],
             'appointment_date' => ['required', 'date'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'social_contact' => ['nullable', 'string', 'max:255'],
@@ -180,13 +187,16 @@ class BookingController extends Controller
         $master = Master::query()->findOrFail($validated['master_id']);
         $time = $validated['appointment_time'];
         $serviceKeys = $this->selectedServiceKeys($validated['service'], $additionalServices);
+        $durationOverrides = $this->durationOverrides($validated['service'], $validated['apparatus_duration_minutes'] ?? null);
 
-        DB::transaction(function () use ($master, $validated, $time, $additionalServices, $serviceKeys): void {
+        DB::transaction(function () use ($master, $validated, $time, $additionalServices, $serviceKeys, $durationOverrides): void {
             $isAvailable = $this->availabilityService->isAvailable(
                 $master,
                 $validated['appointment_date'],
                 $time,
                 $serviceKeys,
+                null,
+                $durationOverrides,
             );
 
             if (! $isAvailable) {
@@ -199,6 +209,8 @@ class BookingController extends Controller
 
             if (! empty($validated['apparatus_discuss'])) {
                 $message = trim(($message ? "{$message}\n\n" : '') . 'Клієнт обрав: обговорити час апаратного масажу з майстром на прийомі. Вікно заброньовано на 60 хв.');
+            } elseif ($durationOverrides) {
+                $message = trim(($message ? "{$message}\n\n" : '') . 'Тривалість апаратного масажу: ' . reset($durationOverrides) . ' хв.');
             }
 
             Appointment::query()->create([
@@ -208,6 +220,7 @@ class BookingController extends Controller
                 'service' => $validated['service'],
                 'additional_service' => $additionalServices[0] ?? null,
                 'additional_services' => $additionalServices,
+                'service_durations' => $durationOverrides ?: null,
                 'appointment_date' => $validated['appointment_date'],
                 'appointment_time' => $time,
                 'social_contact' => $validated['social_contact'] ?? null,
@@ -231,6 +244,21 @@ class BookingController extends Controller
             ->all();
     }
 
+    private function durationOverrides(?string $primaryService, int|string|null $duration): array
+    {
+        if (! $primaryService || ! $duration) {
+            return [];
+        }
+
+        $service = MassageService::query()->where('key', $primaryService)->first();
+
+        if (! $service?->is_price_per_minute) {
+            return [];
+        }
+
+        return [$primaryService => (int) $duration];
+    }
+
     private function maxBookingDate(int $maxAdvanceMonths): Carbon
     {
         return now(config('app.timezone'))
@@ -251,14 +279,13 @@ class BookingController extends Controller
                     return $first + ['variants' => []];
                 }
 
-                $variants = $group
-                    ->sortBy('duration_minutes')
-                    ->values()
-                    ->map(fn (array $service): array => [
-                        'key' => $service['key'],
-                        'duration_minutes' => $service['duration_minutes'],
-                        'price' => $service['price'],
-                        'duration' => $service['duration'],
+                $minutePrice = $first['minute_price'] ?? 10;
+                $variants = collect([15, 30, 45, 60])
+                    ->map(fn (int $duration): array => [
+                        'key' => $first['key'],
+                        'duration_minutes' => $duration,
+                        'price' => $minutePrice * $duration,
+                        'duration' => "{$duration} хв",
                     ])
                     ->all();
 

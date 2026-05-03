@@ -16,8 +16,10 @@ class MassageService extends Model
         'master_id',
         'key',
         'label',
+        'category',
         'duration_minutes',
         'price',
+        'is_price_per_minute',
         'discount_percent',
         'description',
         'is_active',
@@ -28,6 +30,7 @@ class MassageService extends Model
         'is_active' => 'boolean',
         'duration_minutes' => 'integer',
         'price' => 'integer',
+        'is_price_per_minute' => 'boolean',
         'discount_percent' => 'integer',
         'sort_order' => 'integer',
     ];
@@ -137,6 +140,10 @@ class MassageService extends Model
     public function toBookingArray(): array
     {
         $apparatusBase = $this->apparatusBaseLabel();
+        $isApparatus = $apparatusBase !== null;
+        $minutePrice = $isApparatus
+            ? ($this->is_price_per_minute ? $this->price : (int) round($this->price / max($this->duration_minutes, 1)))
+            : null;
 
         return [
             'key' => $this->key,
@@ -144,11 +151,12 @@ class MassageService extends Model
             'master_name' => $this->master?->name,
             'label' => $this->label,
             'display_label' => $apparatusBase ?: $this->label,
-            'is_apparatus' => $apparatusBase !== null,
+            'category' => $this->category,
+            'is_apparatus' => $isApparatus,
             'apparatus_base' => $apparatusBase,
             'duration_minutes' => $this->duration_minutes,
-            'minute_price' => $apparatusBase && $this->duration_minutes > 0 ? (int) round($this->price / $this->duration_minutes) : null,
-            'duration' => $this->duration_minutes . ' хв',
+            'minute_price' => $minutePrice,
+            'duration' => $isApparatus && $this->is_price_per_minute ? 'Оберіть час' : $this->duration_minutes . ' хв',
             'price' => $this->price,
             'old_price' => null,
             'badge' => $this->discount_percent > 0 ? "-{$this->discount_percent}%" : '',
@@ -158,6 +166,10 @@ class MassageService extends Model
 
     private function apparatusBaseLabel(): ?string
     {
+        if ($this->is_price_per_minute || $this->category === 'Апаратні масажі') {
+            return $this->normalizeApparatusLabel($this->label);
+        }
+
         foreach ([
             'Міостимуляція' => 'Міостимуляція',
             'Кавітація' => 'Кавітація',
@@ -172,5 +184,10 @@ class MassageService extends Model
         }
 
         return null;
+    }
+
+    private function normalizeApparatusLabel(string $label): string
+    {
+        return str_starts_with($label, 'RF-') ? 'RF- ліфтинг' : $label;
     }
 }

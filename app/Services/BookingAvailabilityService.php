@@ -12,12 +12,12 @@ use Carbon\CarbonInterface;
 
 class BookingAvailabilityService
 {
-    public function availableSlots(Master $master, string $date, array $serviceKeys = []): array
+    public function availableSlots(Master $master, string $date, array $serviceKeys = [], array $durationOverrides = []): array
     {
         $normalizedDate = Carbon::parse($date, config('app.timezone'))->toDateString();
 
         return collect(BookingSetting::current()->slots())
-            ->filter(fn (string $slot): bool => $this->isAvailable($master, $normalizedDate, $slot, $serviceKeys))
+            ->filter(fn (string $slot): bool => $this->isAvailable($master, $normalizedDate, $slot, $serviceKeys, null, $durationOverrides))
             ->values()
             ->all();
     }
@@ -29,13 +29,14 @@ class BookingAvailabilityService
         CarbonInterface $minDate,
         CarbonInterface $maxDate,
         array $serviceKeys = [],
+        array $durationOverrides = [],
     ): array {
         $days = [];
         $current = $monthStart->copy()->startOfDay();
 
         while ($current->lte($monthEnd)) {
             $withinRange = $current->betweenIncluded($minDate, $maxDate);
-            $slots = $withinRange ? $this->availableSlots($master, $current->toDateString(), $serviceKeys) : [];
+            $slots = $withinRange ? $this->availableSlots($master, $current->toDateString(), $serviceKeys, $durationOverrides) : [];
 
             $days[] = [
                 'date' => $current->toDateString(),
@@ -55,9 +56,10 @@ class BookingAvailabilityService
         string $time,
         array $serviceKeys = [],
         ?int $ignoreAppointmentId = null,
+        array $durationOverrides = [],
     ): bool {
         $dateTime = Carbon::parse(sprintf('%s %s', $date, $time), config('app.timezone'));
-        $endDateTime = $dateTime->copy()->addMinutes($this->resolveDurationInMinutes($serviceKeys));
+        $endDateTime = $dateTime->copy()->addMinutes($this->resolveDurationInMinutes($serviceKeys, $durationOverrides));
 
         $settings = BookingSetting::current();
 
@@ -109,6 +111,7 @@ class BookingAvailabilityService
         string $primaryService,
         array $selectedAdditionalServices = [],
         ?int $ignoreAppointmentId = null,
+        array $durationOverrides = [],
     ): array {
         $currentServices = array_values(array_unique(array_filter([
             $primaryService,
@@ -117,13 +120,14 @@ class BookingAvailabilityService
 
         return collect(MassageService::activeKeys($master->id))
             ->reject(fn (string $serviceKey): bool => in_array($serviceKey, $currentServices, true))
-            ->filter(function (string $candidateService) use ($master, $date, $time, $currentServices, $ignoreAppointmentId): bool {
+            ->filter(function (string $candidateService) use ($master, $date, $time, $currentServices, $ignoreAppointmentId, $durationOverrides): bool {
                 return $this->isAvailable(
                     $master,
                     $date,
                     $time,
                     [...$currentServices, $candidateService],
                     $ignoreAppointmentId,
+                    $durationOverrides,
                 );
             })
             ->values()
@@ -167,22 +171,26 @@ class BookingAvailabilityService
         return $this->resolveDurationInMinutes(array_values(array_filter([
             $appointment->service,
             ...($appointment->additional_services ?? []),
-        ])));
+        ])), $appointment->service_durations ?? []);
     }
 
-    private function resolveDurationInMinutes(array $serviceKeys): int
+    private function resolveDurationInMinutes(array $serviceKeys, array $durationOverrides = []): int
     {
         return max(
             collect($serviceKeys)
                 ->filter()
-                ->map(fn (string $serviceKey): int => $this->serviceDurationInMinutes($serviceKey))
+                ->map(fn (string $serviceKey): int => $this->serviceDurationInMinutes($serviceKey, $durationOverrides))
                 ->sum(),
             0,
         );
     }
 
-    private function serviceDurationInMinutes(string $serviceKey): int
+    private function serviceDurationInMinutes(string $serviceKey, array $durationOverrides = []): int
     {
+        if (isset($durationOverrides[$serviceKey])) {
+            return max((int) $durationOverrides[$serviceKey], 1);
+        }
+
         return MassageService::durationFor($serviceKey);
     }
 

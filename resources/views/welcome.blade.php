@@ -1750,6 +1750,7 @@
               <input type="hidden" name="appointment_date" id="appointment_date" value="{{ old('appointment_date') }}">
               <input type="hidden" name="appointment_time" id="appointment_time" value="{{ old('appointment_time') }}">
               <input type="hidden" name="apparatus_discuss" id="apparatus_discuss" value="{{ old('apparatus_discuss') }}">
+              <input type="hidden" name="apparatus_duration_minutes" id="apparatus_duration_minutes" value="{{ old('apparatus_duration_minutes') }}">
 
               <div class="booking-flow">
                 <div class="booking-block">
@@ -1942,6 +1943,7 @@
     const dateInput = document.getElementById('appointment_date');
     const timeInput = document.getElementById('appointment_time');
     const apparatusDiscussInput = document.getElementById('apparatus_discuss');
+    const apparatusDurationInput = document.getElementById('apparatus_duration_minutes');
     const slotHint = document.getElementById('slot-hint');
     const servicesBlock = document.getElementById('services-block');
     const serviceCards = document.querySelectorAll('.service-option');
@@ -2484,6 +2486,7 @@
     const dateInput = document.getElementById('appointment_date');
     const timeInput = document.getElementById('appointment_time');
     const apparatusDiscussInput = document.getElementById('apparatus_discuss');
+    const apparatusDurationInput = document.getElementById('apparatus_duration_minutes');
     const slotHint = document.getElementById('slot-hint');
     const servicesBlock = document.getElementById('services-block');
     const dateTimeBlock = document.getElementById('date-time-block');
@@ -2577,6 +2580,7 @@
       apparatusBase: '',
       apparatusVariants: [],
       apparatusDiscuss: false,
+      apparatusDurationMinutes: Number.parseInt(apparatusDurationInput.value || '0', 10) || 0,
     };
 
     const pageSizeDays = 7;
@@ -2592,8 +2596,24 @@
     };
 
     const getDurationMinutes = (service) => {
+      if (service?.is_apparatus && state.apparatusDurationMinutes) {
+        return state.apparatusDurationMinutes;
+      }
+
       const numericValue = Number.parseInt(String(service?.duration || '').replace(/[^\d]/g, ''), 10);
       return Number.isFinite(numericValue) ? numericValue : 0;
+    };
+
+    const getServicePrice = (service) => {
+      if (!service) {
+        return 0;
+      }
+
+      if (service.is_apparatus && state.apparatusDurationMinutes) {
+        return (service.minute_price || service.price || 0) * state.apparatusDurationMinutes;
+      }
+
+      return service.price || 0;
     };
 
     const formatServiceSummaryName = (service) => {
@@ -2773,7 +2793,9 @@
       state.apparatusBase = '';
       state.apparatusVariants = [];
       state.apparatusDiscuss = false;
+      state.apparatusDurationMinutes = 0;
       apparatusDiscussInput.value = '';
+      apparatusDurationInput.value = '';
       renderApparatusDurationPicker();
     };
 
@@ -2802,6 +2824,8 @@
       selectServiceKey(variant.key);
       state.apparatusDiscuss = discuss;
       apparatusDiscussInput.value = discuss ? '1' : '';
+      state.apparatusDurationMinutes = Number(variant.duration_minutes) || 60;
+      apparatusDurationInput.value = String(state.apparatusDurationMinutes);
       setActiveCard(serviceCards, (element) => element.dataset.apparatusBase === state.apparatusBase);
       renderApparatusDurationPicker();
       renderBookingStepVisibility();
@@ -2852,6 +2876,10 @@
     const appendServiceSelection = (params) => {
       if (state.service) {
         params.set('service', state.service);
+      }
+
+      if (state.apparatusDurationMinutes) {
+        params.set('apparatus_duration_minutes', String(state.apparatusDurationMinutes));
       }
 
       state.additionalServices.forEach((serviceKey) => {
@@ -2948,7 +2976,7 @@
       const selectedService = servicesByKey[state.service];
       const selectedAdditionalServices = state.additionalServices.map((serviceKey) => servicesByKey[serviceKey]).filter(Boolean);
       const selectedMaster = mastersById[state.masterId];
-      const totalPrice = (selectedService?.price || 0) + selectedAdditionalServices.reduce((sum, service) => sum + (service.price || 0), 0);
+      const totalPrice = getServicePrice(selectedService) + selectedAdditionalServices.reduce((sum, service) => sum + (service.price || 0), 0);
       const totalDuration = (selectedService ? getDurationMinutes(selectedService) : 0)
         + selectedAdditionalServices.reduce((sum, service) => sum + getDurationMinutes(service), 0);
 
@@ -2976,7 +3004,7 @@
 
       if (selectedService) {
         const durationLines = [
-          `Основна процедура: ${selectedService.label} (${formatDurationValue(getDurationMinutes(selectedService))})`,
+          `Основна процедура: ${selectedService.apparatus_base || selectedService.label} (${formatDurationValue(getDurationMinutes(selectedService))})`,
           ...selectedAdditionalServices.map((service) => (
             `Додаткова послуга: ${service.label} (${formatDurationValue(getDurationMinutes(service))})`
           )),

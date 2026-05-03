@@ -20,18 +20,22 @@ class ServicesTable
                     ->label('Назва')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('category')
+                    ->label('Тема')
+                    ->placeholder('—')
+                    ->toggleable(),
                 TextColumn::make('master.name')
                     ->label('Майстер')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('duration_minutes')
                     ->label('Тривалість')
-                    ->suffix(' хв')
+                    ->formatStateUsing(fn (int $state, $record): string => $record->is_price_per_minute ? 'Обирає клієнт' : "{$state} хв")
                     ->sortable()
                     ->visibleFrom('md'),
                 TextColumn::make('price')
                     ->label('Ціна')
-                    ->money('UAH')
+                    ->formatStateUsing(fn (int $state, $record): string => $record->is_price_per_minute ? "1 хв - {$state} грн" : number_format($state, 0, ',', ' ') . ' грн')
                     ->sortable(),
                 TextColumn::make('discount_percent')
                     ->label('Знижка')
