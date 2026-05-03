@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Services\Schemas;
 
 use App\Models\Master;
+use App\Models\MassageService;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -26,13 +27,17 @@ class ServiceForm
                     ->label('Назва послуги')
                     ->required()
                     ->maxLength(255),
-                Select::make('category')
+                TextInput::make('category')
                     ->label('Тема')
-                    ->options([
-                        'Апаратні масажі' => 'Апаратні масажі',
-                    ])
-                    ->placeholder('Звичайна послуга')
-                    ->helperText('Оберіть “Апаратні масажі”, щоб послуга була в апаратному блоці або окремій апаратній рамці на сайті.'),
+                    ->placeholder('Наприклад: Апаратні масажі')
+                    ->datalist(fn (): array => MassageService::query()
+                        ->whereNotNull('category')
+                        ->where('category', '!=', '')
+                        ->distinct()
+                        ->orderBy('category')
+                        ->pluck('category')
+                        ->all())
+                    ->helperText('Можна вписати нову тему вручну. Послуги з однаковою темою та увімкненою “Ціною за 1 хвилину” будуть в одному блоці на сайті.'),
                 TextInput::make('key')
                     ->label('Ключ')
                     ->helperText('Можна залишити порожнім, ключ створиться автоматично з назви.')
@@ -53,7 +58,7 @@ class ServiceForm
                     ->required(),
                 Toggle::make('is_price_per_minute')
                     ->label('Ціна за 1 хвилину')
-                    ->helperText('Увімкнено: послуга піде в загальний блок “Апаратні масажі” з вибором часу. Вимкнено: буде окрема рамка з фіксованою тривалістю та ціною.')
+                    ->helperText('Увімкнено: послуга піде в блок своєї теми з вибором часу. Вимкнено: буде окрема рамка з фіксованою тривалістю та ціною.')
                     ->default(false)
                     ->required(),
                 TextInput::make('discount_percent')

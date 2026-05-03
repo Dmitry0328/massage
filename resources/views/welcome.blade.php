@@ -2596,7 +2596,7 @@
     };
 
     const getDurationMinutes = (service) => {
-      if (service?.is_apparatus && state.apparatusDurationMinutes) {
+      if (service?.uses_duration_picker && state.apparatusDurationMinutes) {
         return state.apparatusDurationMinutes;
       }
 
@@ -2609,7 +2609,7 @@
         return 0;
       }
 
-      if (service.is_apparatus && state.apparatusDurationMinutes) {
+      if (service.uses_duration_picker && state.apparatusDurationMinutes) {
         return (service.minute_price || service.price || 0) * state.apparatusDurationMinutes;
       }
 

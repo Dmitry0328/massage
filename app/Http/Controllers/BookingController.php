@@ -270,7 +270,7 @@ class BookingController extends Controller
     {
         return $services
             ->groupBy(fn (array $service): string => $service['uses_duration_picker']
-                ? "{$service['master_id']}|{$service['apparatus_base']}"
+                ? "minute|{$service['master_id']}|{$service['key']}"
                 : "service|{$service['key']}")
             ->map(function ($group): array {
                 $first = $group->first();
@@ -292,11 +292,11 @@ class BookingController extends Controller
                 return [
                     ...$first,
                     'key' => '',
-                    'label' => $first['apparatus_base'],
-                    'display_label' => $first['apparatus_base'],
+                    'label' => $first['duration_picker_label'],
+                    'display_label' => $first['duration_picker_label'],
                     'duration' => 'Оберіть час',
                     'price' => $first['minute_price'] ?? 10,
-                    'description' => 'Апаратний масаж: 1 хв - ' . ($first['minute_price'] ?? 10) . ' грн.',
+                    'description' => 'Ціна за 1 хв: ' . ($first['minute_price'] ?? 10) . ' грн. Оберіть тривалість процедури.',
                     'variants' => $variants,
                 ];
             })
@@ -316,35 +316,50 @@ class BookingController extends Controller
                         'is_apparatus_group' => false,
                     ]);
 
-                $apparatusServices = $masterServices
+                $minuteServiceGroups = $masterServices
                     ->filter(fn (array $service): bool => $service['uses_duration_picker'])
-                    ->groupBy('apparatus_base')
-                    ->map(fn ($group) => $group->first())
-                    ->values();
+                    ->groupBy(fn (array $service): string => $service['duration_picker_group'] ?: 'Послуги за хвилину:');
 
-                if ($apparatusServices->isEmpty()) {
+                if ($minuteServiceGroups->isEmpty()) {
                     return $regularServices->values();
                 }
 
-                $firstApparatus = $apparatusServices->first();
-                $apparatusSummary = [
-                    ...$firstApparatus,
-                    'key' => '',
-                    'label' => 'Апаратні масажі:',
-                    'display_label' => 'Апаратні масажі:',
-                    'price_label' => '1 хв - ' . ($firstApparatus['minute_price'] ?? 10) . ' грн',
-                    'duration_label' => '',
-                    'is_apparatus_group' => true,
-                    'apparatus_base' => '',
-                    'apparatus_items' => $apparatusServices
-                        ->pluck('apparatus_base')
-                        ->filter()
-                        ->values()
-                        ->all(),
-                ];
+                $minuteSummaries = $minuteServiceGroups
+                    ->map(function ($group, string $groupLabel): array {
+                        $first = $group->first();
+                        $prices = $group
+                            ->pluck('minute_price')
+                            ->filter()
+                            ->unique()
+                            ->values();
+
+                        return [
+                            ...$first,
+                            'key' => '',
+                            'label' => $groupLabel,
+                            'display_label' => $groupLabel,
+                            'price_label' => $prices->count() === 1
+                                ? '1 хв - ' . $prices->first() . ' грн'
+                                : 'від 1 хв - ' . ($prices->min() ?? 0) . ' грн',
+                            'duration_label' => '',
+                            'is_apparatus_group' => true,
+                            'apparatus_base' => '',
+                            'apparatus_items' => $group
+                                ->map(function (array $service) use ($prices): string {
+                                    if ($prices->count() <= 1) {
+                                        return $service['duration_picker_label'];
+                                    }
+
+                                    return $service['duration_picker_label'] . ' - 1 хв ' . ($service['minute_price'] ?? 0) . ' грн';
+                                })
+                                ->values()
+                                ->all(),
+                        ];
+                    })
+                    ->values();
 
                 return $regularServices
-                    ->push($apparatusSummary)
+                    ->concat($minuteSummaries)
                     ->values();
             });
     }

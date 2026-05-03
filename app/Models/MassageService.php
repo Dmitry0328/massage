@@ -141,24 +141,41 @@ class MassageService extends Model
     {
         $apparatusBase = $this->apparatusBaseLabel();
         $isApparatus = $apparatusBase !== null;
-        $minutePrice = $isApparatus
-            ? ($this->is_price_per_minute ? $this->price : (int) round($this->price / max($this->duration_minutes, 1)))
-            : null;
+        $usesDurationPicker = $this->is_price_per_minute;
+        $minutePrice = $usesDurationPicker
+            ? $this->price
+            : ($isApparatus ? (int) round($this->price / max($this->duration_minutes, 1)) : null);
+        $displayLabel = $usesDurationPicker ? $this->label : ($apparatusBase ?: $this->label);
+
+        if ($usesDurationPicker && $isApparatus) {
+            $displayLabel = $apparatusBase;
+        }
+
+        $durationPickerLabel = $displayLabel;
+        $durationPickerGroup = $this->category ?: 'Послуги за хвилину';
+
+        if ($usesDurationPicker && ! str_ends_with($durationPickerGroup, ':')) {
+            $durationPickerGroup .= ':';
+        }
+
+        $isGroupedMinuteService = $usesDurationPicker;
 
         return [
             'key' => $this->key,
             'master_id' => (string) $this->master_id,
             'master_name' => $this->master?->name,
             'label' => $this->label,
-            'display_label' => $apparatusBase ?: $this->label,
+            'display_label' => $displayLabel,
             'category' => $this->category,
             'is_apparatus' => $isApparatus,
             'is_price_per_minute' => $this->is_price_per_minute,
-            'uses_duration_picker' => $isApparatus && $this->is_price_per_minute,
-            'apparatus_base' => $apparatusBase,
+            'uses_duration_picker' => $usesDurationPicker,
+            'duration_picker_group' => $durationPickerGroup,
+            'duration_picker_label' => $durationPickerLabel,
+            'apparatus_base' => $durationPickerLabel,
             'duration_minutes' => $this->duration_minutes,
             'minute_price' => $minutePrice,
-            'duration' => $isApparatus && $this->is_price_per_minute ? 'Оберіть час' : $this->duration_minutes . ' хв',
+            'duration' => $isGroupedMinuteService ? 'Оберіть час' : $this->duration_minutes . ' хв',
             'price' => $this->price,
             'old_price' => null,
             'badge' => $this->discount_percent > 0 ? "-{$this->discount_percent}%" : '',
@@ -168,7 +185,7 @@ class MassageService extends Model
 
     private function apparatusBaseLabel(): ?string
     {
-        if ($this->is_price_per_minute || $this->category === 'Апаратні масажі') {
+        if ($this->category === 'Апаратні масажі') {
             return $this->normalizeApparatusLabel($this->label);
         }
 
