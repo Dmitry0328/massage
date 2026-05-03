@@ -1571,7 +1571,7 @@
                   <h4>Прайс {{ $priceOwnerName }}:</h4>
 
                   @forelse (($priceServicesByMaster[(string) $master->id] ?? collect()) as $service)
-                    <div class="price-item {{ ! empty($service['is_apparatus_group']) ? 'price-item-apparatus' : '' }}">
+                    <div class="price-item {{ (! empty($service['is_apparatus_group']) || (! empty($service['is_apparatus']) && empty($service['uses_duration_picker']))) ? 'price-item-apparatus' : '' }}">
                       <div>
                         <div class="price-name">{{ $service['display_label'] ?? $service['label'] }}</div>
                         @if (! empty($service['is_apparatus_group']) && ! empty($service['apparatus_items']))
@@ -1587,7 +1587,7 @@
                       </div>
                       <div class="price-side">
                         <div class="price-value">{{ $service['price_label'] }}</div>
-                        <a class="btn btn-primary price-book-btn" href="#booking" data-master-target="{{ $master->id }}" data-service-target="{{ $service['key'] }}" @if($service['is_apparatus']) data-apparatus-target="{{ $service['apparatus_base'] }}" @endif>Записатися</a>
+                        <a class="btn btn-primary price-book-btn" href="#booking" data-master-target="{{ $master->id }}" data-service-target="{{ $service['key'] }}" @if(! empty($service['uses_duration_picker'])) data-apparatus-target="{{ $service['apparatus_base'] }}" @endif>Записатися</a>
                       </div>
                     </div>
                   @empty
@@ -1782,7 +1782,7 @@
                         class="service-option {{ old('service') === $service['key'] ? 'active' : '' }}"
                         data-master-id="{{ $service['master_id'] }}"
                         data-service-key="{{ $service['key'] }}"
-                        data-service-kind="{{ $service['is_apparatus'] ? 'apparatus' : 'regular' }}"
+                        data-service-kind="{{ ! empty($service['uses_duration_picker']) ? 'apparatus' : 'regular' }}"
                         data-apparatus-base="{{ $service['apparatus_base'] }}"
                         data-apparatus-variants='@json($service['variants'])'
                         data-service-label="{{ $service['label'] }}"
@@ -1791,7 +1791,7 @@
                       >
                         <strong>{{ $service['display_label'] ?? $service['label'] }}</strong>
                         <div class="service-meta">
-                          <span>{{ $service['is_apparatus'] ? '1 хв - ' . $service['price'] . ' грн' : number_format($service['price'], 0, ',', ' ') . ' грн' }}</span>
+                          <span>{{ ! empty($service['uses_duration_picker']) ? '1 хв - ' . $service['price'] . ' грн' : number_format($service['price'], 0, ',', ' ') . ' грн' }}</span>
                           <span>{{ $service['duration'] }}</span>
                           @if (! empty($service['badge']))
                             <span class="service-badge">{{ $service['badge'] }}</span>

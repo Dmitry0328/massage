@@ -269,13 +269,13 @@ class BookingController extends Controller
     private function serviceCards($services)
     {
         return $services
-            ->groupBy(fn (array $service): string => $service['is_apparatus']
+            ->groupBy(fn (array $service): string => $service['uses_duration_picker']
                 ? "{$service['master_id']}|{$service['apparatus_base']}"
                 : "service|{$service['key']}")
             ->map(function ($group): array {
                 $first = $group->first();
 
-                if (! $first['is_apparatus']) {
+                if (! $first['uses_duration_picker']) {
                     return $first + ['variants' => []];
                 }
 
@@ -309,7 +309,7 @@ class BookingController extends Controller
             ->groupBy('master_id')
             ->map(function ($masterServices) {
                 $regularServices = $masterServices
-                    ->filter(fn (array $service): bool => ! $service['is_apparatus'])
+                    ->filter(fn (array $service): bool => ! $service['uses_duration_picker'])
                     ->map(fn (array $service): array => $service + [
                         'price_label' => number_format($service['price'], 0, ',', ' ') . ' грн',
                         'duration_label' => $service['duration'],
@@ -317,7 +317,7 @@ class BookingController extends Controller
                     ]);
 
                 $apparatusServices = $masterServices
-                    ->filter(fn (array $service): bool => $service['is_apparatus'])
+                    ->filter(fn (array $service): bool => $service['uses_duration_picker'])
                     ->groupBy('apparatus_base')
                     ->map(fn ($group) => $group->first())
                     ->values();

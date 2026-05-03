@@ -153,6 +153,8 @@ class MassageService extends Model
             'display_label' => $apparatusBase ?: $this->label,
             'category' => $this->category,
             'is_apparatus' => $isApparatus,
+            'is_price_per_minute' => $this->is_price_per_minute,
+            'uses_duration_picker' => $isApparatus && $this->is_price_per_minute,
             'apparatus_base' => $apparatusBase,
             'duration_minutes' => $this->duration_minutes,
             'minute_price' => $minutePrice,
