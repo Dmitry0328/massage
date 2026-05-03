@@ -490,9 +490,15 @@
       align-items: stretch;
       border: 1px solid rgba(182, 132, 107, 0.28);
       border-radius: 18px;
-      padding: 18px 18px 24px;
+      padding: 18px 18px 28px;
       margin: 16px 0 6px;
       background: rgba(182, 132, 107, 0.05);
+      overflow: hidden;
+    }
+
+    .price-item-apparatus:last-child {
+      border-bottom: 1px solid rgba(182, 132, 107, 0.28);
+      padding-bottom: 28px;
     }
 
     .price-name {
@@ -502,9 +508,10 @@
     .price-apparatus-list {
       display: grid;
       gap: 7px;
-      margin: 10px 0 8px;
+      margin: 10px 0 0;
       color: var(--text);
       font-size: 15px;
+      padding-bottom: 2px;
     }
 
     .price-sub {
