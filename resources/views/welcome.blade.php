@@ -56,34 +56,37 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 14px 24px;
-      border-radius: 999px;
-      border: none;
+      padding: 14px 28px;
+      border-radius: 6px;
+      border: 1px solid rgba(182, 132, 107, 0.72);
       cursor: pointer;
       font-size: 16px;
       font-weight: 700;
+      letter-spacing: 0.08em;
+      background: rgba(255, 255, 255, 0.28);
+      color: var(--accent-dark);
+      backdrop-filter: blur(6px);
       transition: 0.25s ease;
     }
 
     .btn-primary {
-      background: var(--accent);
-      color: #fff;
+      background: rgba(182, 132, 107, 0.12);
+      color: var(--accent-dark);
       box-shadow: var(--shadow);
     }
 
     .btn-primary:hover {
-      background: var(--accent-dark);
+      background: rgba(182, 132, 107, 0.2);
       transform: translateY(-1px);
     }
 
     .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.2);
+      color: var(--accent-dark);
     }
 
     .btn-secondary:hover {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.48);
     }
 
     .section {
@@ -107,7 +110,6 @@
       position: sticky;
       top: 0;
       z-index: 20;
-      backdrop-filter: blur(10px);
       background: rgba(248, 243, 239, 0.88);
       border-bottom: 1px solid rgba(234, 222, 215, 0.9);
     }
@@ -130,12 +132,75 @@
       color: var(--accent);
     }
 
+    .logo small {
+      display: none;
+    }
+
     .nav-links {
       display: flex;
       align-items: center;
       gap: 22px;
       font-size: 15px;
       color: var(--muted);
+    }
+
+    .mobile-brand-row,
+    .mobile-socials,
+    .mobile-round-cta {
+      display: none;
+    }
+
+    .mobile-brand-row {
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      color: #fff;
+    }
+
+    .mobile-salon-name {
+      max-width: 150px;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .mobile-location {
+      display: grid;
+      justify-items: end;
+      gap: 3px;
+      font-size: 13px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .mobile-location-head {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 7px;
+    }
+
+    .mobile-location small {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+    }
+
+    .mobile-location svg,
+    .mobile-socials svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+    }
+
+    .mobile-socials {
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      color: #fff;
     }
 
     .hero {
@@ -189,6 +254,16 @@
       max-width: 640px;
     }
 
+    .hero-benefits {
+      display: grid;
+      gap: 8px;
+      margin: 0 0 28px;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
@@ -231,6 +306,15 @@
       padding: 24px;
     }
 
+    .hero-image::after {
+      content: '';
+      position: absolute;
+      inset: 24px;
+      border-radius: 22px;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(43, 36, 33, 0.08), rgba(43, 36, 33, 0.24));
+    }
+
     .hero-image img {
       width: 100%;
       height: 100%;
@@ -239,10 +323,36 @@
       border-radius: 22px;
     }
 
+    .mobile-round-cta {
+      position: absolute;
+      z-index: 3;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .mobile-round-cta {
+      right: 22px;
+      bottom: 28px;
+      width: 136px;
+      height: 136px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 18px 40px rgba(43, 36, 33, 0.22);
+      padding: 18px;
+      text-align: center;
+      font-weight: 800;
+      line-height: 1.12;
+      font-size: 20px;
+    }
+
     .floating-box {
       position: absolute;
       left: 24px;
       bottom: 24px;
+      z-index: 2;
       background: rgba(255,255,255,0.95);
       border: 1px solid var(--line);
       padding: 18px 20px;
@@ -1203,13 +1313,42 @@
     }
 
     footer {
-      padding: 28px 0 50px;
+      padding: 28px 0 112px;
       color: var(--muted);
       font-size: 14px;
     }
 
-    .mobile-booking-cta {
-      display: none;
+    .sticky-cta {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      z-index: 80;
+      width: min(calc(100% - 28px), 760px);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 10px;
+      background: rgba(43, 36, 33, 0.72);
+      box-shadow: 0 18px 50px rgba(43, 36, 33, 0.24);
+      backdrop-filter: blur(12px);
+      transform: translateX(-50%);
+    }
+
+    .sticky-cta .btn {
+      min-height: 50px;
+      padding: 12px 16px;
+      border-color: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      box-shadow: none;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .sticky-cta .btn:hover {
+      background: rgba(255, 255, 255, 0.16);
     }
 
     .footer-box {
@@ -1256,33 +1395,84 @@
       .topbar {
         position: sticky;
         top: 0;
+        background: var(--text);
+        border-bottom: 1px solid rgba(234, 222, 215, 0.18);
+        backdrop-filter: none;
+        transition: background 0.2s ease, box-shadow 0.2s ease;
       }
 
       .nav {
         flex-direction: column;
         align-items: stretch;
-        gap: 14px;
-        padding: 14px 0;
+        gap: 16px;
+        padding: 14px 0 12px;
+        transition: padding 0.2s ease, gap 0.2s ease;
+      }
+
+      .topbar.is-compact {
+        background: rgba(43, 36, 33, 0.9);
+        box-shadow: 0 10px 28px rgba(43, 36, 33, 0.16);
+      }
+
+      .topbar.is-compact .nav {
+        gap: 0;
+        padding: 12px 0;
       }
 
       .logo {
         text-align: center;
         font-size: 24px;
+        color: #fff;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .logo span {
+        color: #fff;
+      }
+
+      .logo small {
+        display: block;
+        margin-top: 2px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.26em;
+      }
+
+      .mobile-brand-row,
+      .mobile-socials {
+        display: flex;
+      }
+
+      .logo,
+      .mobile-socials,
+      .nav-links {
+        max-height: 92px;
+        opacity: 1;
+        overflow: hidden;
+        transform: translateY(0);
+        transition: max-height 0.24s ease, opacity 0.18s ease, transform 0.24s ease, margin 0.24s ease;
+      }
+
+      .topbar.is-compact .logo,
+      .topbar.is-compact .mobile-socials,
+      .topbar.is-compact .nav-links {
+        max-height: 0;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px);
       }
 
       .nav-links {
         width: 100%;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 10px 14px;
-        font-size: 14px;
-      }
-
-      .nav-links a {
-        padding: 8px 10px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.72);
-        border: 1px solid var(--line);
+        gap: 14px 20px;
+        color: #fff;
+        font-size: 12px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
       }
 
       .nav > .btn {
@@ -1290,10 +1480,103 @@
       }
 
       .hero {
-        padding: 24px 0 10px;
+        padding: 0 0 10px;
+      }
+
+      .hero .container {
+        width: 100%;
+      }
+
+      .hero-grid {
+        display: grid;
+        gap: 0;
       }
 
       .hero-card,
+      .hero-image {
+        grid-area: 1 / 1;
+      }
+
+      .hero-card {
+        z-index: 2;
+        align-self: end;
+        width: min(100%, 680px);
+        margin: 0 auto;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        color: #fff;
+        text-align: center;
+        padding: 0 64px 104px;
+      }
+
+      .hero-card .eyebrow,
+      .hero-points,
+      .floating-box {
+        display: none;
+      }
+
+      .hero-title {
+        max-width: 540px;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+        line-height: 1.22;
+        margin-bottom: 22px;
+      }
+
+      .hero-text {
+        max-width: 430px;
+        margin: 0 auto 28px;
+        color: #fff;
+        font-size: 16px;
+        line-height: 1.62;
+        letter-spacing: 0.08em;
+      }
+
+      .hero-benefits {
+        width: fit-content;
+        max-width: min(100%, 430px);
+        margin: 0 auto 28px;
+        color: #fff;
+        text-align: left;
+        font-size: 16px;
+        line-height: 1.58;
+        letter-spacing: 0.04em;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 0;
+      }
+
+      .hero-actions .btn-primary {
+        display: none;
+      }
+
+      .hero-actions .btn-secondary {
+        width: auto;
+        min-width: 194px;
+        border-color: rgba(255, 255, 255, 0.86);
+        color: #fff;
+        background: rgba(43, 36, 33, 0.1);
+        border-radius: 5px;
+        font-weight: 500;
+        letter-spacing: 0.16em;
+      }
+
+      .hero-actions .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+
+      .btn {
+        font-size: 15px;
+        letter-spacing: 0.08em;
+      }
+
       .price-card,
       .card,
       .review-card,
@@ -1305,7 +1588,6 @@
         border-radius: 20px;
       }
 
-      .hero-points,
       .services-grid,
       .reviews-grid,
       .benefits-grid,
@@ -1320,11 +1602,6 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .hero-title {
-        font-size: 34px;
-      }
-
-      .hero-text,
       .section-text,
       .card p,
       .price-card p,
@@ -1333,11 +1610,6 @@
         font-size: 15px;
       }
 
-      .hero-actions {
-        flex-direction: column;
-      }
-
-      .hero-actions .btn,
       .form-card .btn {
         width: 100%;
       }
@@ -1351,14 +1623,33 @@
       }
 
       .hero-image {
-        padding: 14px;
-        border-radius: 22px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
       }
 
-      .hero-image img,
+      .hero-image::after {
+        inset: 0;
+        border-radius: 0;
+        background:
+          linear-gradient(180deg, rgba(43, 36, 33, 0.42) 0%, rgba(43, 36, 33, 0.24) 40%, rgba(43, 36, 33, 0.68) 100%),
+          linear-gradient(0deg, rgba(43, 36, 33, 0.32) 0%, rgba(43, 36, 33, 0) 42%);
+      }
+
+      .hero-image img {
+        min-height: calc(100svh - 166px);
+        max-height: 760px;
+        border-radius: 0;
+      }
+
       .about-image img {
         min-height: 280px;
         border-radius: 16px;
+      }
+
+      .mobile-round-cta {
+        display: flex;
       }
 
       .section {
@@ -1367,12 +1658,6 @@
 
       .section-title {
         font-size: 30px;
-      }
-
-      .floating-box {
-        position: static;
-        margin-top: 14px;
-        max-width: none;
       }
 
       .price-item {
@@ -1418,25 +1703,76 @@
         align-items: flex-start;
       }
 
-      .mobile-booking-cta {
-        position: fixed;
-        left: 14px;
-        right: 14px;
-        bottom: calc(14px + env(safe-area-inset-bottom));
-        z-index: 80;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 52px;
-        border-radius: 999px;
-        background: var(--accent);
-        color: #fff;
-        font-weight: 800;
-        box-shadow: 0 18px 44px rgba(140, 88, 62, 0.28);
+      .sticky-cta {
+        width: calc(100% - 20px);
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .sticky-cta .btn {
+        min-height: 48px;
+        padding: 10px 12px;
+        font-size: 12px;
+        letter-spacing: 0.03em;
       }
 
       footer {
-        padding-bottom: 92px;
+        padding-bottom: 118px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .nav-links {
+        gap: 12px 14px;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+      }
+
+      .mobile-location {
+        font-size: 11px;
+        letter-spacing: 0.18em;
+      }
+
+      .mobile-salon-name {
+        max-width: 128px;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+      }
+
+      .hero-card {
+        padding: 0 46px 94px;
+      }
+
+      .hero-title {
+        font-size: 28px;
+        letter-spacing: 0.02em;
+      }
+
+      .hero-text {
+        font-size: 15px;
+        letter-spacing: 0.09em;
+      }
+
+      .hero-benefits {
+        font-size: 15px;
+        letter-spacing: 0.05em;
+      }
+
+      .sticky-cta {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky-cta .btn {
+        min-height: 44px;
+      }
+
+      .mobile-round-cta {
+        width: 112px;
+        height: 112px;
+        right: 14px;
+        bottom: 22px;
+        font-size: 17px;
       }
     }
   </style>
@@ -1444,7 +1780,32 @@
 <body>
   <header class="topbar">
     <div class="container nav">
-      <a class="logo" href="#home">Massage<span>Studio</span></a>
+      <div class="mobile-brand-row" aria-label="Mobile header details">
+        <div class="mobile-salon-name">Tsaruk Massage</div>
+
+        <div class="mobile-location" aria-label="Location">
+          <div class="mobile-location-head">
+            <small>Місто</small>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21s7-5.4 7-12a7 7 0 0 0-14 0c0 6.6 7 12 7 12Z" stroke-width="1.8" />
+              <path d="M12 12.2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke-width="1.8" />
+            </svg>
+          </div>
+          <span>Нова Одеса</span>
+        </div>
+      </div>
+
+      <a class="logo" href="#home">Релакс масаж у Новій Одесі</a>
+
+      <div class="mobile-socials" aria-label="Social links">
+        <a href="https://www.instagram.com/" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5" stroke-width="2" />
+            <path d="M12 15.8a3.8 3.8 0 1 0 0-7.6 3.8 3.8 0 0 0 0 7.6Z" stroke-width="2" />
+            <path d="M17.4 6.8h.1" stroke-width="3" stroke-linecap="round" />
+          </svg>
+        </a>
+      </div>
 
       <nav class="nav-links">
         <a href="#services">Послуги</a>
@@ -1464,11 +1825,13 @@
       <div class="container hero-grid">
         <div class="hero-card">
           <div class="eyebrow">Турбота про тіло • Розслаблення • Відновлення</div>
-          <h1 class="hero-title">Масаж, після якого хочеться повернутися ще</h1>
-          <p class="hero-text">
-            Допомагаю зняти напругу, втому та дискомфорт у тілі. Зручний запис онлайн,
-            зрозумілі ціни та затишна атмосфера для нових і постійних клієнтів.
-          </p>
+          <h1 class="hero-title">Відчуй легкість у тілі вже після першого сеансу</h1>
+          <p class="hero-text">Під ним:</p>
+          <ul class="hero-benefits">
+            <li>✓ Без напруги</li>
+            <li>✓ Індивідуальний підхід</li>
+            <li>✓ Затишна атмосфера</li>
+          </ul>
 
           <div class="hero-actions">
             <a class="btn btn-primary" href="#booking">Онлайн запис</a>
@@ -1492,7 +1855,7 @@
         </div>
 
         <div class="hero-image">
-          <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1200&q=80" alt="Масажний кабінет" />
+          <img src="{{ asset('images/hero-tsaruk-massage.png') }}" alt="Масажист Tsaruk Massage у кабінеті" />
           <div class="floating-box">
             <strong>Перший візит без зайвого стресу</strong>
             <p>Обери послугу, зручний час і залиш заявку за 1 хвилину.</p>
@@ -1914,7 +2277,10 @@
     </section>
   </main>
 
-  <a class="mobile-booking-cta" href="#booking">Записатися онлайн</a>
+  <div class="sticky-cta" aria-label="Швидкі дії">
+    <a class="btn btn-primary" href="#booking">Записатися на прийом</a>
+    <a class="btn btn-secondary" href="#contact">Проконсультуватися з майстром</a>
+  </div>
 
   <footer>
     <div class="container footer-box">
@@ -2457,6 +2823,23 @@
   </script>
 
   <script>
+    (() => {
+      const topbar = document.querySelector('.topbar');
+
+      if (!topbar) {
+        return;
+      }
+
+      const syncHeaderState = () => {
+        topbar.classList.toggle('is-compact', window.scrollY > 72);
+      };
+
+      syncHeaderState();
+      window.addEventListener('scroll', syncHeaderState, { passive: true });
+    })();
+  </script>
+
+  <script>
     const services = @json($services);
     const masters = @json($mastersForUi);
     const bookingConfig = @json($bookingConfig);
@@ -2596,7 +2979,7 @@
     };
 
     const getDurationMinutes = (service) => {
-      if (service?.uses_duration_picker && state.apparatusDurationMinutes) {
+      if (service?.is_apparatus && state.apparatusDurationMinutes) {
         return state.apparatusDurationMinutes;
       }
 
@@ -2609,7 +2992,7 @@
         return 0;
       }
 
-      if (service.uses_duration_picker && state.apparatusDurationMinutes) {
+      if (service.is_apparatus && state.apparatusDurationMinutes) {
         return (service.minute_price || service.price || 0) * state.apparatusDurationMinutes;
       }
 
