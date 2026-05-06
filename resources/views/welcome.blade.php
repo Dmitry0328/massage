@@ -1949,8 +1949,8 @@
                         @endif
                       </div>
                       <div class="price-side">
-                        <div class="price-value">{{ $service['price_label'] }}</div>
-                        <a class="btn btn-primary price-book-btn" href="#booking" data-master-target="{{ $master->id }}" data-service-target="{{ $service['key'] }}" @if(! empty($service['uses_duration_picker'])) data-apparatus-target="{{ $service['apparatus_base'] }}" @endif>Записатися</a>
+                        <div class="price-value">{{ $service['price_label'] ?? number_format($service['price'] ?? 0, 0, ',', ' ') . ' грн' }}</div>
+                        <a class="btn btn-primary price-book-btn" href="#booking" data-master-target="{{ $master->id }}" data-service-target="{{ $service['key'] ?? '' }}" @if(! empty($service['uses_duration_picker'])) data-apparatus-target="{{ $service['apparatus_base'] ?? '' }}" @endif>Записатися</a>
                       </div>
                     </div>
                   @empty
@@ -2142,25 +2142,25 @@
                     @foreach ($serviceCards as $service)
                       <button
                         type="button"
-                        class="service-option {{ old('service') === $service['key'] ? 'active' : '' }}"
-                        data-master-id="{{ $service['master_id'] }}"
-                        data-service-key="{{ $service['key'] }}"
+                        class="service-option {{ old('service') === ($service['key'] ?? '') ? 'active' : '' }}"
+                        data-master-id="{{ $service['master_id'] ?? '' }}"
+                        data-service-key="{{ $service['key'] ?? '' }}"
                         data-service-kind="{{ ! empty($service['uses_duration_picker']) ? 'apparatus' : 'regular' }}"
-                        data-apparatus-base="{{ $service['apparatus_base'] }}"
-                        data-apparatus-variants='@json($service['variants'])'
-                        data-service-label="{{ $service['label'] }}"
-                        data-service-price="{{ $service['price'] }}"
-                        data-service-duration="{{ $service['duration'] }}"
+                        data-apparatus-base="{{ $service['apparatus_base'] ?? '' }}"
+                        data-apparatus-variants='@json($service['variants'] ?? [])'
+                        data-service-label="{{ $service['label'] ?? '' }}"
+                        data-service-price="{{ $service['price'] ?? 0 }}"
+                        data-service-duration="{{ $service['duration'] ?? '' }}"
                       >
-                        <strong>{{ $service['display_label'] ?? $service['label'] }}</strong>
+                        <strong>{{ $service['display_label'] ?? $service['label'] ?? 'Послуга' }}</strong>
                         <div class="service-meta">
-                          <span>{{ ! empty($service['uses_duration_picker']) ? '1 хв - ' . $service['price'] . ' грн' : number_format($service['price'], 0, ',', ' ') . ' грн' }}</span>
-                          <span>{{ $service['duration'] }}</span>
+                          <span>{{ ! empty($service['uses_duration_picker']) ? '1 хв - ' . ($service['price'] ?? 0) . ' грн' : number_format($service['price'] ?? 0, 0, ',', ' ') . ' грн' }}</span>
+                          <span>{{ $service['duration'] ?? '' }}</span>
                           @if (! empty($service['badge']))
                             <span class="service-badge">{{ $service['badge'] }}</span>
                           @endif
                         </div>
-                        <p>{{ $service['description'] }}</p>
+                        <p>{{ $service['description'] ?? '' }}</p>
                       </button>
                     @endforeach
                   </div>
