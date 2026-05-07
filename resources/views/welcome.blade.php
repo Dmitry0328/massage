@@ -1420,6 +1420,7 @@
       }
 
       .logo {
+        display: none;
         text-align: center;
         font-size: 24px;
         color: #fff;
