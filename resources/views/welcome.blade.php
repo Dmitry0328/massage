@@ -387,6 +387,291 @@
       margin-top: 34px;
     }
 
+    .services-section {
+      background: var(--text);
+      color: #fff;
+    }
+
+    .services-intro {
+      text-align: center;
+    }
+
+    .services-intro .section-title {
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .services-intro .section-text {
+      margin-left: auto;
+      margin-right: auto;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .services-columns {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-top: 34px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+    }
+
+    .services-column {
+      padding: 34px 28px;
+    }
+
+    .services-column + .services-column {
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .services-column h3 {
+      margin: 0 0 22px;
+      color: #fff;
+      font-size: 22px;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .services-check-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .services-check-list li {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+
+    .service-list-price {
+      color: #fff;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .services-more {
+      margin-top: 28px;
+      border-color: rgba(255, 255, 255, 0.72);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .services-more:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .quick-book-section {
+      background: var(--text);
+      color: #fff;
+      padding-top: 0;
+    }
+
+    .quick-book-card {
+      padding: 34px 28px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+      text-align: center;
+    }
+
+    .quick-book-card .section-title {
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .quick-book-card .section-text {
+      margin-left: auto;
+      margin-right: auto;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .quick-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .quick-step {
+      padding: 26px 20px;
+      background: rgba(43, 36, 33, 0.78);
+    }
+
+    .quick-step strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #fff;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .quick-step p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 14px;
+    }
+
+    .site-dark-section {
+      background: var(--text);
+      color: #fff;
+    }
+
+    .site-dark-section .section-title {
+      color: #fff;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .site-dark-section .section-text {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .site-dark-section .hero-card,
+    .site-dark-section .price-card,
+    .site-dark-section .review-card,
+    .site-dark-section .info-card,
+    .site-dark-section .form-card {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+      color: #fff;
+    }
+
+    .site-dark-section .price-card p,
+    .site-dark-section .review-card p,
+    .site-dark-section .info-card p,
+    .site-dark-section .form-card p,
+    .site-dark-section .about-list li,
+    .site-dark-section .price-sub,
+    .site-dark-section .price-empty,
+    .site-dark-section .service-meta,
+    .site-dark-section .master-meta,
+    .site-dark-section .apparatus-duration-box small,
+    .site-dark-section .selected-service-meta,
+    .site-dark-section .services-section-label {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .site-dark-section .price-note,
+    .site-dark-section .contact-item,
+    .site-dark-section .booking-block,
+    .site-dark-section .apparatus-duration-box,
+    .site-dark-section .selected-service-card {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .site-dark-section .price-master-tab,
+    .site-dark-section .service-option,
+    .site-dark-section .master-option,
+    .site-dark-section .day-chip,
+    .site-dark-section .time-chip,
+    .site-dark-section .period-chip,
+    .site-dark-section .calendar-nav,
+    .site-dark-section .apparatus-duration-option,
+    .site-dark-section .apparatus-discuss-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .site-dark-section .price-master-tab span {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .site-dark-section .price-master-tab.active,
+    .site-dark-section .service-option.active,
+    .site-dark-section .master-option.active,
+    .site-dark-section .day-chip.active,
+    .site-dark-section .time-chip.active,
+    .site-dark-section .period-chip.active,
+    .site-dark-section .apparatus-duration-option.active,
+    .site-dark-section .apparatus-discuss-btn.active {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+      color: #fff;
+    }
+
+    .site-dark-section .price-master-group h4 {
+      border-color: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .site-dark-section .price-item {
+      border-bottom-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .site-dark-section .price-item-apparatus {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .site-dark-section .booking-summary,
+    .site-dark-section .booking-summary-head,
+    .site-dark-section .booking-total {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .site-dark-section .booking-summary-line {
+      border-top-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .site-dark-section .price-apparatus-list {
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .site-dark-section .stars,
+    .site-dark-section .about-list li::before {
+      color: #fff;
+    }
+
+    .site-dark-section .gallery-grid img,
+    .site-dark-section .about-image img,
+    .site-dark-section .map-box {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+    }
+
+    .site-dark-section input,
+    .site-dark-section select,
+    .site-dark-section textarea {
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    footer {
+      background: var(--text);
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    .footer-box {
+      border-top-color: rgba(255, 255, 255, 0.18);
+    }
+
     .card {
       padding: 28px;
     }
@@ -421,7 +706,7 @@
 
     .prices-wrap {
       display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
+      grid-template-columns: 1fr;
       gap: 24px;
       margin-top: 34px;
     }
@@ -1314,7 +1599,8 @@
 
     footer {
       padding: 28px 0 112px;
-      color: var(--muted);
+      background: var(--text);
+      color: rgba(255, 255, 255, 0.62);
       font-size: 14px;
     }
 
@@ -1357,7 +1643,7 @@
       gap: 20px;
       align-items: center;
       padding-top: 26px;
-      border-top: 1px solid var(--line);
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
     }
 
     @media (max-width: 1080px) {
@@ -1601,6 +1887,7 @@
 
       .price-card,
       .card,
+      .services-column,
       .review-card,
       .info-card,
       .form-card,
@@ -1611,6 +1898,8 @@
       }
 
       .services-grid,
+      .services-columns,
+      .quick-steps,
       .reviews-grid,
       .benefits-grid,
       .gallery-grid,
@@ -1847,17 +2136,16 @@
       <div class="container hero-grid">
         <div class="hero-card">
           <div class="eyebrow">Турбота про тіло • Розслаблення • Відновлення</div>
-          <h1 class="hero-title">Відчуй легкість у тілі вже після першого сеансу</h1>
-          <p class="hero-text">Під ним:</p>
+          <h1 class="hero-title">Поверни легкість уже після першого сеансу.</h1>
           <ul class="hero-benefits">
-            <li>✓ Без напруги</li>
-            <li>✓ Індивідуальний підхід</li>
-            <li>✓ Затишна атмосфера</li>
+            <li>✓ Турбота про кожного клієнта</li>
+            <li>✓ Атмосфера спокою</li>
+            <li>✓ Масаж, після якого тіло дякує</li>
           </ul>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#booking">Онлайн запис</a>
-            <a class="btn btn-secondary" href="#prices">Переглянути ціни</a>
+            <a class="btn btn-primary" href="#booking">Запланувати сеанс</a>
+            <a class="btn btn-secondary" href="#contact">Отримати консультацію</a>
           </div>
 
           <div class="hero-points">
@@ -1886,37 +2174,67 @@
       </div>
     </section>
 
-    <section class="section" id="services">
+    <section class="section services-section" id="services">
+      <div class="container services-intro">
+        <h2 class="section-title">Наші послуги</h2>
+        <p class="section-text">Короткий список послуг наших майстрів</p>
+
+        <div class="services-columns">
+          @foreach (['Олеся', 'Сергій'] as $serviceMasterName)
+            @php
+              $serviceMaster = $masters->firstWhere('name', $serviceMasterName);
+              $serviceItems = $serviceMaster
+                  ? ($priceServicesByMaster[(string) $serviceMaster->id] ?? collect())
+                  : collect();
+            @endphp
+
+            <article class="services-column">
+              <h3>Майстер {{ $serviceMasterName }}</h3>
+              <ul class="services-check-list">
+                @forelse ($serviceItems as $service)
+                  <li>
+                    <span>✓ {{ rtrim($service['display_label'] ?? $service['label'], ':') }}</span>
+                    @if (empty($service['is_apparatus_group']) && empty($service['is_apparatus']))
+                      <span class="service-list-price">{{ $service['price_label'] ?? number_format($service['price'] ?? 0, 0, ',', ' ') . ' грн' }}</span>
+                    @endif
+                  </li>
+                @empty
+                  <li>✓ Послуги скоро будуть додані</li>
+                @endforelse
+              </ul>
+            </article>
+          @endforeach
+        </div>
+
+        <a class="btn services-more" href="#prices">Детальніше про послуги та ціну</a>
+      </div>
+    </section>
+
+    <section class="section quick-book-section">
       <div class="container">
-        <h2 class="section-title">Послуги</h2>
-        <p class="section-text">
-          Можеш залишити базові послуги або замінити цей блок під себе: класичний, апаратний, антицелюлітний,
-          релакс-масаж, масаж спини, шиї та інші процедури.
-        </p>
+        <div class="quick-book-card">
+          <h2 class="section-title">Як записатись за 10 секунд на прийом:</h2>
+          <p class="section-text">Обери майстра, послугу та зручний час. Заявка одразу потрапить до нас, а ми підтвердимо запис.</p>
 
-        <div class="services-grid">
-          <article class="card">
-            <div class="service-icon">🌿</div>
-            <h3>Класичний масаж</h3>
-            <p>Для зняття напруги, покращення самопочуття та загального розслаблення тіла.</p>
-          </article>
-
-          <article class="card">
-            <div class="service-icon">💆</div>
-            <h3>Масаж спини та шиї</h3>
-            <p>Підійде тим, хто має сидячу роботу, втому в спині або відчуття скутості.</p>
-          </article>
-
-          <article class="card">
-            <div class="service-icon">✨</div>
-            <h3>Апаратний масаж</h3>
-            <p>Спрямований на тонус, корекцію зон та покращення зовнішнього вигляду шкіри.</p>
-          </article>
+          <div class="quick-steps">
+            <div class="quick-step">
+              <strong>1. Обери майстра.</strong>
+              <p>Обери майстра Олесю або Сергія та обери послугу/дату/час.</p>
+            </div>
+            <div class="quick-step">
+              <strong>2. Час</strong>
+              <p>Натисни зручний день і вільний час у формі запису.</p>
+            </div>
+            <div class="quick-step">
+              <strong>3. Контакти</strong>
+              <p>Залиши ім'я й телефон, щоб ми швидко підтвердили сеанс.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="prices">
+    <section class="section site-dark-section" id="prices">
       <div class="container">
         <h2 class="section-title">Ціни</h2>
         <p class="section-text">
@@ -1983,37 +2301,11 @@
             </div>
           </div>
 
-          <div class="price-card">
-            <h3>Чому зручно записуватись через сайт</h3>
-            <p>
-              Нові клієнти одразу бачать послуги, ціни, фото та можуть швидко залишити заявку.
-              Постійним клієнтам не треба довго писати в повідомлення — достатньо обрати день та час.
-            </p>
-
-            <div class="benefits-grid">
-              <div class="info-card">
-                <h3>Швидко</h3>
-                <p>Запис за 1 хвилину з телефону або комп’ютера.</p>
-              </div>
-              <div class="info-card">
-                <h3>Зручно</h3>
-                <p>Вся інформація в одному місці: ціни, графік, контакти.</p>
-              </div>
-              <div class="info-card">
-                <h3>Для реклами</h3>
-                <p>Ідеально для Instagram, Facebook та Google-реклами.</p>
-              </div>
-              <div class="info-card">
-                <h3>Довіра</h3>
-                <p>Фото, відгуки та опис підвищують впевненість клієнта.</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section site-dark-section">
       <div class="container">
         <h2 class="section-title">Атмосфера та кабінет</h2>
         <p class="section-text">
@@ -2028,7 +2320,7 @@
       </div>
     </section>
 
-    <section class="section" id="reviews">
+    <section class="section site-dark-section" id="reviews">
       <div class="container">
         <h2 class="section-title">Відгуки клієнтів</h2>
         <p class="section-text">
@@ -2057,7 +2349,7 @@
       </div>
     </section>
 
-    <section class="section" id="about">
+    <section class="section site-dark-section" id="about">
       <div class="container">
         <h2 class="section-title">Про мене</h2>
         <p class="section-text">
@@ -2087,7 +2379,7 @@
       </div>
     </section>
 
-    <section class="section" id="contact">
+    <section class="section site-dark-section" id="contact">
       <div class="container">
         <h2 class="section-title">Контакти та онлайн запис</h2>
         <p class="section-text">
