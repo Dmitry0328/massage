@@ -1420,7 +1420,6 @@
       }
 
       .logo {
-        display: none;
         text-align: center;
         font-size: 24px;
         color: #fff;
@@ -1818,7 +1817,7 @@
         </div>
       </div>
 
-      <a class="logo" href="#home">Релакс масаж у Новій Одесі</a>
+      <a class="logo" href="#home">Масаж у Новій Одесі</a>
 
       <div class="mobile-socials" aria-label="Social links">
         <a href="https://www.instagram.com/" aria-label="Instagram">
