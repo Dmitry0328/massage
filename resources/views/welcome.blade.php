@@ -1445,9 +1445,9 @@
         display: flex;
       }
 
+      .mobile-brand-row,
       .logo,
-      .mobile-socials,
-      .nav-links {
+      .mobile-socials {
         max-height: 92px;
         opacity: 1;
         overflow: hidden;
@@ -1457,7 +1457,8 @@
 
       .topbar.is-compact .logo,
       .topbar.is-compact .mobile-socials,
-      .topbar.is-compact .nav-links {
+      .topbar.is-compact .mobile-brand-row,
+      .topbar.is-compact .mobile-location {
         max-height: 0;
         opacity: 0;
         pointer-events: none;
@@ -1466,13 +1467,34 @@
 
       .nav-links {
         width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
         gap: 14px 20px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0 2px 4px;
+        scroll-behavior: smooth;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
         color: #fff;
         font-size: 12px;
         letter-spacing: 0.28em;
         text-transform: uppercase;
+      }
+
+      .nav-links::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav-links a {
+        flex: 0 0 auto;
+        scroll-snap-align: center;
+        white-space: nowrap;
+      }
+
+      .topbar.is-compact .nav-links {
+        justify-content: safe center;
+        padding-bottom: 0;
       }
 
       .nav > .btn {
@@ -2831,7 +2853,13 @@
       }
 
       const syncHeaderState = () => {
-        topbar.classList.toggle('is-compact', window.scrollY > 72);
+        const isCompact = topbar.classList.contains('is-compact');
+
+        if (!isCompact && window.scrollY > 96) {
+          topbar.classList.add('is-compact');
+        } else if (isCompact && window.scrollY < 24) {
+          topbar.classList.remove('is-compact');
+        }
       };
 
       syncHeaderState();
