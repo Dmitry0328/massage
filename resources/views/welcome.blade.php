@@ -2187,6 +2187,10 @@
       margin-top: -2px;
     }
 
+    .slot-hint + .services-picker {
+      margin-top: 12px;
+    }
+
     .visually-hidden {
       position: absolute;
       width: 1px;
@@ -2477,6 +2481,7 @@
 
     .apparatus-duration-box {
       display: grid;
+      grid-column: 1 / -1;
       gap: 12px;
       margin-top: 14px;
       border: 1px solid var(--line);
@@ -4032,8 +4037,8 @@
                     @foreach ($masters as $master)
                       @php
                         $masterPhone = match ($master->name) {
-                            'Олеся' => '067...',
-                            'Сергій' => '096...',
+                            'Олеся' => '067 876 41 83',
+                            'Сергій' => '096 605 98 23',
                             default => $master->phone ?: 'Онлайн запис',
                         };
                       @endphp
@@ -5420,6 +5425,16 @@
 
       if (!shouldShow) {
         return;
+      }
+
+      const selectedApparatusCard = [...serviceCards].find((card) => (
+        !card.hidden
+        && String(card.dataset.masterId) === String(state.masterId)
+        && card.dataset.apparatusBase === state.apparatusBase
+      ));
+
+      if (selectedApparatusCard) {
+        selectedApparatusCard.insertAdjacentElement('afterend', apparatusDurationBox);
       }
 
       apparatusDurationTitle.textContent = `${state.apparatusBase}: оберіть час процедури`;
