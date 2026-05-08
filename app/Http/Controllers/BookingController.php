@@ -101,7 +101,7 @@ class BookingController extends Controller
 
         $master = Master::query()->findOrFail($data['master_id']);
         $serviceKeys = $this->selectedServiceKeys($data['service'] ?? null, $data['additional_services'] ?? []);
-        $durationOverrides = $this->durationOverrides($data['service'] ?? null, $data['apparatus_duration_minutes'] ?? null);
+        $durationOverrides = $this->durationOverrides($serviceKeys, $data['apparatus_duration_minutes'] ?? null);
 
         return response()->json([
             'days' => $this->availabilityService->availableDays($master, $monthStart, $monthEnd, $today, $maxDate, $serviceKeys, $durationOverrides),
@@ -122,7 +122,7 @@ class BookingController extends Controller
 
         $master = Master::query()->findOrFail($data['master_id']);
         $serviceKeys = $this->selectedServiceKeys($data['service'] ?? null, $data['additional_services'] ?? []);
-        $durationOverrides = $this->durationOverrides($data['service'] ?? null, $data['apparatus_duration_minutes'] ?? null);
+        $durationOverrides = $this->durationOverrides($serviceKeys, $data['apparatus_duration_minutes'] ?? null);
         $payload = [
             'slots' => $this->availabilityService->availableSlots($master, $data['date'], $serviceKeys, $durationOverrides),
         ];
@@ -166,7 +166,7 @@ class BookingController extends Controller
             'apparatus_duration_minutes' => ['nullable', 'integer', Rule::in([15, 30, 45, 60])],
             'appointment_date' => ['required', 'date'],
             'appointment_time' => ['required', 'date_format:H:i'],
-            'social_contact' => ['nullable', 'string', 'max:255'],
+            'social_contact' => ['required', 'string', 'max:255'],
             'message' => ['nullable', 'string', 'max:2000'],
             'apparatus_discuss' => ['nullable', 'boolean'],
         ], [
@@ -180,6 +180,7 @@ class BookingController extends Controller
             'appointment_date.required' => 'Оберіть дату запису.',
             'appointment_time.required' => 'Оберіть вільний час запису.',
             'appointment_time.date_format' => 'Оберіть час у правильному форматі.',
+            'social_contact.required' => 'Вкажіть Telegram, Instagram або Viber.',
         ]);
 
         $additionalServices = collect($validated['additional_services'] ?? [])
@@ -192,7 +193,7 @@ class BookingController extends Controller
         $master = Master::query()->findOrFail($validated['master_id']);
         $time = $validated['appointment_time'];
         $serviceKeys = $this->selectedServiceKeys($validated['service'], $additionalServices);
-        $durationOverrides = $this->durationOverrides($validated['service'], $validated['apparatus_duration_minutes'] ?? null);
+        $durationOverrides = $this->durationOverrides($serviceKeys, $validated['apparatus_duration_minutes'] ?? null);
 
         DB::transaction(function () use ($master, $validated, $time, $additionalServices, $serviceKeys, $durationOverrides): void {
             $isAvailable = $this->availabilityService->isAvailable(
@@ -249,19 +250,22 @@ class BookingController extends Controller
             ->all();
     }
 
-    private function durationOverrides(?string $primaryService, int|string|null $duration): array
+    private function durationOverrides(array $serviceKeys, int|string|null $duration): array
     {
-        if (! $primaryService || ! $duration) {
+        if (! $duration) {
             return [];
         }
 
-        $service = MassageService::query()->where('key', $primaryService)->first();
+        $apparatusKeys = MassageService::query()
+            ->whereIn('key', $serviceKeys)
+            ->where('is_price_per_minute', true)
+            ->pluck('key')
+            ->all();
 
-        if (! $service?->is_price_per_minute) {
-            return [];
-        }
-
-        return [$primaryService => (int) $duration];
+        return collect($serviceKeys)
+            ->filter(fn (string $serviceKey): bool => in_array($serviceKey, $apparatusKeys, true))
+            ->mapWithKeys(fn (string $serviceKey): array => [$serviceKey => (int) $duration])
+            ->all();
     }
 
     private function maxBookingDate(int $maxAdvanceMonths): Carbon

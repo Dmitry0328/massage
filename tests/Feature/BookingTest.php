@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Appointment;
 use App\Models\BookingSetting;
+use App\Models\ClientRequest;
 use App\Models\Master;
 use App\Models\MassageService;
 use App\Models\ScheduleBlock;
@@ -102,14 +103,14 @@ class BookingTest extends TestCase
     {
         $firstMaster = Master::query()->create([
             'name' => 'Olesia',
-            'slug' => 'olesia',
+            'slug' => 'olesia-availability-block',
             'is_active' => true,
             'sort_order' => 1,
         ]);
 
         $secondMaster = Master::query()->create([
             'name' => 'Serhii',
-            'slug' => 'serhii',
+            'slug' => 'serhii-availability-block',
             'is_active' => true,
             'sort_order' => 2,
         ]);
@@ -180,6 +181,7 @@ class BookingTest extends TestCase
             'service' => 'classic',
             'appointment_date' => $this->nextWorkingDate(),
             'appointment_time' => '10:00',
+            'social_contact' => '@maria',
         ]);
 
         $response
@@ -205,6 +207,7 @@ class BookingTest extends TestCase
             'service' => 'classic',
             'appointment_date' => $this->nextWorkingDate(),
             'appointment_time' => '10:00',
+            'social_contact' => '@maria',
         ]);
 
         $response
@@ -252,6 +255,7 @@ class BookingTest extends TestCase
             'service' => 'classic',
             'appointment_date' => $date,
             'appointment_time' => '11:00',
+            'social_contact' => '@client',
         ]);
 
         $response
@@ -442,6 +446,109 @@ class BookingTest extends TestCase
             ->assertSessionHasErrors('service');
 
         $this->assertSame(0, Appointment::query()->count());
+    }
+
+    public function test_three_apparatus_services_can_be_booked_with_shared_duration(): void
+    {
+        MassageService::query()->delete();
+
+        $master = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-apparatus',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        foreach (['apparatus-one', 'apparatus-two', 'apparatus-three'] as $index => $key) {
+            MassageService::query()->create([
+                'master_id' => $master->id,
+                'key' => $key,
+                'label' => 'Apparatus ' . ($index + 1),
+                'category' => 'Apparatus',
+                'duration_minutes' => 60,
+                'price' => 10,
+                'is_price_per_minute' => true,
+                'is_active' => true,
+                'sort_order' => $index + 1,
+            ]);
+        }
+
+        $response = $this->from(route('booking.index'))->post(route('booking.store'), [
+            'client_name' => 'Марія',
+            'phone' => '+380671110044',
+            'master_id' => $master->id,
+            'service' => 'apparatus-one',
+            'additional_services' => ['apparatus-two', 'apparatus-three'],
+            'apparatus_duration_minutes' => 15,
+            'appointment_date' => $this->nextWorkingDate(),
+            'appointment_time' => '10:00',
+            'social_contact' => '@maria',
+        ]);
+
+        $response
+            ->assertRedirect(route('booking.index'))
+            ->assertSessionHas('booking_success');
+
+        $appointment = Appointment::query()->first();
+
+        $this->assertSame(['apparatus-two', 'apparatus-three'], $appointment->additional_services);
+        $this->assertSame([
+            'apparatus-one' => 15,
+            'apparatus-two' => 15,
+            'apparatus-three' => 15,
+        ], $appointment->service_durations);
+    }
+
+    public function test_client_request_is_saved_for_admin_follow_up(): void
+    {
+        $master = Master::query()->create([
+            'name' => 'Олеся',
+            'slug' => 'olesia-callback',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->from(route('booking.index'))->post(route('client-requests.store'), [
+            'client_name' => 'Марія',
+            'phone' => '+380 (67) 111-22-33',
+            'master_id' => $master->id,
+        ]);
+
+        $response
+            ->assertRedirect(route('booking.index'))
+            ->assertSessionHas('client_request_success');
+
+        $request = ClientRequest::query()->first();
+
+        $this->assertNotNull($request);
+        $this->assertSame($master->id, $request->master_id);
+        $this->assertSame('Марія', $request->client_name);
+        $this->assertSame('+380671112233', $request->phone);
+        $this->assertSame(ClientRequest::STATUS_NEW, $request->status);
+        $this->assertStringContainsString('Потрібно зателефонувати', $request->message);
+    }
+
+    public function test_client_request_rejects_invalid_phone(): void
+    {
+        $master = Master::query()->create([
+            'name' => 'Олеся',
+            'slug' => 'olesia-callback-invalid',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->from(route('booking.index'))->post(route('client-requests.store'), [
+            'client_name' => 'Марія',
+            'phone' => '12345',
+            'master_id' => $master->id,
+        ]);
+
+        $response
+            ->assertRedirect(route('booking.index'))
+            ->assertSessionHasErrors('phone', null, 'clientRequest')
+            ->assertSessionHas('open_client_request_popup');
+
+        $this->assertSame(0, ClientRequest::query()->count());
     }
 
     private function nextWorkingDate(): string

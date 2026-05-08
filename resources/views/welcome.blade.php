@@ -56,37 +56,44 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 14px 28px;
+      min-height: 54px;
+      padding: 15px 30px;
       border-radius: 6px;
-      border: 1px solid rgba(182, 132, 107, 0.72);
+      border: 1px solid rgba(148, 106, 84, 0.76);
       cursor: pointer;
       font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      background: rgba(255, 255, 255, 0.28);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: 0.14em;
+      text-transform: none;
+      background: transparent;
       color: var(--accent-dark);
-      backdrop-filter: blur(6px);
-      transition: 0.25s ease;
+      box-shadow: none;
+      backdrop-filter: blur(4px);
+      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
     }
 
     .btn-primary {
-      background: rgba(182, 132, 107, 0.12);
+      background: transparent;
       color: var(--accent-dark);
-      box-shadow: var(--shadow);
+      border-color: rgba(148, 106, 84, 0.82);
+      box-shadow: none;
     }
 
     .btn-primary:hover {
-      background: rgba(182, 132, 107, 0.2);
+      background: rgba(148, 106, 84, 0.1);
       transform: translateY(-1px);
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.2);
+      background: transparent;
       color: var(--accent-dark);
+      border-color: rgba(148, 106, 84, 0.62);
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.48);
+      background: rgba(148, 106, 84, 0.1);
+      transform: translateY(-1px);
     }
 
     .section {
@@ -110,30 +117,40 @@
       position: sticky;
       top: 0;
       z-index: 20;
-      background: rgba(248, 243, 239, 0.88);
-      border-bottom: 1px solid rgba(234, 222, 215, 0.9);
+      background: var(--text);
+      border-bottom: 1px solid rgba(234, 222, 215, 0.18);
+      box-shadow: 0 10px 28px rgba(43, 36, 33, 0.16);
     }
 
     .nav {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 16px 0;
+      align-items: stretch;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      padding: 16px 0 14px;
     }
 
     .logo {
-      font-size: 22px;
+      color: #fff;
+      text-align: center;
+      font-size: 24px;
       font-weight: 800;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
     }
 
     .logo span {
-      color: var(--accent);
+      color: #fff;
     }
 
     .logo small {
-      display: none;
+      display: block;
+      margin-top: 2px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
     }
 
     .nav-links {
@@ -141,13 +158,18 @@
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 22px;
-      font-size: 15px;
-      color: var(--muted);
+      gap: 14px 22px;
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
     }
 
     .mobile-brand-row,
-    .mobile-socials,
+    .mobile-socials {
+      display: flex;
+    }
+
     .mobile-round-cta {
       display: none;
     }
@@ -215,15 +237,31 @@
       line-height: 1;
     }
 
+    .nav > .btn {
+      display: none;
+    }
+
     .hero {
-      padding: 56px 0 28px;
+      position: relative;
+      background: var(--text);
+      padding: 0;
+    }
+
+    .hero .container {
+      width: 100%;
+      max-width: none;
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 36px;
-      align-items: center;
+      min-height: calc(100vh - 152px);
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .hero-image {
+      grid-area: 1 / 1;
     }
 
     .hero-card,
@@ -239,11 +277,22 @@
     }
 
     .hero-card {
-      padding: 52px;
+      position: relative;
+      z-index: 2;
+      align-self: center;
+      width: min(100% - 32px, 760px);
+      margin: 0 auto;
+      padding: clamp(72px, 10vw, 136px) 24px;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      color: #fff;
+      text-align: center;
     }
 
     .eyebrow {
-      display: inline-flex;
+      display: none;
       padding: 8px 14px;
       border-radius: 999px;
       background: #f2e6df;
@@ -254,9 +303,14 @@
     }
 
     .hero-title {
-      font-size: clamp(36px, 5vw, 62px);
-      line-height: 1.02;
-      margin: 0 0 18px;
+      max-width: 760px;
+      margin: 0 auto 24px;
+      color: #fff;
+      font-size: clamp(38px, 5.2vw, 82px);
+      font-weight: 900;
+      line-height: 1.12;
+      letter-spacing: 0.02em;
+      text-wrap: balance;
     }
 
     .hero-text {
@@ -268,23 +322,46 @@
 
     .hero-benefits {
       display: grid;
-      gap: 8px;
-      margin: 0 0 28px;
+      width: fit-content;
+      max-width: min(100%, 520px);
+      gap: 10px;
+      margin: 0 auto 32px;
       padding: 0;
       list-style: none;
-      color: var(--muted);
-      font-size: 18px;
+      color: #fff;
+      text-align: left;
+      font-size: clamp(17px, 1.45vw, 24px);
+      font-weight: 600;
+      line-height: 1.45;
     }
 
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
-      margin-bottom: 28px;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+
+    .hero-actions .btn-primary {
+      display: none;
+    }
+
+    .hero-actions .btn-secondary {
+      border-color: rgba(255, 255, 255, 0.86);
+      color: #fff;
+      background: rgba(43, 36, 33, 0.14);
+      border-radius: 5px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+    }
+
+    .hero-actions .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
     }
 
     .hero-points {
-      display: grid;
+      display: none;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
     }
@@ -309,30 +386,36 @@
 
     .hero-image {
       position: relative;
-      min-height: 100%;
+      min-height: inherit;
       overflow: hidden;
-      border-radius: 28px;
-      background: linear-gradient(180deg, #e9d7cf 0%, #cfae9e 100%);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      padding: 24px;
+      border-radius: 0;
+      background: #1f1916;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
     }
 
     .hero-image::after {
       content: '';
       position: absolute;
-      inset: 24px;
-      border-radius: 22px;
+      inset: 0;
+      border-radius: 0;
       pointer-events: none;
-      background: linear-gradient(180deg, rgba(43, 36, 33, 0.08), rgba(43, 36, 33, 0.24));
+      background:
+        linear-gradient(90deg, rgba(43, 36, 33, 0.8) 0%, rgba(43, 36, 33, 0.52) 42%, rgba(43, 36, 33, 0.34) 100%),
+        linear-gradient(180deg, rgba(43, 36, 33, 0.24) 0%, rgba(43, 36, 33, 0.48) 100%);
     }
 
     .hero-image img {
       width: 100%;
       height: 100%;
-      min-height: 620px;
+      min-height: inherit;
       object-fit: cover;
-      border-radius: 22px;
+      border-radius: 0;
+    }
+
+    .floating-box {
+      display: none;
     }
 
     .mobile-round-cta {
@@ -362,6 +445,7 @@
 
     .floating-box {
       position: absolute;
+      display: none;
       left: 24px;
       bottom: 24px;
       z-index: 2;
@@ -741,6 +825,20 @@
       color: rgba(255, 255, 255, 0.72);
     }
 
+    .site-dark-section .btn {
+      border-color: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      box-shadow: none;
+    }
+
+    .site-dark-section .btn:hover {
+      border-color: #fff;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
     .site-dark-section .hero-card,
     .site-dark-section .price-card,
     .site-dark-section .review-card,
@@ -773,6 +871,35 @@
       color: rgba(255, 255, 255, 0.72);
     }
 
+    .site-dark-section .booking-block h4,
+    .site-dark-section .booking-block-header h4 {
+      color: #fff;
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.24);
+    }
+
+    .site-dark-section .booking-block-header small,
+    .site-dark-section .slot-hint,
+    .site-dark-section .apparatus-duration-box small {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .site-dark-section .form-card > p {
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .site-dark-section .booking-block input,
+    .site-dark-section .booking-block textarea,
+    .site-dark-section .booking-block select {
+      color: #2b2421;
+    }
+
+    .site-dark-section .booking-block input::placeholder,
+    .site-dark-section .booking-block textarea::placeholder {
+      color: rgba(43, 36, 33, 0.68);
+    }
+
     .site-dark-section .price-note,
     .site-dark-section .contact-item,
     .site-dark-section .booking-block,
@@ -801,6 +928,22 @@
       color: rgba(255, 255, 255, 0.72);
     }
 
+    .site-dark-section .service-option strong,
+    .site-dark-section .master-option strong,
+    .site-dark-section .selected-service-card strong,
+    .site-dark-section .month-picker-title {
+      color: #fff;
+    }
+
+    .site-dark-section .service-option p,
+    .site-dark-section .service-meta,
+    .site-dark-section .master-meta,
+    .site-dark-section .selected-service-meta,
+    .site-dark-section .day-chip .day-name,
+    .site-dark-section .day-chip .day-month {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
     .site-dark-section .price-master-tab.active,
     .site-dark-section .service-option.active,
     .site-dark-section .master-option.active,
@@ -813,6 +956,27 @@
       border-color: rgba(255, 255, 255, 0.78);
       box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
       color: #fff;
+    }
+
+    .site-dark-section .service-option:hover,
+    .site-dark-section .master-option:hover,
+    .site-dark-section .day-chip:not(:disabled):hover,
+    .site-dark-section .time-chip:not(:disabled):hover,
+    .site-dark-section .apparatus-duration-option:hover,
+    .site-dark-section .apparatus-discuss-btn:hover {
+      border-color: rgba(255, 255, 255, 0.62);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .site-dark-section .time-chip.is-consumed {
+      background: rgba(255, 255, 255, 0.88);
+      border-color: rgba(255, 255, 255, 0.82);
+      color: #7a5d50;
+    }
+
+    .site-dark-section .day-chip.is-disabled {
+      background: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.58);
     }
 
     .site-dark-section .price-master-group h4 {
@@ -830,9 +994,7 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
-    .site-dark-section .booking-summary,
-    .site-dark-section .booking-summary-head,
-    .site-dark-section .booking-total {
+    .site-dark-section .booking-summary {
       background: rgba(255, 255, 255, 0.08);
       border-color: rgba(255, 255, 255, 0.18);
       color: #fff;
@@ -840,6 +1002,12 @@
 
     .site-dark-section .booking-summary-line {
       border-top-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .site-dark-section .booking-summary small,
+    .site-dark-section .booking-summary p,
+    .site-dark-section #summary-duration {
+      color: rgba(255, 255, 255, 0.82);
     }
 
     .site-dark-section .price-apparatus-list {
@@ -1378,10 +1546,10 @@
     }
 
     .review-popup-dialog {
-      background: rgba(43, 36, 33, 0.96);
+      background: rgba(43, 36, 33, 0.98);
       border: 1px solid rgba(255, 255, 255, 0.22);
       color: #fff;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+      box-shadow: 0 26px 90px rgba(0, 0, 0, 0.46);
     }
 
     .review-popup-dialog strong {
@@ -1469,13 +1637,13 @@
     }
 
     .review-form .btn {
-      border-color: rgba(255, 255, 255, 0.32);
-      background: rgba(182, 132, 107, 0.18);
+      border-color: rgba(255, 255, 255, 0.82);
+      background: transparent;
       color: #fff;
     }
 
     .review-form .btn:hover {
-      background: rgba(182, 132, 107, 0.28);
+      background: rgba(255, 255, 255, 0.14);
     }
 
     .about-wrap {
@@ -1871,31 +2039,84 @@
     .message-popup-backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(30, 24, 20, 0.45);
+      background: rgba(18, 14, 12, 0.68);
+      backdrop-filter: blur(5px);
     }
 
     .message-popup-dialog {
       position: relative;
       z-index: 1;
-      width: min(420px, 100%);
+      width: min(460px, 100%);
       display: grid;
-      gap: 14px;
-      padding: 22px;
-      border-radius: 20px;
-      background: #fffaf6;
-      border: 1px solid var(--line);
-      box-shadow: 0 24px 70px rgba(30, 24, 20, 0.22);
+      gap: 18px;
+      padding: 28px;
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(65, 55, 50, 0.98), rgba(43, 36, 33, 0.98)),
+        var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #fff;
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    .message-popup-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      cursor: pointer;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .message-popup-close:hover {
+      background: rgba(255, 255, 255, 0.16);
     }
 
     .message-popup-dialog strong {
-      font-size: 20px;
+      color: #fff;
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: 0.03em;
     }
 
     .message-popup-dialog p {
       margin: 0;
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.78);
       line-height: 1.55;
       white-space: pre-line;
+    }
+
+    .message-popup-dialog label,
+    .message-popup-dialog small {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .message-popup-dialog input,
+    .message-popup-dialog select,
+    .message-popup-dialog textarea {
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--text);
+      border-radius: 8px;
+    }
+
+    .message-popup-dialog .btn {
+      border-color: rgba(255, 255, 255, 0.82);
+      background: transparent;
+      color: #fff;
+      box-shadow: none;
+    }
+
+    .message-popup-dialog .btn:hover {
+      background: rgba(255, 255, 255, 0.14);
     }
 
     .message-popup-actions {
@@ -1912,13 +2133,9 @@
       width: min(500px, 100%);
       gap: 20px;
       padding: 30px;
-      border-radius: 10px;
-      border: 1px solid rgba(182, 132, 107, 0.54);
-      background:
-        linear-gradient(180deg, rgba(55, 46, 42, 0.98), rgba(43, 36, 33, 0.98)),
-        #2b2421;
-      color: #fff;
-      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+      background: rgba(43, 36, 33, 0.98);
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 26px 90px rgba(0, 0, 0, 0.46);
     }
 
     .message-popup-dialog.review-popup-dialog strong {
@@ -1928,35 +2145,35 @@
       text-transform: uppercase;
     }
 
-    .message-popup-dialog.review-popup-dialog label {
-      color: rgba(255, 255, 255, 0.88);
-    }
-
-    .message-popup-dialog.review-popup-dialog input,
-    .message-popup-dialog.review-popup-dialog textarea {
-      border-color: rgba(255, 255, 255, 0.24);
-      background: rgba(255, 255, 255, 0.94);
-      color: var(--text);
-      border-radius: 8px;
-    }
-
     .message-popup-dialog.review-popup-dialog small {
       color: rgba(255, 255, 255, 0.62);
-    }
-
-    .message-popup-dialog.review-popup-dialog .btn {
-      border-color: rgba(182, 132, 107, 0.82);
-      background: rgba(182, 132, 107, 0.18);
-      color: #fff;
-    }
-
-    .message-popup-dialog.review-popup-dialog .btn:hover {
-      background: rgba(182, 132, 107, 0.28);
     }
 
     @media (max-width: 520px) {
       .message-popup-actions.has-confirm {
         grid-template-columns: 1fr;
+      }
+
+      .floating-booking-btn {
+        right: auto;
+        left: 50%;
+        bottom: calc(14px + env(safe-area-inset-bottom));
+        max-width: calc(100% - 32px);
+        transform: translateX(-50%);
+      }
+
+      .floating-booking-btn:hover,
+      .floating-booking-btn:focus-visible {
+        transform: translateX(-50%) translateY(-1px);
+      }
+
+      .booking-modal {
+        padding: 10px;
+      }
+
+      .booking-modal-dialog {
+        max-height: 94vh;
+        border-radius: 10px;
       }
     }
 
@@ -1980,6 +2197,111 @@
 
     [hidden] {
       display: none !important;
+    }
+
+    body.is-booking-modal-open {
+      overflow: hidden;
+    }
+
+    .floating-booking-btn {
+      position: fixed;
+      right: clamp(16px, 4vw, 42px);
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      z-index: 95;
+      min-height: 54px;
+      padding: 0 24px;
+      border: 0;
+      border-radius: 999px;
+      background: #d8ad55;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1;
+      box-shadow:
+        0 0 0 10px rgba(216, 173, 85, 0.16),
+        0 12px 30px rgba(43, 36, 33, 0.26);
+      animation: bookingPulse 2.1s ease-in-out infinite;
+    }
+
+    .floating-booking-btn:hover,
+    .floating-booking-btn:focus-visible {
+      background: #e0b964;
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    @keyframes bookingPulse {
+      0%,
+      100% {
+        box-shadow:
+          0 0 0 8px rgba(216, 173, 85, 0.14),
+          0 12px 30px rgba(43, 36, 33, 0.24);
+      }
+
+      50% {
+        box-shadow:
+          0 0 0 18px rgba(216, 173, 85, 0.06),
+          0 16px 36px rgba(43, 36, 33, 0.3);
+      }
+    }
+
+    .booking-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .booking-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(18, 14, 12, 0.72);
+      backdrop-filter: blur(6px);
+    }
+
+    .booking-modal-dialog {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 760px);
+      max-height: min(92vh, 980px);
+      overflow: auto;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 14px;
+      background: rgba(43, 36, 33, 0.98);
+      box-shadow: 0 26px 90px rgba(0, 0, 0, 0.46);
+    }
+
+    .booking-modal-slot .form-card {
+      border: 0;
+      border-radius: 14px;
+      box-shadow: none;
+    }
+
+    .booking-modal-close {
+      position: sticky;
+      top: 12px;
+      left: calc(100% - 54px);
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      margin: 12px 12px -54px auto;
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      border-radius: 999px;
+      background: rgba(43, 36, 33, 0.78);
+      color: #fff;
+      cursor: pointer;
+      font-size: 28px;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+
+    .booking-modal-close:hover {
+      background: rgba(255, 255, 255, 0.14);
     }
 
     .booking-flow {
@@ -2239,6 +2561,9 @@
     }
 
     .selected-service-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
       color: var(--muted);
       font-size: 14px;
     }
@@ -2366,9 +2691,22 @@
     }
 
     .time-chip {
+      display: grid;
+      place-items: center;
+      gap: 3px;
+      min-height: 56px;
       padding: 14px 10px;
       text-align: center;
       font-weight: 700;
+    }
+
+    .time-chip small {
+      display: block;
+      color: currentColor;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.15;
+      opacity: 0.72;
     }
 
     .time-grid.is-disabled {
@@ -2399,6 +2737,7 @@
       border-radius: 22px;
       background: #f5f3f0;
       border: 1px solid var(--line);
+      overflow: hidden;
     }
 
     .booking-summary-head,
@@ -2406,7 +2745,16 @@
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      align-items: baseline;
+      align-items: flex-start;
+    }
+
+    .booking-summary-head > div:first-child {
+      min-width: 0;
+    }
+
+    .booking-summary-head > div:last-child {
+      flex: 0 0 auto;
+      min-width: 94px;
     }
 
     .booking-summary small,
@@ -2422,6 +2770,13 @@
 
     .booking-summary strong {
       font-size: 20px;
+      line-height: 1.28;
+      overflow-wrap: anywhere;
+    }
+
+    #summary-price {
+      display: block;
+      white-space: nowrap;
     }
 
     .booking-summary-line {
@@ -2641,36 +2996,19 @@
         padding: 0 0 10px;
       }
 
-      .hero .container {
-        width: 100%;
-      }
-
       .hero-grid {
-        display: grid;
+        min-height: calc(100svh - 166px);
         gap: 0;
       }
 
-      .hero-card,
-      .hero-image {
-        grid-area: 1 / 1;
-      }
-
       .hero-card {
-        z-index: 2;
         align-self: end;
         width: min(100%, 680px);
-        margin: 0 auto;
-        background: transparent;
-        border: 0;
-        box-shadow: none;
-        color: #fff;
-        text-align: center;
         padding: 0 64px 104px;
       }
 
       .hero-card .eyebrow,
-      .hero-points,
-      .floating-box {
+      .hero-points {
         display: none;
       }
 
@@ -2760,9 +3098,55 @@
       }
 
       .days-grid,
-      .time-grid,
       .masters-picker {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .date-slider {
+        grid-template-columns: 38px minmax(0, 1fr) 38px;
+        gap: 8px;
+      }
+
+      .date-slider .calendar-nav,
+      .month-picker .calendar-nav {
+        width: 38px;
+        height: 44px;
+      }
+
+      .days-grid {
+        display: flex;
+        gap: 8px;
+        min-width: 0;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+        padding: 2px 2px 8px;
+      }
+
+      .day-chip {
+        flex: 0 0 clamp(54px, 13vw, 66px);
+        min-height: 92px;
+        padding: 12px 6px;
+        scroll-snap-align: center;
+      }
+
+      .time-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .booking-summary-head,
+      .booking-total {
+        align-items: flex-start;
+      }
+
+      .booking-summary-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .booking-summary strong {
+        font-size: 18px;
       }
 
       .section-text,
@@ -2786,24 +3170,17 @@
       }
 
       .hero-image {
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
+        min-height: inherit;
       }
 
       .hero-image::after {
-        inset: 0;
-        border-radius: 0;
         background:
           linear-gradient(180deg, rgba(43, 36, 33, 0.42) 0%, rgba(43, 36, 33, 0.24) 40%, rgba(43, 36, 33, 0.68) 100%),
           linear-gradient(0deg, rgba(43, 36, 33, 0.32) 0%, rgba(43, 36, 33, 0) 42%);
       }
 
       .hero-image img {
-        min-height: calc(100svh - 166px);
         max-height: 760px;
-        border-radius: 0;
       }
 
       .about-image img {
@@ -3043,7 +3420,7 @@
           </ul>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#booking">Запланувати сеанс</a>
+            <button type="button" class="btn btn-secondary" data-client-request-open>Отримати консультацію</button>
           </div>
 
           <div class="hero-points">
@@ -3410,6 +3787,7 @@
     <div class="message-popup" id="review-popup" hidden role="dialog" aria-modal="true" aria-labelledby="review-popup-title">
       <div class="message-popup-backdrop" data-review-close></div>
       <div class="message-popup-dialog review-popup-dialog">
+        <button type="button" class="message-popup-close" data-review-close aria-label="Закрити відгук">×</button>
         <strong id="review-popup-title">Залишити відгук</strong>
         <form class="review-form" method="POST" action="{{ route('reviews.store') }}">
           @csrf
@@ -3424,7 +3802,7 @@
 
           <label>
             Ім'я
-            <input type="text" name="client_name" value="{{ old('client_name') }}" minlength="2" maxlength="80" required />
+            <input type="text" name="client_name" placeholder="Введіть Ваше ім'я" value="{{ old('client_name') }}" minlength="2" maxlength="80" required />
           </label>
 
           <label>
@@ -3441,7 +3819,7 @@
 
           <label>
             Текст відгуку
-            <textarea name="text" maxlength="2000" required>{{ old('text') }}</textarea>
+            <textarea name="text" placeholder="Напишіть Ваш відгук про масаж" maxlength="2000" required>{{ old('text') }}</textarea>
           </label>
 
           <label class="review-rating-control">
@@ -3596,8 +3974,9 @@
             </div>
           </div>
 
+          <div id="booking-inline-slot" hidden></div>
           <div class="form-card" id="booking">
-            <h3>Записатися на прийом</h3>
+            <h3 id="booking-modal-title">Записатися на прийом</h3>
             <p>Оберіть майстра, послугу, день і час для запису на прийом. Після цього залиште контакти для підтвердження прийому.</p>
 
             <form id="bookingForm" method="POST" action="{{ route('booking.store') }}">
@@ -3615,6 +3994,13 @@
                   <h4>1. Оберіть майстра</h4>
                   <div class="masters-picker" id="masters-picker">
                     @foreach ($masters as $master)
+                      @php
+                        $masterPhone = match ($master->name) {
+                            'Олеся' => '+380 (67) 876-41-83',
+                            'Сергій' => '+380 (96) 605-98-23',
+                            default => $master->phone ?: 'Онлайн запис',
+                        };
+                      @endphp
                       <button
                         type="button"
                         class="master-option {{ (string) old('master_id') === (string) $master->id ? 'active' : '' }}"
@@ -3624,7 +4010,7 @@
                       >
                         <strong>{{ $master->name }}</strong>
                         <div class="master-meta">
-                          <span>{{ $master->phone ?: 'Онлайн запис' }}</span>
+                          <span>{{ $masterPhone }}</span>
                         </div>
                       </button>
                     @endforeach
@@ -3738,19 +4124,12 @@
                 </div>
 
                 <div class="booking-block">
-                  <h4>5. Контактні дані</h4>
+                  <h4>Введіть Ваші данні для запису на послугу:</h4>
                   <div class="contact-fields">
-                    <div class="form-row">
-                      <input type="text" name="client_name" placeholder="Ваше ім’я" value="{{ old('client_name') }}" autocomplete="name" minlength="2" maxlength="80" required />
-                      <input type="tel" name="phone" placeholder="+380XXXXXXXXX" value="{{ old('phone', '+380') }}" autocomplete="tel" inputmode="tel" maxlength="13" required />
-                    </div>
-
-                    <div class="form-row">
-                      <input type="text" name="social_contact" placeholder="Instagram або Telegram (необов’язково)" value="{{ old('social_contact') }}" />
-                      <input type="text" value="{{ $bookingConfig['scheduleLabel'] }}" disabled />
-                    </div>
-
-                    <textarea name="message" placeholder="Коментар до запису">{{ old('message') }}</textarea>
+                    <input type="text" name="client_name" placeholder="Введіть Ваше ім'я" value="{{ old('client_name') }}" autocomplete="name" minlength="2" maxlength="80" required />
+                    <input type="tel" name="phone" placeholder="Введіть Ваш номер телефону для зв'язку з Вами" value="{{ old('phone', '+380') }}" autocomplete="tel" inputmode="tel" maxlength="19" data-phone-mask required />
+                    <input type="text" name="social_contact" placeholder="Введіть Telegram / Instagram / Viber" value="{{ old('social_contact') }}" required />
+                    <textarea name="message" placeholder="Коментар до запису: можливо, маєте питання або побажання">{{ old('message') }}</textarea>
                     <button class="btn btn-primary" type="submit" {{ $masters->isEmpty() ? 'disabled' : '' }}>Підтвердити запис</button>
                   </div>
                 </div>
@@ -3774,9 +4153,59 @@
     </section>
   </main>
 
-  <div class="sticky-cta" aria-label="Швидкі дії">
-    <a class="btn btn-primary" href="#booking">Записатися на масаж</a>
-    <a class="btn btn-secondary" href="#contact">Отримати консультацію</a>
+  <button type="button" class="floating-booking-btn" data-booking-modal-open>
+    Записатись
+  </button>
+
+  <div class="booking-modal" id="booking-modal" hidden role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
+    <div class="booking-modal-backdrop" data-booking-modal-close></div>
+    <div class="booking-modal-dialog">
+      <button type="button" class="booking-modal-close" data-booking-modal-close aria-label="Закрити форму запису">×</button>
+      <div class="booking-modal-slot" id="booking-modal-slot"></div>
+    </div>
+  </div>
+
+  <div class="message-popup" id="client-request-popup" hidden role="dialog" aria-modal="true" aria-labelledby="client-request-title">
+    <div class="message-popup-backdrop" data-client-request-close></div>
+    <div class="message-popup-dialog review-popup-dialog">
+      <button type="button" class="message-popup-close" data-client-request-close aria-label="Закрити форму консультації">×</button>
+      <strong id="client-request-title">Отримати консультацію</strong>
+      <small>Залиште контакти, і ми зателефонуємо, щоб допомогти обрати майстра та зручний час.</small>
+
+      @if ($errors->clientRequest->any())
+        <div class="review-form-errors">
+          <ul>
+            @foreach ($errors->clientRequest->all() as $error)
+              <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
+
+      <div class="review-form-errors" id="client-request-errors" hidden></div>
+
+      <form class="review-form client-request-form" id="client-request-form" method="POST" action="{{ route('client-requests.store') }}">
+        @csrf
+        <label>
+          Майстер
+          <select name="master_id" required>
+            <option value="">Оберіть майстра</option>
+            @foreach ($masters as $master)
+              <option value="{{ $master->id }}" @selected((string) old('master_id') === (string) $master->id)>{{ $master->name }}</option>
+            @endforeach
+          </select>
+        </label>
+        <label>
+          Ім'я
+          <input type="text" name="client_name" placeholder="Введіть Ваше ім'я" value="{{ old('client_name') }}" autocomplete="name" minlength="2" maxlength="80" required>
+        </label>
+        <label>
+          Номер телефону
+          <input type="tel" name="phone" placeholder="Введіть Ваш номер телефону для зв'язку з Вами" value="{{ old('phone', '+380') }}" autocomplete="tel" inputmode="tel" maxlength="19" data-phone-mask required>
+        </label>
+        <button type="submit" class="btn btn-primary" {{ $masters->isEmpty() ? 'disabled' : '' }}>Залишити запит на зворотний дзвінок</button>
+      </form>
+    </div>
   </div>
 
   <footer>
@@ -4599,10 +5028,25 @@
     };
     const serverMessages = {
       success: @json(session('booking_success')),
-      errors: @json($errors->all()),
+      clientRequestSuccess: @json(session('client_request_success')),
+      openClientRequestPopup: @json((bool) session('open_client_request_popup')),
+      errors: @json($errors->getBag('default')->all()),
     };
 
     const bookingForm = document.getElementById('bookingForm');
+    const bookingCard = document.getElementById('booking');
+    const bookingInlineSlot = document.getElementById('booking-inline-slot');
+    const bookingModal = document.getElementById('booking-modal');
+    const bookingModalSlot = document.getElementById('booking-modal-slot');
+    const bookingModalOpenButtons = document.querySelectorAll('[data-booking-modal-open]');
+    const bookingModalCloseButtons = document.querySelectorAll('[data-booking-modal-close]');
+    const clientRequestPopup = document.getElementById('client-request-popup');
+    const clientRequestOpenButtons = document.querySelectorAll('[data-client-request-open]');
+    const clientRequestCloseButtons = document.querySelectorAll('[data-client-request-close]');
+    const clientRequestForm = document.getElementById('client-request-form');
+    const clientRequestPhoneInput = clientRequestForm?.querySelector('input[name="phone"]');
+    const clientRequestErrors = document.getElementById('client-request-errors');
+    const maskedPhoneInputs = document.querySelectorAll('[data-phone-mask]');
     const bookingMessagePopup = document.getElementById('booking-message-popup');
     const bookingMessageTitle = document.getElementById('booking-message-title');
     const bookingMessageText = document.getElementById('booking-message-text');
@@ -4660,8 +5104,8 @@
     const servicesByKey = Object.fromEntries(services.map((service) => [service.key, service]));
     const mastersById = Object.fromEntries(masters.map((master) => [String(master.id), master]));
 
-    summaryDatetime.previousElementSibling.textContent = 'Дата і час процедури (ви маєте прийти на прийом до майстра)';
-    summaryAdditional.previousElementSibling.textContent = 'Додаткові послуги (якщо обирали)';
+    summaryDatetime.previousElementSibling.textContent = 'Час прийому';
+    summaryAdditional.previousElementSibling.textContent = 'Обрані послуги';
     summaryDuration.nextElementSibling.textContent = '';
 
     const makeDate = (value) => new Date(`${value}T00:00:00`);
@@ -4853,11 +5297,15 @@
 
       serviceCards.forEach((card) => {
         const isApparatusCard = card.dataset.serviceKind === 'apparatus';
+        const variantKeys = isApparatusCard
+          ? JSON.parse(card.dataset.apparatusVariants || '[]').map((variant) => variant.key)
+          : [];
+        const apparatusOrder = selectedKeys.findIndex((serviceKey) => variantKeys.includes(serviceKey));
         const isSelected = isApparatusCard
-          ? Boolean(state.apparatusBase && card.dataset.apparatusBase === state.apparatusBase)
+          ? apparatusOrder >= 0
           : selectedKeys.includes(card.dataset.serviceKey || '');
         const order = isApparatusCard
-          ? selectedKeys.indexOf(state.service)
+          ? apparatusOrder
           : selectedKeys.indexOf(card.dataset.serviceKey || '');
         const orderBadge = card.querySelector('.service-order');
 
@@ -4943,7 +5391,7 @@
       state.apparatusVariants.forEach((variant) => {
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = `apparatus-duration-option${state.service === variant.key && !state.apparatusDiscuss ? ' active' : ''}`;
+        button.className = `apparatus-duration-option${getSelectedServiceKeys().includes(variant.key) && !state.apparatusDiscuss ? ' active' : ''}`;
         button.textContent = `${variant.duration_minutes} хв - ${formatPrice(variant.price)}`;
         button.addEventListener('click', () => {
           selectApparatusVariant(variant, false);
@@ -4995,7 +5443,9 @@
       state.additionalServices = normalizeAdditionalServices(normalizedKeys.slice(1), state.service);
       serviceInput.value = state.service;
 
-      if (!servicesByKey[state.service]?.is_apparatus) {
+      const hasSelectedApparatus = normalizedKeys.some((serviceKey) => servicesByKey[serviceKey]?.is_apparatus);
+
+      if (!hasSelectedApparatus) {
         resetApparatusSelection();
       }
 
@@ -5047,11 +5497,26 @@
     };
 
     function selectApparatusVariant(variant, discuss) {
-      selectServiceKey(variant.key);
+      const selectedKeys = getSelectedServiceKeys();
+      const previousDuration = state.apparatusDurationMinutes;
+      const nextDuration = Number(variant.duration_minutes) || 60;
+      const isAlreadySelected = selectedKeys.includes(variant.key);
+
       state.apparatusDiscuss = discuss;
       apparatusDiscussInput.value = discuss ? '1' : '';
-      state.apparatusDurationMinutes = Number(variant.duration_minutes) || 60;
+      state.apparatusDurationMinutes = nextDuration;
       apparatusDurationInput.value = String(state.apparatusDurationMinutes);
+
+      if (isAlreadySelected) {
+        if (previousDuration !== nextDuration) {
+          resetSelectedDateTime();
+        }
+
+        syncAdditionalServiceInputs();
+      } else {
+        applySelectedServiceKeys([...selectedKeys, variant.key]);
+      }
+
       renderApparatusDurationPicker();
       renderBookingStepVisibility();
       renderAdditionalServices();
@@ -5118,6 +5583,47 @@
     };
 
     const normalizePhone = (value) => value.replace(/[\s\-()]/g, '');
+    const formatPhoneForDisplay = (value) => {
+      let digits = value.replace(/\D/g, '');
+
+      if (digits.startsWith('380')) {
+        digits = digits.slice(3);
+      } else if (digits.startsWith('80')) {
+        digits = digits.slice(2);
+      } else if (digits.startsWith('0')) {
+        digits = digits.slice(1);
+      }
+
+      digits = digits.slice(0, 9);
+
+      let formatted = '+380';
+      const operator = digits.slice(0, 2);
+      const first = digits.slice(2, 5);
+      const second = digits.slice(5, 7);
+      const third = digits.slice(7, 9);
+
+      if (operator) {
+        formatted += ` (${operator}`;
+      }
+
+      if (operator.length === 2) {
+        formatted += ')';
+      }
+
+      if (first) {
+        formatted += ` ${first}`;
+      }
+
+      if (second) {
+        formatted += `-${second}`;
+      }
+
+      if (third) {
+        formatted += `-${third}`;
+      }
+
+      return formatted;
+    };
     const validNamePattern = /^[А-Яа-яЁёІіЇїЄєҐґ'’ʼ`\-\s]{2,80}$/u;
     const validPhonePattern = /^\+380\d{9}$/;
 
@@ -5173,6 +5679,57 @@
       closeBookingMessage();
     };
 
+    const openBookingModal = () => {
+      if (!bookingModal || !bookingCard || !bookingModalSlot) {
+        return;
+      }
+
+      bookingModalSlot.appendChild(bookingCard);
+      bookingModal.hidden = false;
+      document.body.classList.add('is-booking-modal-open');
+      bookingCard.querySelector('button, input, select, textarea, a')?.focus({ preventScroll: true });
+    };
+
+    const closeBookingModal = () => {
+      if (!bookingModal || !bookingCard || !bookingInlineSlot) {
+        return;
+      }
+
+      bookingInlineSlot.after(bookingCard);
+      bookingModal.hidden = true;
+      document.body.classList.remove('is-booking-modal-open');
+    };
+
+    const openClientRequestPopup = () => {
+      if (!clientRequestPopup) {
+        return;
+      }
+
+      clientRequestPopup.hidden = false;
+      clientRequestPopup.querySelector('select, input, button')?.focus({ preventScroll: true });
+    };
+
+    const closeClientRequestPopup = () => {
+      if (!clientRequestPopup) {
+        return;
+      }
+
+      clientRequestPopup.hidden = true;
+      if (clientRequestErrors) {
+        clientRequestErrors.hidden = true;
+        clientRequestErrors.textContent = '';
+      }
+    };
+
+    const showClientRequestError = (message) => {
+      if (!clientRequestErrors) {
+        return;
+      }
+
+      clientRequestErrors.textContent = message;
+      clientRequestErrors.hidden = false;
+    };
+
     const checkSelectedSlotAvailability = async () => {
       const params = new URLSearchParams({
         master_id: state.masterId,
@@ -5210,29 +5767,14 @@
       const totalDuration = (selectedService ? getDurationMinutes(selectedService) : 0)
         + selectedAdditionalServices.reduce((sum, service) => sum + getDurationMinutes(service), 0);
 
-      summaryService.textContent = selectedService ? selectedService.label : 'Послугу ще не обрано';
       summaryMaster.textContent = selectedMaster ? `Майстер: ${selectedMaster.name}` : 'Оберіть майстра';
-      summaryAdditional.textContent = selectedAdditionalServices.length
-        ? selectedAdditionalServices.map((service) => service.label).join(', ')
-        : 'Без додаткових послуг';
       summaryPrice.textContent = formatPrice(totalPrice);
-      summaryService.textContent = formatServiceSummaryName(selectedService);
-
-      if (selectedAdditionalServices.length && state.time) {
-        let offsetMinutes = selectedService ? getDurationMinutes(selectedService) : 0;
-        summaryAdditional.textContent = selectedAdditionalServices
-          .map((service) => {
-            const serviceTime = addMinutesToTime(state.time, offsetMinutes);
-            offsetMinutes += getDurationMinutes(service);
-
-            return `${service.label}: ${serviceTime}`;
-          })
-          .join('\n');
-      } else {
-        summaryAdditional.textContent = selectedAdditionalServices.length
-          ? selectedAdditionalServices.map((service) => service.label).join(', ')
-          : 'Без додаткових послуг';
-      }
+      summaryService.textContent = selectedService ? 'Ваш запис' : 'Послугу ще не обрано';
+      summaryAdditional.textContent = selectedService
+        ? [formatServiceSummaryName(selectedService), ...selectedAdditionalServices.map((service) => service.label)]
+          .map((label, index) => `${index + 1}. ${label}`)
+          .join('\n')
+        : 'Оберіть послуги';
 
       if (selectedService) {
         const durationLines = [
@@ -5519,11 +6061,20 @@
         const button = document.createElement('button');
         button.type = 'button';
         button.className = `time-chip${slot === state.time ? ' active' : ''}${isConsumed ? ' is-consumed' : ''}`;
-        button.textContent = slot;
+        button.innerHTML = `<span>${slot}</span>`;
         button.disabled = isConsumed;
 
+        if (slot === state.time) {
+          const label = document.createElement('small');
+          label.textContent = 'час вашого прийому';
+          button.appendChild(label);
+        }
+
         if (isConsumed) {
-          button.title = 'Цей час уже входить у вибраний запис';
+          const label = document.createElement('small');
+          label.textContent = 'тривалість процедури';
+          button.appendChild(label);
+          button.title = 'Цей час входить у тривалість вашої процедури';
         }
 
         button.addEventListener('click', () => {
@@ -5678,28 +6229,33 @@
       }
     };
 
-    serviceCards.forEach((card) => {
-      card.addEventListener('click', () => {
-        clearBookingError();
-        const isApparatus = card.dataset.serviceKind === 'apparatus';
+      serviceCards.forEach((card) => {
+        card.addEventListener('click', () => {
+          clearBookingError();
+          const isApparatus = card.dataset.serviceKind === 'apparatus';
 
-        if (isApparatus) {
-          state.apparatusBase = card.dataset.apparatusBase || '';
-          state.apparatusVariants = JSON.parse(card.dataset.apparatusVariants || '[]');
-          state.service = '';
-          serviceInput.value = '';
-          state.additionalServices = [];
-          state.apparatusDiscuss = false;
-          apparatusDiscussInput.value = '';
-          resetSelectedDateTime();
-          syncAdditionalServiceInputs();
-          renderServiceSelectionState();
-          renderApparatusDurationPicker();
-          renderBookingStepVisibility();
-          renderAdditionalServices();
-          updateSummary();
-          return;
-        }
+          if (isApparatus) {
+            const selectedKeys = getSelectedServiceKeys();
+            const variants = JSON.parse(card.dataset.apparatusVariants || '[]');
+            const variantKeys = variants.map((variant) => variant.key);
+            const isSelected = selectedKeys.some((serviceKey) => variantKeys.includes(serviceKey));
+
+            if (!isSelected && selectedKeys.length >= maxSelectedServices) {
+              showBookingMessage('Можна обрати максимум 3 послуги в одному записі.', 'Ліміт послуг');
+              return;
+            }
+
+            state.apparatusBase = card.dataset.apparatusBase || '';
+            state.apparatusVariants = variants;
+            state.apparatusDiscuss = false;
+            apparatusDiscussInput.value = '';
+            renderServiceSelectionState();
+            renderApparatusDurationPicker();
+            renderBookingStepVisibility();
+            renderAdditionalServices();
+            updateSummary();
+            return;
+          }
 
         toggleRegularService(card.dataset.serviceKey || '');
       });
@@ -5820,6 +6376,49 @@
       renderAdditionalServices();
     });
 
+    bookingModalOpenButtons.forEach((button) => {
+      button.addEventListener('click', openBookingModal);
+    });
+
+    bookingModalCloseButtons.forEach((button) => {
+      button.addEventListener('click', closeBookingModal);
+    });
+
+    maskedPhoneInputs.forEach((input) => {
+      input.value = formatPhoneForDisplay(input.value || '+380');
+
+      input.addEventListener('input', () => {
+        input.value = formatPhoneForDisplay(input.value);
+      });
+
+      input.addEventListener('focus', () => {
+        if (!input.value.trim()) {
+          input.value = '+380';
+        }
+      });
+    });
+
+    clientRequestOpenButtons.forEach((button) => {
+      button.addEventListener('click', openClientRequestPopup);
+    });
+
+    clientRequestCloseButtons.forEach((button) => {
+      button.addEventListener('click', closeClientRequestPopup);
+    });
+
+    clientRequestForm?.addEventListener('submit', (event) => {
+      const phone = normalizePhone(clientRequestPhoneInput?.value.trim() || '');
+
+      if (clientRequestPhoneInput) {
+        clientRequestPhoneInput.value = phone;
+      }
+
+      if (!validPhonePattern.test(phone)) {
+        event.preventDefault();
+        showClientRequestError('Вкажіть номер телефону у форматі +380XXXXXXXXX.');
+      }
+    });
+
     bookingForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       clearBookingError();
@@ -5892,6 +6491,16 @@
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && !bookingMessagePopup.hidden) {
         closeBookingMessage();
+        return;
+      }
+
+      if (event.key === 'Escape' && bookingModal && !bookingModal.hidden) {
+        closeBookingModal();
+        return;
+      }
+
+      if (event.key === 'Escape' && clientRequestPopup && !clientRequestPopup.hidden) {
+        closeClientRequestPopup();
       }
     });
 
@@ -5966,8 +6575,14 @@
 
     if (serverMessages.success) {
       showBookingMessage(serverMessages.success, 'Готово');
+    } else if (serverMessages.clientRequestSuccess) {
+      showBookingMessage(serverMessages.clientRequestSuccess, 'Готово');
     } else if (Array.isArray(serverMessages.errors) && serverMessages.errors.length) {
       showBookingMessage(serverMessages.errors.join('\n'), 'Зверніть увагу');
+    }
+
+    if (serverMessages.openClientRequestPopup) {
+      openClientRequestPopup();
     }
   </script>
 </body>
