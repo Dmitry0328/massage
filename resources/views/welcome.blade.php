@@ -3307,11 +3307,20 @@
 
     @media (max-width: 420px) {
       .service-list-apparatus-wrap {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(88px, auto);
+        align-items: start;
+        gap: 10px;
       }
 
       .service-list-apparatus-side {
-        justify-items: start;
+        justify-items: end;
+        text-align: right;
+        padding-top: 2px;
+      }
+
+      .service-list-apparatus-price-label,
+      .service-list-apparatus-price {
+        font-size: 15px;
       }
 
       .nav-links {
