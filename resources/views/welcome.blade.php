@@ -5620,7 +5620,6 @@
       });
     };
 
-    const normalizePhone = (value) => value.replace(/[\s\-()]/g, '');
     const formatPhoneForDisplay = (value) => {
       let digits = value.replace(/\D/g, '');
 
@@ -5638,33 +5637,7 @@
 
       digits = digits.slice(0, 9);
 
-      let formatted = '+380';
-      const operator = digits.slice(0, 2);
-      const first = digits.slice(2, 5);
-      const second = digits.slice(5, 7);
-      const third = digits.slice(7, 9);
-
-      if (operator) {
-        formatted += ` (${operator}`;
-      }
-
-      if (operator.length === 2) {
-        formatted += ')';
-      }
-
-      if (first) {
-        formatted += ` ${first}`;
-      }
-
-      if (second) {
-        formatted += `-${second}`;
-      }
-
-      if (third) {
-        formatted += `-${third}`;
-      }
-
-      return formatted;
+      return digits ? `+380 ${digits}` : '+380';
     };
     const normalizePhoneForSubmit = (value) => {
       const digits = value.replace(/\D/g, '');
@@ -6450,8 +6423,16 @@
     maskedPhoneInputs.forEach((input) => {
       input.value = input.value.trim() ? formatPhoneForDisplay(input.value) : '';
 
-      input.addEventListener('input', () => {
+      input.addEventListener('input', (event) => {
+        if (event.inputType?.startsWith('delete')) {
+          return;
+        }
+
         input.value = formatPhoneForDisplay(input.value);
+      });
+
+      input.addEventListener('blur', () => {
+        input.value = input.value.trim() ? formatPhoneForDisplay(input.value) : '';
       });
     });
 
