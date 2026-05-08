@@ -244,19 +244,23 @@
     .hero {
       position: relative;
       background: var(--text);
-      padding: 0;
+      padding: 42px 0 54px;
     }
 
     .hero .container {
-      width: 100%;
-      max-width: none;
+      width: min(100% - 32px, var(--container));
+      max-width: var(--container);
     }
 
     .hero-grid {
       display: grid;
-      min-height: calc(100vh - 152px);
+      min-height: min(620px, calc(100vh - 132px));
       gap: 0;
       align-items: stretch;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 26px 90px rgba(0, 0, 0, 0.34);
     }
 
     .hero-card,
@@ -2996,9 +3000,18 @@
         padding: 0 0 10px;
       }
 
+      .hero .container {
+        width: 100%;
+        max-width: none;
+      }
+
       .hero-grid {
         min-height: calc(100svh - 166px);
         gap: 0;
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
       }
 
       .hero-card {
