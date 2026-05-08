@@ -5599,6 +5599,10 @@
     const formatPhoneForDisplay = (value) => {
       let digits = value.replace(/\D/g, '');
 
+      if (!digits) {
+        return '';
+      }
+
       if (digits.startsWith('380')) {
         digits = digits.slice(3);
       } else if (digits.startsWith('80')) {
@@ -5637,12 +5641,33 @@
 
       return formatted;
     };
+    const normalizePhoneForSubmit = (value) => {
+      const digits = value.replace(/\D/g, '');
+
+      if (!digits) {
+        return '';
+      }
+
+      if (digits.startsWith('380')) {
+        return `+${digits.slice(0, 12)}`;
+      }
+
+      if (digits.startsWith('80')) {
+        return `+380${digits.slice(2, 11)}`;
+      }
+
+      if (digits.startsWith('0')) {
+        return `+380${digits.slice(1, 10)}`;
+      }
+
+      return `+380${digits.slice(0, 9)}`;
+    };
     const validNamePattern = /^[А-Яа-яЁёІіЇїЄєҐґ'’ʼ`\-\s]{2,80}$/u;
     const validPhonePattern = /^\+380\d{9}$/;
 
     const validateContacts = () => {
       const clientName = clientNameInput.value.trim().replace(/\s+/g, ' ');
-      const phone = normalizePhone(phoneInput.value.trim());
+      const phone = normalizePhoneForSubmit(phoneInput.value.trim());
 
       clientNameInput.value = clientName;
       phoneInput.value = phone;
@@ -6398,16 +6423,10 @@
     });
 
     maskedPhoneInputs.forEach((input) => {
-      input.value = formatPhoneForDisplay(input.value || '+380');
+      input.value = input.value.trim() ? formatPhoneForDisplay(input.value) : '';
 
       input.addEventListener('input', () => {
         input.value = formatPhoneForDisplay(input.value);
-      });
-
-      input.addEventListener('focus', () => {
-        if (!input.value.trim()) {
-          input.value = '+380';
-        }
       });
     });
 
@@ -6420,7 +6439,7 @@
     });
 
     clientRequestForm?.addEventListener('submit', (event) => {
-      const phone = normalizePhone(clientRequestPhoneInput?.value.trim() || '');
+      const phone = normalizePhoneForSubmit(clientRequestPhoneInput?.value.trim() || '');
 
       if (clientRequestPhoneInput) {
         clientRequestPhoneInput.value = phone;
