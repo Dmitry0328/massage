@@ -2155,16 +2155,16 @@
       }
 
       .floating-booking-btn {
-        right: auto;
-        left: 50%;
+        right: 14px;
+        left: auto;
         bottom: calc(14px + env(safe-area-inset-bottom));
         max-width: calc(100% - 32px);
-        transform: translateX(-50%);
+        transform: none;
       }
 
       .floating-booking-btn:hover,
       .floating-booking-btn:focus-visible {
-        transform: translateX(-50%) translateY(-1px);
+        transform: translateY(-1px);
       }
 
       .booking-modal {
