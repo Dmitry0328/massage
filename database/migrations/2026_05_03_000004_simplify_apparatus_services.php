@@ -28,6 +28,7 @@ return new class extends Migration
 
         $apparatusNames = [
             'Міостимуляція',
+            'ЕНДОСФЕРА',
             'Кавітація',
             'RF-ліфтинг',
             'RF- ліфтинг',

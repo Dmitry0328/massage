@@ -101,6 +101,7 @@ return new class extends Migration
     {
         $apparatus = [
             ['miostimuliaciia', 'Міостимуляція'],
+            ['endosfera', 'ЕНДОСФЕРА'],
             ['kavitaciia', 'Кавітація'],
             ['rf-lifting', 'RF- ліфтинг'],
             ['vakuumnii-masaz', 'Вакуумний масаж'],
@@ -110,7 +111,7 @@ return new class extends Migration
         return [
             'olesia' => [
                 $this->fixed('olesia-zagalnii-masaz-tila-120', 'Загальний масаж тіла', 120, 800, 'Повний масаж тіла для глибокого розслаблення та відновлення.'),
-                $this->fixed('olesia-klasicnii-masaz-bud-iaka-odna-zona-45', 'Класичний масаж (будь яка одна зона)', 45, 500, 'Класичний масаж однієї обраної зони.'),
+                $this->fixed('olesia-klasicnii-masaz-bud-iaka-zona-45', 'Класичний масаж (будь яка зона)', 45, 500, 'Класичний масаж однієї обраної зони.'),
                 $this->fixed('olesia-limfodrenaz-45', 'Лімфодренаж', 45, 600, 'Лімфодренажний масаж для легкості та зменшення набряклості.'),
                 $this->fixed('olesia-medovii-masaz-45', 'Медовий масаж', 45, 700, 'Медовий масаж для тонусу шкіри та активного опрацювання тканин.'),
                 $this->fixed('olesia-masaz-obliccia-45', 'Масаж обличчя', 45, 500, 'Масаж обличчя для розслаблення, тонусу та свіжого вигляду.'),
