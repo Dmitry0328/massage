@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
 
         BookingSetting::query()->firstOrCreate([], [
             'max_advance_months' => 2,
+            'show_quick_book_block' => false,
         ]);
 
         collect(config('booking.services', []))->each(function (array $service, string $key): void {

@@ -13,10 +13,12 @@ class BookingSetting extends Model
         'work_start_time',
         'work_end_time',
         'slot_step_minutes',
+        'show_quick_book_block',
     ];
 
     protected $casts = [
         'working_days' => 'array',
+        'show_quick_book_block' => 'boolean',
     ];
 
     public static function current(): self
@@ -27,6 +29,7 @@ class BookingSetting extends Model
             'work_start_time' => '10:00',
             'work_end_time' => '18:00',
             'slot_step_minutes' => 60,
+            'show_quick_book_block' => false,
         ]);
     }
 

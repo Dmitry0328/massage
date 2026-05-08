@@ -35,6 +35,10 @@
         .calendar-weekdays { display: flex; flex-wrap: wrap; gap: 8px; }
         .calendar-weekday-toggle { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #e5cfc4; border-radius: 999px; background: #fff; padding: 8px 12px; font-weight: 700; }
         .calendar-weekday-toggle input { accent-color: #d3422f; }
+        .calendar-site-toggle { display: flex; align-items: center; justify-content: space-between; gap: 14px; border: 1px solid #e5cfc4; border-radius: 14px; background: #fff; padding: 12px 14px; }
+        .calendar-site-toggle strong { display: block; color: #2b2421; }
+        .calendar-site-toggle span { display: block; margin-top: 2px; color: #6b5148; font-size: 13px; }
+        .calendar-site-toggle input { width: 20px; height: 20px; accent-color: #d3422f; }
         .calendar-label { display: block; margin-bottom: 6px; color: #6b5148; font-size: 13px; font-weight: 600; }
         .calendar-input { width: 100%; border: 1px solid #e5cfc4; border-radius: 12px; background: #fff; padding: 10px 12px; }
         .calendar-modal { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 20px; }
@@ -220,6 +224,14 @@
                         >
                     </div>
                 </div>
+
+                <label class="calendar-site-toggle">
+                    <span>
+                        <strong>Показувати блок "Як записатись за 10 секунд"</strong>
+                        <span>Увімкніть, якщо потрібно показати інструкцію запису на головній сторінці.</span>
+                    </span>
+                    <input type="checkbox" wire:model.live="showQuickBookBlock">
+                </label>
 
                 <button type="button" class="calendar-save" wire:click="saveSettings">
                     Зберегти графік

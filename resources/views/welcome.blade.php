@@ -199,8 +199,18 @@
     .mobile-socials {
       align-items: center;
       justify-content: center;
-      gap: 22px;
+      flex-wrap: wrap;
+      gap: 10px 16px;
       color: #fff;
+    }
+
+    .mobile-socials a {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
     }
 
     .hero {
@@ -426,39 +436,211 @@
       border-top: 1px solid rgba(255, 255, 255, 0.18);
     }
 
+    .services-details {
+      display: grid;
+      gap: 12px;
+      margin: 28px 28px 34px;
+      text-align: left;
+    }
+
+    .services-details > p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .service-accordion {
+      display: grid;
+      gap: 8px;
+    }
+
+    .service-accordion details {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+
+    .service-accordion summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      list-style: none;
+    }
+
+    .service-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .service-accordion summary::after {
+      content: "+";
+      display: inline-grid;
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      margin-left: auto;
+      color: #fff;
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .service-accordion details[open] summary::after {
+      content: "−";
+    }
+
+    .service-accordion p {
+      margin: 0;
+      padding: 0 56px 16px 16px;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
     .services-column h3 {
       margin: 0 0 22px;
       color: #fff;
-      font-size: 22px;
+      font-size: 20px;
       letter-spacing: 0.08em;
-      text-align: center;
+      text-align: left;
       text-transform: uppercase;
     }
 
     .services-check-list {
       display: grid;
-      gap: 12px;
+      gap: 16px;
       margin: 0;
       padding: 0;
       list-style: none;
       color: rgba(255, 255, 255, 0.78);
       font-size: 14px;
       line-height: 1.45;
-      text-align: center;
+      text-align: left;
     }
 
     .services-check-list li {
+      display: grid;
+      justify-items: start;
+      gap: 5px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .services-check-list li:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .service-list-name {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .service-list-meta {
       display: flex;
-      justify-content: center;
+      width: 100%;
+      justify-content: flex-start;
+      align-items: center;
       gap: 10px;
-      align-items: baseline;
       flex-wrap: wrap;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 13px;
+    }
+
+    .service-list-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 4px 9px;
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.86);
+      font-weight: 600;
     }
 
     .service-list-price {
+      margin-left: auto;
       color: #fff;
+      font-size: 15px;
       font-weight: 800;
       white-space: nowrap;
+    }
+
+    .service-list-apparatus-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    .service-list-apparatus-wrap .service-list-time {
+      justify-content: center;
+    }
+
+    .service-list-apparatus-side {
+      display: grid;
+      gap: 4px;
+      justify-items: center;
+      align-content: center;
+    }
+
+    .service-list-apparatus-price-label {
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .service-list-apparatus-price {
+      display: inline-grid;
+      place-items: center;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.25;
+      text-align: center;
+    }
+
+    .service-list-apparatus {
+      display: grid;
+      gap: 8px;
+      margin-top: 4px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .service-list-apparatus-label {
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 13px;
+    }
+
+    .service-list-apparatus li {
+      position: relative;
+      padding: 0 0 0 14px;
+      border: 0;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 13px;
+    }
+
+    .service-list-apparatus li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #fff;
     }
 
     .services-more {
@@ -541,6 +723,18 @@
       text-transform: uppercase;
     }
 
+    #about .section-title {
+      text-align: center;
+    }
+
+    #reviews .section-title {
+      text-align: center;
+    }
+
+    #contact .section-title {
+      text-align: center;
+    }
+
     .site-dark-section .section-text {
       color: rgba(255, 255, 255, 0.72);
     }
@@ -549,7 +743,10 @@
     .site-dark-section .price-card,
     .site-dark-section .review-card,
     .site-dark-section .info-card,
-    .site-dark-section .form-card {
+    .site-dark-section .form-card,
+    .site-dark-section .prep-card,
+    .site-dark-section .about-master-card,
+    .site-dark-section .about-profile-card {
       background: rgba(255, 255, 255, 0.06);
       border-color: rgba(255, 255, 255, 0.18);
       border-radius: 10px;
@@ -562,6 +759,8 @@
     .site-dark-section .info-card p,
     .site-dark-section .form-card p,
     .site-dark-section .about-list li,
+    .site-dark-section .prep-card li,
+    .site-dark-section .about-profile-text,
     .site-dark-section .price-sub,
     .site-dark-section .price-empty,
     .site-dark-section .service-meta,
@@ -650,7 +849,7 @@
       color: #fff;
     }
 
-    .site-dark-section .gallery-grid img,
+    .site-dark-section .gallery-slide img,
     .site-dark-section .about-image img,
     .site-dark-section .map-box {
       border: 1px solid rgba(255, 255, 255, 0.18);
@@ -948,15 +1147,99 @@
       padding: 24px;
     }
 
-    .gallery-grid {
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 34px;
+    .gallery-section {
+      text-align: center;
     }
 
-    .gallery-grid img {
-      width: 100%;
-      height: 290px;
-      object-fit: cover;
+    .gallery-section .section-text {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .gallery-slider {
+      position: relative;
+      max-width: 880px;
+      margin-top: 34px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .gallery-viewport {
+      overflow: hidden;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .gallery-track {
+      display: flex;
+      transition: transform 0.35s ease;
+      will-change: transform;
+    }
+
+    .gallery-slide {
+      flex: 0 0 100%;
+      display: grid;
+      place-items: center;
+    }
+
+    .gallery-slide img {
+      width: auto;
+      max-width: 100%;
+      height: clamp(520px, 72vw, 720px);
+      object-fit: contain;
+      background: rgba(43, 36, 33, 0.36);
+    }
+
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      z-index: 2;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 999px;
+      background: rgba(43, 36, 33, 0.58);
+      color: #fff;
+      cursor: pointer;
+      font-size: 28px;
+      line-height: 1;
+      transform: translateY(-50%);
+      transition: 0.2s ease;
+    }
+
+    .gallery-nav:hover {
+      background: rgba(43, 36, 33, 0.78);
+    }
+
+    .gallery-prev {
+      left: 16px;
+    }
+
+    .gallery-next {
+      right: 16px;
+    }
+
+    .gallery-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .gallery-dot {
+      width: 10px;
+      height: 10px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.32);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .gallery-dot.active {
+      background: #fff;
     }
 
     .reviews-grid {
@@ -964,20 +1247,233 @@
       margin-top: 34px;
     }
 
+    .reviews-head {
+      display: grid;
+      justify-items: center;
+      gap: 18px;
+    }
+
+    .reviews-page[hidden],
+    .reviews-pagination[hidden] {
+      display: none;
+    }
+
+    .review-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 28px;
+    }
+
     .review-card {
       padding: 26px;
     }
 
-    .stars {
+    .stars,
+    .rating-stars {
+      position: relative;
+      display: inline-block;
       font-size: 18px;
       letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.24);
+      line-height: 1;
+    }
+
+    .stars {
       margin-bottom: 14px;
+    }
+
+    .rating-stars::before {
+      content: "★★★★★";
+    }
+
+    .rating-stars::after {
+      content: "★★★★★";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: calc(var(--rating) / 5 * 100%);
+      overflow: hidden;
       color: var(--accent);
     }
 
     .review-author {
       margin-top: 18px;
       font-weight: 700;
+    }
+
+    .review-meta {
+      display: grid;
+      gap: 6px;
+      margin-top: 14px;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .reviews-pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .review-page-arrow,
+    .review-page-dot {
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 800;
+      transition: 0.2s ease;
+    }
+
+    .review-page-arrow {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .review-page-dot {
+      width: 18px;
+      height: 18px;
+      padding: 0;
+    }
+
+    .review-page-arrow:hover,
+    .review-page-dot:hover,
+    .review-page-dot.active {
+      border-color: rgba(255, 255, 255, 0.78);
+      background: #fff;
+      color: var(--text);
+    }
+
+    .review-page-arrow:disabled {
+      opacity: 0.38;
+      cursor: default;
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .review-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .review-form label {
+      display: grid;
+      gap: 8px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .review-form small {
+      color: rgba(255, 255, 255, 0.62);
+      font-weight: 400;
+    }
+
+    .review-popup-dialog {
+      background: rgba(43, 36, 33, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+    }
+
+    .review-popup-dialog strong {
+      color: #fff;
+      font-size: 24px;
+      letter-spacing: 0.04em;
+    }
+
+    .review-popup-dialog input,
+    .review-popup-dialog select,
+    .review-popup-dialog textarea {
+      border-color: rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--text);
+    }
+
+    .review-rating-control {
+      display: grid;
+      gap: 10px;
+    }
+
+    .review-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .review-stars-picker {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.28);
+      line-height: 1;
+    }
+
+    .review-star-option {
+      position: relative;
+      width: 30px;
+      height: 32px;
+      display: inline-grid;
+      place-items: center;
+      font-size: 30px;
+    }
+
+    .review-star-option::before {
+      content: "★";
+    }
+
+    .review-star-option::after {
+      content: "★";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      width: var(--fill, 0%);
+      overflow: hidden;
+      color: var(--accent);
+    }
+
+    .review-stars-picker:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.72);
+      outline-offset: 4px;
+      border-radius: 6px;
+    }
+
+    .review-rating-value {
+      min-width: 46px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .review-form-errors {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(184, 70, 70, 0.1);
+      color: #9f2f2f;
+      font-size: 14px;
+    }
+
+    .review-form .btn {
+      border-color: rgba(255, 255, 255, 0.32);
+      background: rgba(182, 132, 107, 0.18);
+      color: #fff;
+    }
+
+    .review-form .btn:hover {
+      background: rgba(182, 132, 107, 0.28);
     }
 
     .about-wrap {
@@ -1021,6 +1517,227 @@
       color: var(--accent);
       font-size: 24px;
       line-height: 1;
+    }
+
+    .prep-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    .prepare-section {
+      text-align: center;
+    }
+
+    .prepare-section .section-text {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .prep-card {
+      display: grid;
+      gap: 12px;
+      padding: 26px;
+      text-align: center;
+    }
+
+    .prep-card h3 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .prep-card h3 span {
+      display: inline-grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(182, 132, 107, 0.16);
+      color: #fff;
+      font-size: 17px;
+    }
+
+    .prep-card ul,
+    .about-profile-text {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+    }
+
+    .prep-card li,
+    .about-profile-text p {
+      margin: 0;
+    }
+
+    .about-profiles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    .about-profile-card {
+      padding: 30px;
+    }
+
+    .about-profile-card h3 {
+      margin: 0 0 16px;
+      font-size: 26px;
+    }
+
+    .about-master-card {
+      display: grid;
+      grid-template-columns: 0.88fr 1.12fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-top: 34px;
+      padding: 28px;
+      overflow: hidden;
+    }
+
+    .about-master-card--reverse {
+      grid-template-columns: 1.12fr 0.88fr;
+    }
+
+    .about-master-card--reverse .about-master-photo {
+      order: 2;
+    }
+
+    .about-master-photo {
+      min-height: 520px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .about-master-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-master-content {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      text-align: left;
+    }
+
+    .about-master-kicker {
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .about-master-content h3 {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .about-master-text {
+      position: relative;
+      display: grid;
+      gap: 12px;
+      max-height: 190px;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 17px;
+      line-height: 1.7;
+      transition: max-height 0.35s ease;
+    }
+
+    .about-master-text::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 76px;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(54, 46, 42, 0), rgba(54, 46, 42, 0.96));
+      transition: opacity 0.25s ease;
+    }
+
+    .about-master-text.is-expanded {
+      max-height: 900px;
+    }
+
+    .about-master-text.is-expanded::after {
+      opacity: 0;
+    }
+
+    .about-master-text p {
+      margin: 0;
+    }
+
+    .about-expand {
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 0;
+      padding: 4px 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .about-expand-icon {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.48);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+
+    .about-expand-icon::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: translateY(-2px) rotate(45deg);
+    }
+
+    .about-expand:hover .about-expand-icon {
+      border-color: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .about-expand[aria-expanded="true"] .about-expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .about-expand .toggle-open {
+      display: none;
+    }
+
+    .about-expand[aria-expanded="true"] .toggle-open {
+      display: inline;
+    }
+
+    .about-expand[aria-expanded="true"] .toggle-closed {
+      display: none;
     }
 
     .contact-grid {
@@ -1089,6 +1806,14 @@
       margin-bottom: 6px;
     }
 
+    .contact-item span {
+      display: block;
+    }
+
+    .contact-item span + span {
+      margin-top: 6px;
+    }
+
     .map-box {
       margin-top: 18px;
       border-radius: 20px;
@@ -1100,6 +1825,12 @@
       width: 100%;
       height: 260px;
       border: 0;
+    }
+
+    .map-link {
+      width: 100%;
+      margin-top: 12px;
+      color: #fff;
     }
 
     .notice,
@@ -1173,6 +1904,52 @@
 
     .message-popup-actions.has-confirm {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .message-popup-dialog.review-popup-dialog {
+      width: min(500px, 100%);
+      gap: 20px;
+      padding: 30px;
+      border-radius: 10px;
+      border: 1px solid rgba(182, 132, 107, 0.54);
+      background:
+        linear-gradient(180deg, rgba(55, 46, 42, 0.98), rgba(43, 36, 33, 0.98)),
+        #2b2421;
+      color: #fff;
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+    }
+
+    .message-popup-dialog.review-popup-dialog strong {
+      color: #fff;
+      font-size: 26px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .message-popup-dialog.review-popup-dialog label {
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .message-popup-dialog.review-popup-dialog input,
+    .message-popup-dialog.review-popup-dialog textarea {
+      border-color: rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--text);
+      border-radius: 8px;
+    }
+
+    .message-popup-dialog.review-popup-dialog small {
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    .message-popup-dialog.review-popup-dialog .btn {
+      border-color: rgba(182, 132, 107, 0.82);
+      background: rgba(182, 132, 107, 0.18);
+      color: #fff;
+    }
+
+    .message-popup-dialog.review-popup-dialog .btn:hover {
+      background: rgba(182, 132, 107, 0.28);
     }
 
     @media (max-width: 520px) {
@@ -1264,6 +2041,37 @@
       padding: 18px;
     }
 
+    .master-option {
+      position: relative;
+      overflow: hidden;
+      padding-right: 52px;
+      transform: translateY(0);
+      animation: priceTabFloat 3.8s ease-in-out infinite;
+    }
+
+    .master-option:nth-child(2n) {
+      animation-delay: 0.7s;
+    }
+
+    .master-option::after {
+      content: '';
+      position: absolute;
+      right: 18px;
+      top: 22px;
+      width: 13px;
+      height: 13px;
+      border-radius: 999px;
+      background: rgba(47, 149, 173, 0.24);
+      box-shadow: 0 0 0 0 rgba(47, 149, 173, 0.22);
+      animation: priceTapPulse 2.4s ease-out infinite;
+    }
+
+    .master-option:hover {
+      border-color: #2f95ad;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(47, 149, 173, 0.12);
+    }
+
     .service-option.active,
     .master-option.active,
     .day-chip.active,
@@ -1273,6 +2081,11 @@
       color: #fff;
       border-color: #2f8dad;
       box-shadow: 0 10px 24px rgba(47, 141, 173, 0.18);
+    }
+
+    .master-option.active::after {
+      background: rgba(255, 255, 255, 0.58);
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.16);
     }
 
     .service-option strong,
@@ -1639,11 +2452,11 @@
 
     .footer-box {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       gap: 20px;
       align-items: center;
       padding-top: 26px;
-      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      text-align: center;
     }
 
     @media (max-width: 1080px) {
@@ -1657,6 +2470,22 @@
       .services-grid,
       .reviews-grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-profiles {
+        grid-template-columns: 1fr;
+      }
+
+      .about-master-card {
+        grid-template-columns: 1fr;
+      }
+
+      .about-master-card--reverse .about-master-photo {
+        order: 0;
+      }
+
+      .about-master-photo {
+        min-height: 380px;
       }
 
       .benefits-grid {
@@ -1892,6 +2721,7 @@
       .info-card,
       .form-card,
       .info-card.large,
+      .about-master-card,
       .about-box {
         padding: 22px;
         border-radius: 20px;
@@ -1900,6 +2730,7 @@
       .services-grid,
       .services-columns,
       .quick-steps,
+      .prep-grid,
       .reviews-grid,
       .benefits-grid,
       .gallery-grid,
@@ -1959,6 +2790,10 @@
         border-radius: 16px;
       }
 
+      .about-master-photo {
+        min-height: 320px;
+      }
+
       .mobile-round-cta {
         display: flex;
       }
@@ -1990,8 +2825,14 @@
         font-size: 20px;
       }
 
-      .gallery-grid img {
-        height: 220px;
+      .gallery-slide img {
+        height: clamp(420px, 122vw, 620px);
+      }
+
+      .gallery-nav {
+        width: 38px;
+        height: 38px;
+        font-size: 24px;
       }
 
       input,
@@ -2011,7 +2852,7 @@
 
       .footer-box {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
       }
 
       .sticky-cta {
@@ -2028,12 +2869,25 @@
         letter-spacing: 0.03em;
       }
 
+      .service-list-apparatus-wrap {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+      }
+
       footer {
         padding-bottom: 118px;
       }
     }
 
     @media (max-width: 420px) {
+      .service-list-apparatus-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .service-list-apparatus-side {
+        justify-items: start;
+      }
+
       .nav-links {
         gap: 12px 14px;
         font-size: 11px;
@@ -2108,19 +2962,28 @@
 
       <a class="logo" href="#home">Масаж у Новій Одесі</a>
 
-      <div class="mobile-socials" aria-label="Social links">
-        <a href="https://www.instagram.com/" aria-label="Instagram">
+      <div class="mobile-socials" aria-label="Instagram">
+        <a href="https://www.instagram.com/massage_serhiy_tsaruk/" target="_blank" rel="noopener" aria-label="Instagram Сергія">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5" stroke-width="2" />
             <path d="M12 15.8a3.8 3.8 0 1 0 0-7.6 3.8 3.8 0 0 0 0 7.6Z" stroke-width="2" />
             <path d="M17.4 6.8h.1" stroke-width="3" stroke-linecap="round" />
           </svg>
+          <span>massage_serhiy_tsaruk</span>
+        </a>
+        <a href="https://www.instagram.com/massage_olesia_tsaruk/" target="_blank" rel="noopener" aria-label="Instagram Олесі">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5" stroke-width="2" />
+            <path d="M12 15.8a3.8 3.8 0 1 0 0-7.6 3.8 3.8 0 0 0 0 7.6Z" stroke-width="2" />
+            <path d="M17.4 6.8h.1" stroke-width="3" stroke-linecap="round" />
+          </svg>
+          <span>massage_olesia_tsaruk</span>
         </a>
       </div>
 
       <nav class="nav-links">
         <a href="#services">Послуги</a>
-        <a href="#prices">Ціни</a>
+        <a href="#prepare">Підготовка</a>
         <a href="#reviews">Відгуки</a>
         <a href="#about">Про мене</a>
         <a href="#contact">Контакти</a>
@@ -2145,7 +3008,6 @@
 
           <div class="hero-actions">
             <a class="btn btn-primary" href="#booking">Запланувати сеанс</a>
-            <a class="btn btn-secondary" href="#contact">Отримати консультацію</a>
           </div>
 
           <div class="hero-points">
@@ -2193,9 +3055,30 @@
               <ul class="services-check-list">
                 @forelse ($serviceItems as $service)
                   <li>
-                    <span>✓ {{ rtrim($service['display_label'] ?? $service['label'], ':') }}</span>
-                    @if (empty($service['is_apparatus_group']) && empty($service['is_apparatus']))
-                      <span class="service-list-price">{{ $service['price_label'] ?? number_format($service['price'] ?? 0, 0, ',', ' ') . ' грн' }}</span>
+                    <span class="service-list-name">✓ {{ rtrim($service['display_label'] ?? $service['label'], ':') }}</span>
+
+                    @if (! empty($service['is_apparatus_group']) && ! empty($service['apparatus_items']))
+                      <div class="service-list-apparatus-wrap">
+                        <div>
+                          <span class="service-list-apparatus-label">Доступні апаратні масажі:</span>
+                          <ul class="service-list-apparatus">
+                            @foreach ($service['apparatus_items'] as $apparatusItem)
+                              <li>{{ $apparatusItem }}</li>
+                            @endforeach
+                          </ul>
+                        </div>
+                        <div class="service-list-apparatus-side">
+                          <span class="service-list-apparatus-price-label">Ціна:</span>
+                          <span class="service-list-apparatus-price">1 хв - {{ number_format($service['minute_price'] ?? 10, 0, ',', ' ') }} грн</span>
+                        </div>
+                      </div>
+                    @else
+                      <span class="service-list-meta">
+                        @if (! empty($service['duration_label']))
+                        <span class="service-list-time">⏱ Тривалість сеансу: {{ $service['duration_label'] }}</span>
+                        <span class="service-list-price">Ціна: {{ $service['price_label'] ?? number_format($service['price'] ?? 0, 0, ',', ' ') . ' грн' }}</span>
+                        @endif
+                      </span>
                     @endif
                   </li>
                 @empty
@@ -2204,12 +3087,105 @@
               </ul>
             </article>
           @endforeach
-        </div>
 
-        <a class="btn services-more" href="#prices">Детальніше про послуги та ціну</a>
+          <div class="services-details">
+            <p>* Ви можете прочитати про кожен вид масажу тут</p>
+            <div class="service-accordion">
+              @php
+                $serviceDescriptions = [
+                    'Міопресура' => 'Поєднання тиску та апаратної стимуляції для розслаблення мʼязів, зняття болю та покращення рухливості.',
+                    'Пресотерапія' => 'Апаратна компресія, яка стимулює лімфодренаж — чудова для зменшення набряків, втоми ніг і детоксикації.',
+                    'Кавітація' => 'Ультразвук руйнує жирові клітини, допомагаючи зменшити обʼєми та покращити контури тіла.',
+                    'RF-ліфтинг' => 'Радіохвилі стимулюють вироблення колагену — шкіра стає більш підтягнутою, еластичною, зменшуються зморшки.',
+                    'RF- ліфтинг' => 'Радіохвилі стимулюють вироблення колагену — шкіра стає більш підтягнутою, еластичною, зменшуються зморшки.',
+                    'Вакуумний масаж' => 'Глибоко опрацьовує тканини, покращує кровотік, розщеплює жирові відкладення, ефективний проти целюліту.',
+                    'Ендосфера' => 'Мікровібрації та тиск покращують лімфотік, зменшують набряки, формують рельєф і підтягують тіло.',
+                    'Медовий масаж' => 'Виводить токсини, стимулює обмін речовин, підтягує шкіру й добре працює для детоксикації організму.',
+                    'Масаж обличчя' => 'Покращує тонус шкіри, стимулює кровообіг, має ліфтинговий ефект, зменшує набряки та сприяє омолодженню.',
+                    'Класичний масаж (будь яка одна зона)' => 'Покращує кровообіг, знімає мʼязову напругу, розслабляє та допомагає відновитися після навантажень.',
+                    'Класичний масаж (будь яка зона)' => 'Покращує кровообіг, знімає мʼязову напругу, розслабляє та допомагає відновитися після навантажень.',
+                    'Загальний масаж тіла' => 'Покращує кровообіг, знімає мʼязову напругу, розслабляє та допомагає відновитися після навантажень.',
+                    'Загальний масаж всього тіла' => 'Покращує кровообіг, знімає мʼязову напругу, розслабляє та допомагає відновитися після навантажень.',
+                    'Антицелюлітний' => 'Спрямований на розбиття жирових відкладень, покращення мікроциркуляції та зменшення проявів «апельсинової кірки».',
+                    'Антицелюлітний масаж' => 'Спрямований на розбиття жирових відкладень, покращення мікроциркуляції та зменшення проявів «апельсинової кірки».',
+                    'Лімфодренаж' => 'Виводить зайву рідину, зменшує набряки, покращує роботу лімфатичної системи та сприяє полегшенню відчуття важкості.',
+                    'Лімфодренажний' => 'Виводить зайву рідину, зменшує набряки, покращує роботу лімфатичної системи та сприяє полегшенню відчуття важкості.',
+                    'Лімфодренажний масаж' => 'Виводить зайву рідину, зменшує набряки, покращує роботу лімфатичної системи та сприяє полегшенню відчуття важкості.',
+                ];
+
+                $serviceDetails = collect($serviceCards)
+                    ->filter(fn (array $service): bool => ! empty($service['display_label'] ?? $service['label'] ?? null))
+                    ->unique(fn (array $service): string => (string) ($service['display_label'] ?? $service['label']))
+                    ->values();
+              @endphp
+
+              @foreach ($serviceDetails as $serviceDetail)
+                @php
+                  $serviceDetailTitle = rtrim($serviceDetail['display_label'] ?? $serviceDetail['label'], ':');
+                  $serviceDetailDescription = $serviceDescriptions[$serviceDetailTitle]
+                      ?? $serviceDetail['description']
+                      ?? 'Детальний опис цієї послуги скоро буде додано.';
+                @endphp
+                <details @if ($loop->first) open @endif>
+                  <summary>{{ $serviceDetailTitle }}</summary>
+                  <p>{{ $serviceDetailDescription }}</p>
+                </details>
+              @endforeach
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
+    <section class="section site-dark-section prepare-section" id="prepare">
+      <div class="container">
+        <h2 class="section-title">Підготовка до масажу</h2>
+        <p class="section-text">
+          Кілька простих кроків перед сеансом допоможуть зробити масаж комфортнішим і ефективнішим.
+        </p>
+
+        <div class="prep-grid">
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Гігієна</h3>
+            <ul>
+              <li>Прийміть душ перед масажем, щоб освіжитись і зняти забруднення зі шкіри.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Одяг</h3>
+            <ul>
+              <li>Оберіть зручний одяг, який легко знімати й одягати після сеансу.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Прийом їжі</h3>
+            <ul>
+              <li>Уникайте щільного прийому їжі за 1-2 години до початку сеансу.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Самопочуття та здоровʼя</h3>
+            <ul>
+              <li>Якщо відчуваєте хворобу або нездужання, краще перенесіть сеанс.</li>
+              <li>Обовʼязково попередьте про будь-які травми, алергії та хвороби.</li>
+              <li>Забезпечте собі достатньо часу після сеансу, щоб не поспішати й дати організму відпочити.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Спілкування з масажистом</h3>
+            <ul>
+              <li>Висловлюйте свої побажання та повідомляйте про будь-який дискомфорт чи біль.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    @if ($showQuickBookBlock ?? false)
     <section class="section quick-book-section">
       <div class="container">
         <div class="quick-book-card">
@@ -2230,179 +3206,347 @@
               <p>Залиши ім'я й телефон, щоб ми швидко підтвердили сеанс.</p>
             </div>
           </div>
+
+          <a class="btn services-more" href="#booking">Записатися на прийом</a>
         </div>
       </div>
     </section>
+    @endif
 
-    <section class="section site-dark-section" id="prices">
+    <section class="section site-dark-section gallery-section">
       <div class="container">
-        <h2 class="section-title">Ціни</h2>
-        <p class="section-text">
-          Цей блок легко редагується. Просто заміни назви процедур, опис і вартість на свої актуальні.
-        </p>
+        <h2 class="section-title">Фото-галерея</h2>
 
-        <div class="prices-wrap">
-          <div class="price-card price-menu-card">
-            <h3>Прайс за послуги майстрів</h3>
-            <p class="price-note">У кожного майстра можуть бути свої послуги, тривалість і ціни.</p>
-
-            <div class="price-switch-label">Обери майстра та оглянь його прайс:</div>
-
-            <div class="price-master-switch" id="price-master-switch">
-              @foreach ($masters as $master)
-                <button
-                  type="button"
-                  class="price-master-tab {{ $loop->first ? 'active' : '' }}"
-                  data-price-master="{{ $master->id }}"
-                >
-                  <strong>{{ $master->name }}</strong>
-                  <span>{{ $master->phone ?: 'Онлайн запис' }}</span>
-                </button>
-              @endforeach
-            </div>
-
-            <div class="price-list">
-              @foreach ($masters as $master)
-                <div class="price-master-group" data-price-master-group="{{ $master->id }}" {{ $loop->first ? '' : 'hidden' }}>
-                  @php
-                    $priceOwnerName = match ($master->name) {
-                        'Олеся' => 'Олесі',
-                        'Сергій' => 'Сергія',
-                        default => $master->name,
-                    };
-                  @endphp
-                  <h4>Прайс {{ $priceOwnerName }}:</h4>
-
-                  @forelse (($priceServicesByMaster[(string) $master->id] ?? collect()) as $service)
-                    <div class="price-item {{ (! empty($service['is_apparatus_group']) || (! empty($service['is_apparatus']) && empty($service['uses_duration_picker']))) ? 'price-item-apparatus' : '' }}">
-                      <div>
-                        <div class="price-name">{{ $service['display_label'] ?? $service['label'] }}</div>
-                        @if (! empty($service['is_apparatus_group']) && ! empty($service['apparatus_items']))
-                          <div class="price-apparatus-list">
-                            @foreach ($service['apparatus_items'] as $apparatusItem)
-                              <span>{{ $apparatusItem }}</span>
-                            @endforeach
-                          </div>
-                        @endif
-                        @if (! empty($service['duration_label']))
-                          <div class="price-sub">{{ $service['duration_label'] }}</div>
-                        @endif
-                      </div>
-                      <div class="price-side">
-                        <div class="price-value">{{ $service['price_label'] ?? number_format($service['price'] ?? 0, 0, ',', ' ') . ' грн' }}</div>
-                        <a class="btn btn-primary price-book-btn" href="#booking" data-master-target="{{ $master->id }}" data-service-target="{{ $service['key'] ?? '' }}" @if(! empty($service['uses_duration_picker'])) data-apparatus-target="{{ $service['apparatus_base'] ?? '' }}" @endif>Записатися</a>
-                      </div>
-                    </div>
-                  @empty
-                    <p class="price-empty">Послуги для цього майстра ще не додані.</p>
-                  @endforelse
+        <div class="gallery-slider" data-gallery-slider>
+          <button type="button" class="gallery-nav gallery-prev" data-gallery-prev aria-label="Попереднє фото">‹</button>
+          <div class="gallery-viewport">
+            <div class="gallery-track" data-gallery-track>
+              @foreach ([
+                ['file' => 'gallery-01', 'alt' => 'Олеся та Сергій виконують масаж'],
+                ['file' => 'gallery-02', 'alt' => 'Сергій виконує масаж спини'],
+                ['file' => 'gallery-03', 'alt' => 'Бамбуковий масаж спини'],
+                ['file' => 'gallery-04', 'alt' => 'Ручний масаж спини'],
+                ['file' => 'gallery-05', 'alt' => 'Сергій біля апарату для пресотерапії'],
+                ['file' => 'gallery-06', 'alt' => 'Апаратні процедури в кабінеті'],
+                ['file' => 'gallery-07', 'alt' => 'Апаратний догляд за обличчям'],
+                ['file' => 'gallery-08', 'alt' => 'Олеся проводить процедуру для обличчя'],
+                ['file' => 'gallery-09', 'alt' => 'Олеся виконує масаж'],
+              ] as $photo)
+                <div class="gallery-slide">
+                  <img
+                    src="{{ asset('images/gallery/' . $photo['file'] . '-1400.jpg') }}"
+                    srcset="{{ asset('images/gallery/' . $photo['file'] . '-700.jpg') }} 700w, {{ asset('images/gallery/' . $photo['file'] . '-1400.jpg') }} 1400w"
+                    sizes="(max-width: 760px) calc(100vw - 48px), 940px"
+                    alt="{{ $photo['alt'] }}"
+                    width="1400"
+                    height="2100"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
               @endforeach
             </div>
           </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section class="section site-dark-section">
-      <div class="container">
-        <h2 class="section-title">Атмосфера та кабінет</h2>
-        <p class="section-text">
-          Тут можна показати свій кабінет, масажне крісло, робоче місце або фото процедур.
-        </p>
-
-        <div class="gallery-grid">
-          <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1200&q=80" alt="Інтер'єр кабінету" />
-          <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1200&q=80" alt="Масажна процедура" />
-          <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80" alt="Розслабляюча атмосфера" />
-        </div>
-      </div>
-    </section>
-
-    <section class="section site-dark-section" id="reviews">
-      <div class="container">
-        <h2 class="section-title">Відгуки клієнтів</h2>
-        <p class="section-text">
-          Сюди можна вставити свої реальні відгуки або скріни переписок, якщо є дозвіл клієнтів.
-        </p>
-
-        <div class="reviews-grid">
-          <article class="review-card">
-            <div class="stars">★★★★★</div>
-            <p>Дуже сподобалась атмосфера і сам підхід. Після сеансу спина стала набагато легшою.</p>
-            <div class="review-author">— Олена</div>
-          </article>
-
-          <article class="review-card">
-            <div class="stars">★★★★★</div>
-            <p>Все акуратно, комфортно і без поспіху. Зручно, що можна одразу записатись через сайт.</p>
-            <div class="review-author">— Марина</div>
-          </article>
-
-          <article class="review-card">
-            <div class="stars">★★★★★</div>
-            <p>Приємний сервіс, зрозумілі ціни та хороший результат вже після перших процедур.</p>
-            <div class="review-author">— Ірина</div>
-          </article>
+          <button type="button" class="gallery-nav gallery-next" data-gallery-next aria-label="Наступне фото">›</button>
+          <div class="gallery-dots" data-gallery-dots aria-label="Навігація галереї"></div>
         </div>
       </div>
     </section>
 
     <section class="section site-dark-section" id="about">
       <div class="container">
-        <h2 class="section-title">Про мене</h2>
+        <h2 class="section-title">Про нас</h2>
+
+        <article class="about-master-card">
+          <div class="about-master-photo">
+            <img
+              src="{{ asset('images/about/olesya-1200.jpg') }}"
+              srcset="{{ asset('images/about/olesya-700.jpg') }} 700w, {{ asset('images/about/olesya-1200.jpg') }} 807w"
+              sizes="(max-width: 760px) calc(100vw - 48px), 360px"
+              alt="Майстер Олеся"
+              width="807"
+              height="1034"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <div class="about-master-content">
+            <div class="about-master-kicker">Майстер Олеся</div>
+            <h3>Турбота, делікатність і професійний підхід</h3>
+            <div class="about-master-text" id="olesya-about-text" data-about-text>
+              <p>
+                Я — Олеся, масажист із вищою освітою у сфері фізичного виховання. Я ціную довіру своїх клієнтів і прагну, щоб кожен візит був не просто процедурою, а приємним досвідом турботи про себе.
+              </p>
+              <p>Найбільше я спеціалізуюсь на релаксуючих масажах, процедурах для підтяжки обличчя та покращення тонусу тіла. У своїй роботі люблю поєднувати делікатність і турботу до клієнта. Вмію просто й зрозуміло пояснити все, що стосується процедур, догляду за тілом чи обличчям.</p>
+              <p>Якщо у вас є сумніви щодо вибору масажу чи процедур, перед записом ви завжди можете проконсультуватися зі мною, і я допоможу підібрати саме те, що найкраще підійде для вашого стану та побажань.</p>
+            </div>
+
+            <button type="button" class="about-expand" data-about-toggle aria-expanded="false" aria-controls="olesya-about-text">
+              <span class="about-expand-icon" aria-hidden="true"></span>
+              <span class="toggle-closed">Розгорнути інформацію</span>
+              <span class="toggle-open">Згорнути інформацію</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="about-master-card about-master-card--reverse">
+          <div class="about-master-photo">
+            <img
+              src="{{ asset('images/about/sergiy-1400.jpg') }}"
+              srcset="{{ asset('images/about/sergiy-700.jpg') }} 700w, {{ asset('images/about/sergiy-1400.jpg') }} 1400w"
+              sizes="(max-width: 760px) calc(100vw - 48px), 360px"
+              alt="Майстер Сергій"
+              width="1400"
+              height="2100"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <div class="about-master-content">
+            <div class="about-master-kicker">Майстер Сергій</div>
+            <h3>Досвід, уважність і результативний масаж</h3>
+            <div class="about-master-text" id="sergiy-about-text" data-about-text>
+              <p>Я — Сергій, у нашому містечку мене часто знають як Сергія Юрійовича. Понад 15 років працював керівником фізичного виховання, тому добре знаю анатомію людини, причини болю та затисків у тілі.</p>
+              <p>Більше 3 років професійно займаюсь масажем. Працюю не на кількість, а на результат — щоб після сеансу ви реально відчули ефект масажу.</p>
+              <p>Я завжди уважно вислухаю вашу проблему, підберу підхід саме під ваш стан та, за потреби, підкажу вправи для підтримки здоровʼя вашого тіла.</p>
+              <p>Про мою роботу найкраще говорять відгуки клієнтів, з якими можете ознайомитись тут на сайті.</p>
+              <p>Знаю, що для жінок масаж у чоловіка може спочатку викликати дискомфорт, але запевняю: я завжди працюю професійно та з повагою до особистих меж клієнта.</p>
+              <p>Моя дружина Олеся також масажист, тому якщо вам більше комфортний жіночий майстер або ви хочете релаксуючий масаж тіла чи обличчя — можете звернутись і до неї.</p>
+            </div>
+
+            <button type="button" class="about-expand" data-about-toggle aria-expanded="false" aria-controls="sergiy-about-text">
+              <span class="about-expand-icon" aria-hidden="true"></span>
+              <span class="toggle-closed">Розгорнути інформацію</span>
+              <span class="toggle-open">Згорнути інформацію</span>
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section site-dark-section" id="reviews">
+      <div class="container">
+        <div class="reviews-head">
+          <h2 class="section-title">Відгуки клієнтів</h2>
+          <button type="button" class="btn btn-primary" data-review-open>Залишити відгук</button>
+        </div>
+
+        @php
+          $reviewChunks = $reviews->chunk(3)->values();
+        @endphp
+
+        <div class="reviews-pages" data-reviews-pages>
+          @foreach ($reviewChunks as $chunk)
+            <div class="reviews-grid reviews-page" data-review-page="{{ $loop->index }}" @if (! $loop->first) hidden @endif>
+              @foreach ($chunk as $review)
+                <article class="review-card">
+                  <div class="stars rating-stars" style="--rating: {{ (float) $review['rating'] }}" aria-label="Оцінка {{ number_format((float) $review['rating'], 1, '.', '') }} з 5"></div>
+                  <p>{{ $review['text'] }}</p>
+                  <div class="review-meta">
+                    @if (! empty($review['master_name']))
+                      <span>Майстер: {{ $review['master_name'] }}</span>
+                    @endif
+                    @if (! empty($review['published_date']))
+                      <span>{{ $review['published_date'] }}</span>
+                    @endif
+                  </div>
+                  <div class="review-author">— {{ $review['client_name'] }}</div>
+                </article>
+              @endforeach
+            </div>
+          @endforeach
+        </div>
+
+        @if ($reviewChunks->count() > 1)
+          <div class="reviews-pagination" data-reviews-pagination aria-label="Сторінки відгуків">
+            <button type="button" class="review-page-arrow" data-review-prev aria-label="Попередня сторінка відгуків">‹</button>
+            @foreach ($reviewChunks as $chunk)
+              <button type="button" class="review-page-dot {{ $loop->first ? 'active' : '' }}" data-review-page-btn="{{ $loop->index }}" aria-label="Сторінка {{ $loop->iteration }}"></button>
+            @endforeach
+            <button type="button" class="review-page-arrow" data-review-next aria-label="Наступна сторінка відгуків">›</button>
+          </div>
+        @endif
+      </div>
+    </section>
+
+    <div class="message-popup" id="review-popup" hidden role="dialog" aria-modal="true" aria-labelledby="review-popup-title">
+      <div class="message-popup-backdrop" data-review-close></div>
+      <div class="message-popup-dialog review-popup-dialog">
+        <strong id="review-popup-title">Залишити відгук</strong>
+        <form class="review-form" method="POST" action="{{ route('reviews.store') }}">
+          @csrf
+
+          @if ($errors->review->any())
+            <div class="review-form-errors">
+              @foreach ($errors->review->all() as $error)
+                <span>{{ $error }}</span>
+              @endforeach
+            </div>
+          @endif
+
+          <label>
+            Ім'я
+            <input type="text" name="client_name" value="{{ old('client_name') }}" minlength="2" maxlength="80" required />
+          </label>
+
+          <label>
+            Майстер
+            <select name="master_id" required>
+              <option value="">Оберіть майстра</option>
+              @foreach ($masters as $master)
+                <option value="{{ $master->id }}" @selected((string) old('master_id') === (string) $master->id)>
+                  {{ $master->name }}
+                </option>
+              @endforeach
+            </select>
+          </label>
+
+          <label>
+            Текст відгуку
+            <textarea name="text" maxlength="2000" required>{{ old('text') }}</textarea>
+          </label>
+
+          <label class="review-rating-control">
+            Яку оцінку за масаж ставите?
+            <span class="review-rating-row">
+              <button type="button" class="review-stars-picker" data-review-stars aria-label="Оберіть оцінку від 0 до 5 зірок">
+                @for ($i = 1; $i <= 5; $i++)
+                  <span class="review-star-option" data-review-star="{{ $i }}"></span>
+                @endfor
+              </button>
+              <span class="review-rating-value" data-review-rating-value>{{ old('rating', 5) }}</span>
+            </span>
+            <input type="hidden" name="rating" value="{{ old('rating', 5) }}" data-review-rating />
+            <small>Натисніть на ліву або праву половину зірки, щоб поставити оцінку з кроком 0.5.</small>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Надіслати відгук</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="message-popup" id="review-success-popup" hidden role="dialog" aria-modal="true" aria-labelledby="review-success-title">
+      <div class="message-popup-backdrop" data-review-success-close></div>
+      <div class="message-popup-dialog">
+        <strong id="review-success-title">Дякую за відгук!</strong>
+        <p id="review-success-text"></p>
+        <div class="message-popup-actions">
+          <button type="button" class="btn btn-primary" data-review-success-close>Зрозуміло</button>
+        </div>
+      </div>
+    </div>
+
+    @if (false)
+    <section class="section site-dark-section prepare-section" id="prepare">
+      <div class="container">
+        <h2 class="section-title">Підготовка до масажу</h2>
         <p class="section-text">
-          У цьому блоці ти можеш коротко розповісти про себе: досвід, підхід до клієнтів, локацію та переваги.
+          Кілька простих кроків перед сеансом допоможуть зробити масаж комфортнішим і ефективнішим.
         </p>
 
-        <div class="about-wrap">
-          <div class="about-image">
-            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80" alt="Майстер масажу" />
-          </div>
-
-          <div class="hero-card about-box">
-            <h3>Турбота, комфорт і індивідуальний підхід</h3>
-            <p class="section-text" style="max-width:none; margin-top: 14px;">
-              Я працюю для того, щоб клієнт відчував не лише фізичне полегшення, а й спокій, довіру та комфорт.
-              Приділяю увагу деталям, пояснюю процедури та допомагаю підібрати оптимальний варіант саме під ваш запит.
-            </p>
-
-            <ul class="about-list">
-              <li>Затишний кабінет і комфортна атмосфера.</li>
-              <li>Зручна локація та запис без довгого очікування.</li>
-              <li>Індивідуальний підхід до нових і постійних клієнтів.</li>
-              <li>Можливість вести клієнтів із реклами прямо на сайт.</li>
+        <div class="prep-grid">
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Гігієна</h3>
+            <ul>
+              <li>Прийміть душ перед масажем, щоб освіжитись і зняти забруднення зі шкіри.</li>
             </ul>
-          </div>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Одяг</h3>
+            <ul>
+              <li>Оберіть зручний одяг, який легко знімати й одягати після сеансу.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Прийом їжі</h3>
+            <ul>
+              <li>Уникайте щільного прийому їжі за 1-2 години до початку сеансу.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Самопочуття та здоровʼя</h3>
+            <ul>
+              <li>Якщо відчуваєте хворобу або нездужання, краще перенесіть сеанс.</li>
+              <li>Обовʼязково попередьте про будь-які травми, алергії та хвороби.</li>
+              <li>Забезпечте собі достатньо часу після сеансу, щоб не поспішати й дати організму відпочити.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>💡</span>Спілкування з масажистом</h3>
+            <ul>
+              <li>Висловлюйте свої побажання та повідомляйте про будь-який дискомфорт чи біль.</li>
+            </ul>
+          </article>
         </div>
       </div>
     </section>
 
+    @endif
+
+    @if (false)
+    <section class="section site-dark-section" id="about">
+      <div class="container">
+        <h2 class="section-title">Про мене</h2>
+        <p class="section-text">
+          Ми працюємо уважно, професійно й з повагою до особистих меж клієнта.
+        </p>
+
+        <div class="about-profiles">
+          <article class="about-profile-card hero-card">
+            <h3>Сергій</h3>
+            <div class="about-profile-text">
+              <p>Я — Сергій, у нашому містечку мене часто знають як Сергія Юрійовича. Понад 15 років працював керівником фізичного виховання, тому добре знаю анатомію людини, причини болю та затисків у тілі.</p>
+              <p>Більше 3 років професійно займаюсь масажем. Працюю не на кількість, а на результат, щоб після сеансу ви реально відчули ефект масажу.</p>
+              <p>Я завжди уважно вислухаю вашу проблему, підберу підхід саме під ваш стан та, за потреби, підкажу вправи для підтримки здоровʼя вашого тіла.</p>
+              <p>Про мою роботу найкраще говорять відгуки клієнтів, з якими можете ознайомитись тут на сайті.</p>
+              <p>Знаю, що для жінок масаж у чоловіка може спочатку викликати дискомфорт, але запевняю: я завжди працюю професійно та з повагою до особистих меж клієнта.</p>
+              <p>Моя дружина Олеся також масажист, тому якщо вам більше комфортний жіночий майстер або ви хочете релаксуючий масаж тіла чи обличчя, можете звернутись і до неї.</p>
+            </div>
+          </article>
+
+          <article class="about-profile-card hero-card">
+            <h3>Олеся</h3>
+            <div class="about-profile-text">
+              <p>Я — Олеся, масажист із вищою освітою у сфері фізичного виховання. Я ціную довіру своїх клієнтів і прагну, щоб кожен візит був не просто процедурою, а приємним досвідом турботи про себе.</p>
+              <p>Найбільше я спеціалізуюсь на релаксуючих масажах, процедурах для підтяжки обличчя та покращення тонусу тіла. У своїй роботі люблю поєднувати делікатність і турботу до клієнта.</p>
+              <p>Вмію просто й зрозуміло пояснити все, що стосується процедур, догляду за тілом чи обличчям.</p>
+              <p>Якщо у вас є сумніви щодо вибору масажу чи процедур, перед записом ви завжди можете проконсультуватися зі мною, і я допоможу підібрати саме те, що найкраще підійде для вашого стану та побажань.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    @endif
+
     <section class="section site-dark-section" id="contact">
       <div class="container">
-        <h2 class="section-title">Контакти та онлайн запис</h2>
-        <p class="section-text">
-          Нижче форма заявки. Вона може поки що відправляти дані в Telegram, email або просто працювати як макет.
-        </p>
+        <h2 class="section-title">Контакти</h2>
 
         <div class="contact-grid">
           <div class="info-card large">
             <h3>Інформація</h3>
-            <p>Замінюй контакти, адресу, Instagram, години роботи та карту на свої дані.</p>
 
             <div class="contact-list">
               <div class="contact-item">
                 <strong>Телефон</strong>
-                <span>+38 (0XX) XXX-XX-XX</span>
+                <span>Олеся: <a href="tel:+380678764183">+380 (67) 876-41-83</a></span>
+                <span>Сергій: <a href="tel:+380966059823">+380 (96) 605-98-23</a></span>
               </div>
               <div class="contact-item">
                 <strong>Instagram</strong>
-                <span>@yourmassagepage</span>
+                <span><a href="https://www.instagram.com/massage_serhiy_tsaruk/" target="_blank" rel="noopener">@massage_serhiy_tsaruk</a></span>
+                <span><a href="https://www.instagram.com/massage_olesia_tsaruk/" target="_blank" rel="noopener">@massage_olesia_tsaruk</a></span>
               </div>
               <div class="contact-item">
                 <strong>Адреса</strong>
-                <span>Ваше місто, вулиця, кабінет</span>
+                <span>м. Нова Одеса 56-600, вул. Сапроненко 8</span>
               </div>
               <div class="contact-item">
                 <strong>Графік</strong>
@@ -2411,7 +3555,8 @@
             </div>
 
             <div class="map-box">
-              <iframe src="https://www.google.com/maps?q=Kyiv&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              <iframe src="https://www.google.com/maps?q=%D0%BC.%20%D0%9D%D0%BE%D0%B2%D0%B0%20%D0%9E%D0%B4%D0%B5%D1%81%D0%B0%2056-600%2C%20%D0%B2%D1%83%D0%BB.%20%D0%A1%D0%B0%D0%BF%D1%80%D0%BE%D0%BD%D0%B5%D0%BD%D0%BA%D0%BE%208&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              <a class="btn btn-secondary map-link" href="https://maps.app.goo.gl/rEQXh84ndFvyroz79?g_st=it" target="_blank" rel="noopener">Відкрити на карті</a>
             </div>
           </div>
 
@@ -2592,14 +3737,13 @@
   </main>
 
   <div class="sticky-cta" aria-label="Швидкі дії">
-    <a class="btn btn-primary" href="#booking">Записатися на прийом</a>
-    <a class="btn btn-secondary" href="#contact">Проконсультуватися з майстром</a>
+    <a class="btn btn-primary" href="#booking">Записатися на масаж</a>
+    <a class="btn btn-secondary" href="#contact">Отримати консультацію</a>
   </div>
 
   <footer>
     <div class="container footer-box">
-      <div>© 2026 MassageStudio. Всі права захищені.</div>
-      <div>Шаблон можна редагувати під твій бренд, кольори та послуги.</div>
+      <div>© 2026 Massage Tsruk. Всі права захищені.</div>
     </div>
   </footer>
 
@@ -3134,6 +4278,249 @@
     renderDays();
     updateSummary();
     loadMonthAvailability();
+  </script>
+
+  <script>
+    (() => {
+      const pages = [...document.querySelectorAll('[data-review-page]')];
+      const buttons = [...document.querySelectorAll('[data-review-page-btn]')];
+      const prevButton = document.querySelector('[data-review-prev]');
+      const nextButton = document.querySelector('[data-review-next]');
+      let activeReviewPage = 0;
+
+      const setReviewPage = (index) => {
+        activeReviewPage = Math.max(0, Math.min(pages.length - 1, index));
+
+        pages.forEach((page) => {
+          page.hidden = Number(page.dataset.reviewPage) !== activeReviewPage;
+        });
+
+        buttons.forEach((button) => {
+          button.classList.toggle('active', Number(button.dataset.reviewPageBtn) === activeReviewPage);
+        });
+
+        if (prevButton) {
+          prevButton.disabled = activeReviewPage === 0;
+        }
+
+        if (nextButton) {
+          nextButton.disabled = activeReviewPage === pages.length - 1;
+        }
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => setReviewPage(Number(button.dataset.reviewPageBtn)));
+      });
+
+      prevButton?.addEventListener('click', () => setReviewPage(activeReviewPage - 1));
+      nextButton?.addEventListener('click', () => setReviewPage(activeReviewPage + 1));
+      setReviewPage(0);
+
+      const reviewPopup = document.getElementById('review-popup');
+      const reviewSuccessPopup = document.getElementById('review-success-popup');
+      const reviewSuccessText = document.getElementById('review-success-text');
+      const ratingInput = document.querySelector('[data-review-rating]');
+      const ratingPicker = document.querySelector('[data-review-stars]');
+      const ratingStars = [...document.querySelectorAll('[data-review-star]')];
+      const ratingValue = document.querySelector('[data-review-rating-value]');
+      const reviewSuccess = @json(session('review_success'));
+      const hasReviewErrors = @json($errors->review->any());
+
+      const openReviewPopup = () => {
+        if (!reviewPopup) {
+          return;
+        }
+
+        reviewPopup.hidden = false;
+        reviewPopup.querySelector('input, textarea, button')?.focus();
+      };
+
+      const closeReviewPopup = () => {
+        if (reviewPopup) {
+          reviewPopup.hidden = true;
+        }
+      };
+
+      const openReviewSuccess = (message) => {
+        if (!reviewSuccessPopup || !reviewSuccessText) {
+          return;
+        }
+
+        reviewSuccessText.textContent = message;
+        reviewSuccessPopup.hidden = false;
+        reviewSuccessPopup.querySelector('button')?.focus();
+      };
+
+      const closeReviewSuccess = () => {
+        if (reviewSuccessPopup) {
+          reviewSuccessPopup.hidden = true;
+        }
+      };
+
+      const syncRating = () => {
+        if (!ratingInput || !ratingValue) {
+          return;
+        }
+
+        const rating = Number(ratingInput.value);
+
+        ratingStars.forEach((star) => {
+          const index = Number(star.dataset.reviewStar);
+          const fill = Math.max(0, Math.min(1, rating - (index - 1)));
+          star.style.setProperty('--fill', `${fill * 100}%`);
+        });
+
+        ratingValue.textContent = rating.toFixed(Number.isInteger(rating) ? 0 : 1);
+        ratingPicker?.setAttribute('aria-label', `Оцінка ${ratingValue.textContent} з 5`);
+      };
+
+      const setRating = (rating) => {
+        if (!ratingInput) {
+          return;
+        }
+
+        const normalizedRating = Math.max(0, Math.min(5, Math.round(rating * 2) / 2));
+        ratingInput.value = normalizedRating.toFixed(Number.isInteger(normalizedRating) ? 0 : 1);
+        syncRating();
+      };
+
+      document.querySelectorAll('[data-review-open]').forEach((button) => {
+        button.addEventListener('click', openReviewPopup);
+      });
+
+      document.querySelectorAll('[data-review-close]').forEach((element) => {
+        element.addEventListener('click', closeReviewPopup);
+      });
+
+      document.querySelectorAll('[data-review-success-close]').forEach((element) => {
+        element.addEventListener('click', closeReviewSuccess);
+      });
+
+      ratingStars.forEach((star) => {
+        star.addEventListener('click', (event) => {
+          const rect = star.getBoundingClientRect();
+          const index = Number(star.dataset.reviewStar);
+          const isLeftHalf = event.clientX - rect.left <= rect.width / 2;
+
+          setRating(index - (isLeftHalf ? 0.5 : 0));
+        });
+      });
+
+      ratingPicker?.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowDown', 'ArrowRight', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
+          return;
+        }
+
+        event.preventDefault();
+        const currentRating = Number(ratingInput?.value || 5);
+
+        if (event.key === 'Home') {
+          setRating(0);
+        } else if (event.key === 'End') {
+          setRating(5);
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+          setRating(currentRating - 0.5);
+        } else {
+          setRating(currentRating + 0.5);
+        }
+      });
+
+      syncRating();
+
+      if (hasReviewErrors) {
+        openReviewPopup();
+      }
+
+      if (reviewSuccess) {
+        openReviewSuccess(reviewSuccess);
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') {
+          return;
+        }
+
+        closeReviewPopup();
+        closeReviewSuccess();
+      });
+    })();
+  </script>
+
+  <script>
+    (() => {
+      document.querySelectorAll('.service-accordion').forEach((accordion) => {
+        accordion.querySelectorAll('details').forEach((details) => {
+          details.addEventListener('toggle', () => {
+            if (!details.open) {
+              return;
+            }
+
+            accordion.querySelectorAll('details[open]').forEach((opened) => {
+              if (opened !== details) {
+                opened.open = false;
+              }
+            });
+          });
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    (() => {
+      document.querySelectorAll('[data-about-toggle]').forEach((toggle) => {
+        const textId = toggle.getAttribute('aria-controls');
+        const text = textId ? document.getElementById(textId) : null;
+
+        if (!text) {
+          return;
+        }
+
+        toggle.addEventListener('click', () => {
+          const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', String(!isExpanded));
+          text.classList.toggle('is-expanded', !isExpanded);
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    (() => {
+      const slider = document.querySelector('[data-gallery-slider]');
+
+      if (!slider) {
+        return;
+      }
+
+      const track = slider.querySelector('[data-gallery-track]');
+      const slides = [...slider.querySelectorAll('.gallery-slide')];
+      const prev = slider.querySelector('[data-gallery-prev]');
+      const next = slider.querySelector('[data-gallery-next]');
+      const dotsWrap = slider.querySelector('[data-gallery-dots]');
+      let activeIndex = 0;
+
+      const dots = slides.map((_, index) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = `gallery-dot${index === 0 ? ' active' : ''}`;
+        dot.setAttribute('aria-label', `Фото ${index + 1}`);
+        dot.addEventListener('click', () => setSlide(index));
+        dotsWrap.appendChild(dot);
+        return dot;
+      });
+
+      const setSlide = (index) => {
+        activeIndex = (index + slides.length) % slides.length;
+        track.style.transform = `translateX(-${activeIndex * 100}%)`;
+        dots.forEach((dot, dotIndex) => {
+          dot.classList.toggle('active', dotIndex === activeIndex);
+        });
+      };
+
+      prev.addEventListener('click', () => setSlide(activeIndex - 1));
+      next.addEventListener('click', () => setSlide(activeIndex + 1));
+    })();
   </script>
 
   <script>

@@ -41,6 +41,8 @@ class MasterCalendar extends Page
 
     public int $slotStepMinutes = 60;
 
+    public bool $showQuickBookBlock = false;
+
     public ?int $selectedAppointmentId = null;
 
     public function mount(): void
@@ -54,6 +56,7 @@ class MasterCalendar extends Page
         $this->workStartTime = substr((string) $setting->work_start_time, 0, 5);
         $this->workEndTime = substr((string) $setting->work_end_time, 0, 5);
         $this->slotStepMinutes = (int) $setting->slot_step_minutes;
+        $this->showQuickBookBlock = (bool) $setting->show_quick_book_block;
         $this->monthKey = now(config('app.timezone'))->format('Y-m');
         $this->selectedDate = now(config('app.timezone'))->toDateString();
     }
@@ -149,6 +152,7 @@ class MasterCalendar extends Page
             'workStartTime' => ['required', 'date_format:H:i'],
             'workEndTime' => ['required', 'date_format:H:i', 'after:workStartTime'],
             'slotStepMinutes' => ['required', 'integer', 'min:15', 'max:240'],
+            'showQuickBookBlock' => ['boolean'],
         ]);
 
         BookingSetting::current()->update([
@@ -157,6 +161,7 @@ class MasterCalendar extends Page
             'work_start_time' => $validated['workStartTime'],
             'work_end_time' => $validated['workEndTime'],
             'slot_step_minutes' => $validated['slotStepMinutes'],
+            'show_quick_book_block' => (bool) $validated['showQuickBookBlock'],
         ]);
 
         Notification::make()
