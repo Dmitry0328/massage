@@ -44,7 +44,7 @@ class TelegramNotificationService
         $clientRequest->loadMissing('master');
 
         $this->send([
-            'Новий запит на зворотний дзвінок',
+            'Новий запит на зворотній дзвінок',
             '',
             "Клієнт: {$clientRequest->client_name}",
             "Телефон: {$clientRequest->phone}",

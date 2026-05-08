@@ -4225,7 +4225,7 @@
           Номер телефону
           <input type="tel" name="phone" placeholder="Введіть Ваш номер телефону для зв'язку з Вами" value="{{ old('phone', '+380') }}" autocomplete="tel" inputmode="tel" maxlength="19" data-phone-mask required>
         </label>
-        <button type="submit" class="btn btn-primary" {{ $masters->isEmpty() ? 'disabled' : '' }}>Залишити запит на зворотний дзвінок</button>
+        <button type="submit" class="btn btn-primary" {{ $masters->isEmpty() ? 'disabled' : '' }}>Залишити запит на зворотній дзвінок</button>
       </form>
     </div>
   </div>

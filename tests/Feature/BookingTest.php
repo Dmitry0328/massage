@@ -550,7 +550,7 @@ class BookingTest extends TestCase
 
         Http::assertSent(fn ($request): bool => str_contains($request->url(), '/bottest-token/sendMessage')
             && $request['chat_id'] === '-100'
-            && str_contains($request['text'], 'Новий запит на зворотний дзвінок'));
+            && str_contains($request['text'], 'Новий запит на зворотній дзвінок'));
     }
 
     public function test_client_request_rejects_invalid_phone(): void
