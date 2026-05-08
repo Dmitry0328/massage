@@ -2457,6 +2457,13 @@
       color: var(--muted);
     }
 
+    .master-phone {
+      display: inline-block;
+      white-space: nowrap;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
     .service-option.active .service-meta,
     .service-option.active p,
     .master-option.active .master-meta {
@@ -3113,6 +3120,15 @@
       .days-grid,
       .masters-picker {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .master-option {
+        padding: 16px 42px 16px 16px;
+      }
+
+      .master-phone {
+        font-size: 12px;
+        letter-spacing: -0.01em;
       }
 
       .date-slider {
@@ -4032,7 +4048,7 @@
                       >
                         <strong>{{ $master->name }}</strong>
                         <div class="master-meta">
-                          <span>{{ $masterPhone }}</span>
+                          <span class="master-phone">{{ $masterPhone }}</span>
                         </div>
                       </button>
                     @endforeach
