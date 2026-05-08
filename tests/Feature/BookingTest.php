@@ -9,6 +9,7 @@ use App\Models\Master;
 use App\Models\MassageService;
 use App\Models\ScheduleBlock;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class BookingTest extends TestCase
@@ -17,6 +18,14 @@ class BookingTest extends TestCase
 
     public function test_booking_is_saved_and_slot_becomes_unavailable(): void
     {
+        config([
+            'services.telegram.bot_token' => 'test-token',
+            'services.telegram.chat_id' => '-100',
+        ]);
+        Http::fake([
+            'api.telegram.org/*' => Http::response(['ok' => true]),
+        ]);
+
         $master = Master::query()->create([
             'name' => 'Тестовий майстер',
             'slug' => 'test-master',
@@ -60,6 +69,10 @@ class BookingTest extends TestCase
 
         $this->assertNotContains('10:00', $availabilityResponse->json('slots'));
         $this->assertNotContains('11:00', $availabilityResponse->json('slots'));
+
+        Http::assertSent(fn ($request): bool => str_contains($request->url(), '/bottest-token/sendMessage')
+            && $request['chat_id'] === '-100'
+            && str_contains($request['text'], 'Новий запис на масаж'));
     }
 
     public function test_duration_blocks_following_slots_and_limits_extra_services(): void
@@ -501,6 +514,14 @@ class BookingTest extends TestCase
 
     public function test_client_request_is_saved_for_admin_follow_up(): void
     {
+        config([
+            'services.telegram.bot_token' => 'test-token',
+            'services.telegram.chat_id' => '-100',
+        ]);
+        Http::fake([
+            'api.telegram.org/*' => Http::response(['ok' => true]),
+        ]);
+
         $master = Master::query()->create([
             'name' => 'Олеся',
             'slug' => 'olesia-callback',
@@ -526,6 +547,10 @@ class BookingTest extends TestCase
         $this->assertSame('+380671112233', $request->phone);
         $this->assertSame(ClientRequest::STATUS_NEW, $request->status);
         $this->assertStringContainsString('Потрібно зателефонувати', $request->message);
+
+        Http::assertSent(fn ($request): bool => str_contains($request->url(), '/bottest-token/sendMessage')
+            && $request['chat_id'] === '-100'
+            && str_contains($request['text'], 'Новий запит на зворотний дзвінок'));
     }
 
     public function test_client_request_rejects_invalid_phone(): void

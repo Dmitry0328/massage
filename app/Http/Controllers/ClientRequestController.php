@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClientRequest;
 use App\Models\Master;
+use App\Services\TelegramNotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,11 @@ use Illuminate\Validation\Rule;
 
 class ClientRequestController extends Controller
 {
+    public function __construct(
+        private readonly TelegramNotificationService $telegramNotificationService,
+    ) {
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->merge([
@@ -41,7 +47,7 @@ class ClientRequestController extends Controller
         $data = $validator->validated();
         $master = Master::query()->findOrFail($data['master_id']);
 
-        ClientRequest::query()->create([
+        $clientRequest = ClientRequest::query()->create([
             'master_id' => $master->id,
             'client_name' => $data['client_name'],
             'phone' => $data['phone'],
@@ -52,6 +58,8 @@ class ClientRequestController extends Controller
             ),
             'status' => ClientRequest::STATUS_NEW,
         ]);
+
+        $this->telegramNotificationService->clientRequestCreated($clientRequest);
 
         return redirect()
             ->route('booking.index')

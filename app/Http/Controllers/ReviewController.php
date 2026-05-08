@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Review;
+use App\Services\TelegramNotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ReviewController extends Controller
 {
+    public function __construct(
+        private readonly TelegramNotificationService $telegramNotificationService,
+    ) {
+    }
+
     public function store(Request $request): RedirectResponse
     {
         if ($request->has('client_name')) {
@@ -34,13 +40,15 @@ class ReviewController extends Controller
 
         Review::purgeExpiredTrash();
 
-        Review::query()->create([
+        $review = Review::query()->create([
             'client_name' => $validated['client_name'],
             'master_id' => $validated['master_id'],
             'text' => $validated['text'],
             'rating' => (float) $validated['rating'],
             'status' => Review::STATUS_DRAFT,
         ]);
+
+        $this->telegramNotificationService->reviewCreated($review);
 
         return redirect()
             ->to(route('booking.index') . '#reviews')

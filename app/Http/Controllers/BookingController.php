@@ -8,6 +8,7 @@ use App\Models\Master;
 use App\Models\MassageService;
 use App\Models\Review;
 use App\Services\BookingAvailabilityService;
+use App\Services\TelegramNotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -20,6 +21,7 @@ class BookingController extends Controller
 {
     public function __construct(
         private readonly BookingAvailabilityService $availabilityService,
+        private readonly TelegramNotificationService $telegramNotificationService,
     ) {
     }
 
@@ -195,7 +197,7 @@ class BookingController extends Controller
         $serviceKeys = $this->selectedServiceKeys($validated['service'], $additionalServices);
         $durationOverrides = $this->durationOverrides($serviceKeys, $validated['apparatus_duration_minutes'] ?? null);
 
-        DB::transaction(function () use ($master, $validated, $time, $additionalServices, $serviceKeys, $durationOverrides): void {
+        $appointment = DB::transaction(function () use ($master, $validated, $time, $additionalServices, $serviceKeys, $durationOverrides): Appointment {
             $isAvailable = $this->availabilityService->isAvailable(
                 $master,
                 $validated['appointment_date'],
@@ -219,7 +221,7 @@ class BookingController extends Controller
                 $message = trim(($message ? "{$message}\n\n" : '') . 'Тривалість апаратного масажу: ' . reset($durationOverrides) . ' хв.');
             }
 
-            Appointment::query()->create([
+            return Appointment::query()->create([
                 'master_id' => $master->id,
                 'client_name' => $validated['client_name'],
                 'phone' => $validated['phone'],
@@ -235,6 +237,8 @@ class BookingController extends Controller
                 'source' => 'website',
             ]);
         });
+
+        $this->telegramNotificationService->appointmentCreated($appointment);
 
         return redirect()
             ->route('booking.index')

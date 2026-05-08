@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Review;
 use App\Models\Master;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class ReviewTest extends TestCase
@@ -13,6 +14,14 @@ class ReviewTest extends TestCase
 
     public function test_review_submission_is_saved_for_moderation(): void
     {
+        config([
+            'services.telegram.bot_token' => 'test-token',
+            'services.telegram.chat_id' => '-100',
+        ]);
+        Http::fake([
+            'api.telegram.org/*' => Http::response(['ok' => true]),
+        ]);
+
         $master = Master::query()->create([
             'name' => 'Олеся',
             'slug' => 'olesya',
@@ -38,6 +47,10 @@ class ReviewTest extends TestCase
         $this->assertSame(Review::STATUS_DRAFT, $review->status);
         $this->assertNull($review->published_at);
         $this->assertSame('4.5', $review->rating);
+
+        Http::assertSent(fn ($request): bool => str_contains($request->url(), '/bottest-token/sendMessage')
+            && $request['chat_id'] === '-100'
+            && str_contains($request['text'], 'Новий відгук на модерацію'));
     }
 
     public function test_review_rating_accepts_only_half_step_values(): void
