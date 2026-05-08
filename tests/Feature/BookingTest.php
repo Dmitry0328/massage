@@ -16,6 +16,31 @@ class BookingTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        MassageService::query()->updateOrCreate([
+            'key' => 'classic',
+        ], [
+            'label' => 'Тестовий масаж',
+            'duration_minutes' => 60,
+            'price' => 500,
+            'is_active' => true,
+            'sort_order' => 1000,
+        ]);
+
+        MassageService::query()->updateOrCreate([
+            'key' => 'hardware',
+        ], [
+            'label' => 'Тестовий апаратний масаж',
+            'duration_minutes' => 60,
+            'price' => 600,
+            'is_active' => true,
+            'sort_order' => 1001,
+        ]);
+    }
+
     public function test_booking_is_saved_and_slot_becomes_unavailable(): void
     {
         config([
