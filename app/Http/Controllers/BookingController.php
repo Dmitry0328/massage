@@ -87,7 +87,7 @@ class BookingController extends Controller
             'month' => ['required', 'date_format:Y-m'],
             'service' => ['nullable', Rule::in(MassageService::activeKeys($request->input('master_id')))],
             'apparatus_duration_minutes' => ['nullable', 'integer', Rule::in([15, 30, 45, 60])],
-            'additional_services' => ['nullable', 'array'],
+            'additional_services' => ['nullable', 'array', 'max:2'],
             'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
         ]);
 
@@ -116,7 +116,7 @@ class BookingController extends Controller
             'time' => ['nullable', 'date_format:H:i'],
             'service' => ['nullable', Rule::in(MassageService::activeKeys($request->input('master_id')))],
             'apparatus_duration_minutes' => ['nullable', 'integer', Rule::in([15, 30, 45, 60])],
-            'additional_services' => ['nullable', 'array'],
+            'additional_services' => ['nullable', 'array', 'max:2'],
             'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
         ]);
 
@@ -161,7 +161,7 @@ class BookingController extends Controller
             'phone' => ['required', 'string', 'regex:/^\+380\d{9}$/'],
             'master_id' => ['required', 'integer', Rule::exists('masters', 'id')->where('is_active', true)],
             'service' => ['required', Rule::in(MassageService::activeKeys($request->input('master_id')))],
-            'additional_services' => ['nullable', 'array'],
+            'additional_services' => ['nullable', 'array', 'max:2'],
             'additional_services.*' => [Rule::in(MassageService::activeKeys($request->input('master_id')))],
             'apparatus_duration_minutes' => ['nullable', 'integer', Rule::in([15, 30, 45, 60])],
             'appointment_date' => ['required', 'date'],

@@ -20,6 +20,11 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        return $this->isAdmin();
+    }
+
+    public function isAdmin(): bool
+    {
         return str_ends_with($this->email, '@massage.local');
     }
 

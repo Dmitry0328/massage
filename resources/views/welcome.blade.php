@@ -139,6 +139,8 @@
     .nav-links {
       display: flex;
       align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
       gap: 22px;
       font-size: 15px;
       color: var(--muted);
@@ -2036,9 +2038,14 @@
 
     .service-option,
     .master-option {
+      position: relative;
       width: 100%;
       text-align: left;
       padding: 18px;
+    }
+
+    .service-option {
+      padding-right: 54px;
     }
 
     .master-option {
@@ -2081,6 +2088,25 @@
       color: #fff;
       border-color: #2f8dad;
       box-shadow: 0 10px 24px rgba(47, 141, 173, 0.18);
+    }
+
+    .service-option .service-order {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: none;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #2f8dad;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .service-option.active .service-order {
+      display: grid;
     }
 
     .master-option.active::after {
@@ -2582,15 +2608,11 @@
 
       .nav-links {
         width: 100%;
-        justify-content: flex-start;
-        flex-wrap: nowrap;
+        justify-content: center;
+        flex-wrap: wrap;
         gap: 14px 20px;
-        overflow-x: auto;
-        overflow-y: hidden;
+        overflow: visible;
         padding: 0 2px 4px;
-        scroll-behavior: smooth;
-        scroll-snap-type: x proximity;
-        scrollbar-width: none;
         color: #fff;
         font-size: 12px;
         letter-spacing: 0.28em;
@@ -2603,7 +2625,6 @@
 
       .nav-links a {
         flex: 0 0 auto;
-        scroll-snap-align: center;
         white-space: nowrap;
       }
 
@@ -2857,16 +2878,31 @@
 
       .sticky-cta {
         width: calc(100% - 20px);
-        bottom: calc(10px + env(safe-area-inset-bottom));
-        gap: 8px;
-        padding: 8px;
+        bottom: calc(8px + env(safe-area-inset-bottom));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        padding: 6px;
+        border-color: rgba(255, 255, 255, 0.28);
+        background: rgba(43, 36, 33, 0.34);
+        box-shadow: 0 10px 28px rgba(43, 36, 33, 0.14);
+        opacity: 0.58;
+        backdrop-filter: blur(10px);
+      }
+
+      .sticky-cta:focus-within,
+      .sticky-cta:hover {
+        background: rgba(43, 36, 33, 0.86);
+        opacity: 1;
       }
 
       .sticky-cta .btn {
-        min-height: 48px;
-        padding: 10px 12px;
-        font-size: 12px;
-        letter-spacing: 0.03em;
+        min-height: 38px;
+        padding: 8px 10px;
+        border-color: rgba(255, 255, 255, 0.52);
+        background: rgba(255, 255, 255, 0.06);
+        font-size: 11px;
+        letter-spacing: 0.02em;
+        backdrop-filter: none;
       }
 
       .service-list-apparatus-wrap {
@@ -2875,7 +2911,7 @@
       }
 
       footer {
-        padding-bottom: 118px;
+        padding-bottom: 76px;
       }
     }
 
@@ -2924,12 +2960,10 @@
         letter-spacing: 0.05em;
       }
 
-      .sticky-cta {
-        grid-template-columns: 1fr;
-      }
-
       .sticky-cta .btn {
-        min-height: 44px;
+        min-height: 36px;
+        padding: 7px 8px;
+        font-size: 10px;
       }
 
       .mobile-round-cta {
@@ -2985,9 +3019,11 @@
         <a href="#services">Послуги</a>
         <a href="#prepare">Підготовка</a>
         <a href="#reviews">Відгуки</a>
-        <a href="#about">Про мене</a>
+        <a href="#about">Про нас</a>
         <a href="#contact">Контакти</a>
-        <a href="{{ url('/admin') }}">Адмінка</a>
+        @if (auth()->check() && auth()->user()->isAdmin())
+          <a href="{{ url('/admin') }}">Адмінка</a>
+        @endif
       </nav>
 
       <a class="btn btn-primary" href="#booking">Записатися</a>
@@ -3596,7 +3632,8 @@
                 </div>
 
                 <div class="booking-block" id="services-block" {{ old('master_id') ? '' : 'hidden' }}>
-                  <h4>2. Оберіть послугу</h4>
+                  <h4>2. Оберіть до 3 послуг</h4>
+                  <div class="slot-hint" id="services-selection-hint">Можна одразу обрати 1-3 послуги. Перша послуга буде основною, інші додадуться до цього ж запису.</div>
                   <div class="services-picker" id="services-picker">
                     @foreach ($serviceCards as $service)
                       <button
@@ -3612,6 +3649,7 @@
                         data-service-duration="{{ $service['duration'] ?? '' }}"
                       >
                         <strong>{{ $service['display_label'] ?? $service['label'] ?? 'Послуга' }}</strong>
+                        <span class="service-order" aria-hidden="true"></span>
                         <div class="service-meta">
                           <span>{{ ! empty($service['uses_duration_picker']) ? '1 хв - ' . ($service['price'] ?? 0) . ' грн' : number_format($service['price'] ?? 0, 0, ',', ' ') . ' грн' }}</span>
                           <span>{{ $service['duration'] ?? '' }}</span>
@@ -3630,6 +3668,9 @@
                     <button type="button" class="apparatus-discuss-btn" id="apparatus-discuss-btn">Обговорити час з майстром на прийомі</button>
                     <small>Якщо обрати “обговорити час”, вікно буде заброньовано на 60 хв.</small>
                   </div>
+                  <div id="additional-services-inputs"></div>
+                  <div class="services-section-label" id="selected-services-label" hidden>Обрано</div>
+                  <div class="selected-services-list" id="selected-services-list"></div>
                 </div>
 
                 <div class="booking-block" id="date-time-block" {{ old('master_id') && old('service') ? '' : 'hidden' }}>
@@ -3662,9 +3703,6 @@
                   </div>
 
                   <div class="slot-hint" id="additional-services-hint">Після вибору часу ви зможете додати ще одну або кілька послуг до запису.</div>
-                  <div id="additional-services-inputs"></div>
-                  <div class="services-section-label" id="selected-services-label" hidden>Вибрано</div>
-                  <div class="selected-services-list" id="selected-services-list"></div>
                   <div class="services-section-label" id="available-services-label" hidden>Доступно для додавання</div>
                   <div class="additional-services-picker" id="additional-services-picker" hidden>
                     <div class="additional-picker-list" id="additional-picker-list"></div>
@@ -4606,6 +4644,7 @@
     const summaryPrice = document.getElementById('summary-price');
     const summaryDatetime = document.getElementById('summary-datetime');
     const summaryDuration = document.getElementById('summary-duration');
+    const servicesSelectionHint = document.getElementById('services-selection-hint');
     const addServiceTrigger = document.getElementById('add-service-trigger');
     const additionalServicesHint = document.getElementById('additional-services-hint');
     const additionalServicesInputs = document.getElementById('additional-services-inputs');
@@ -4639,6 +4678,8 @@
       monthCursor.setMonth(monthCursor.getMonth() + 1);
     }
 
+    const maxSelectedServices = 3;
+
     const normalizeAdditionalServices = (values, primaryService) => {
       if (!Array.isArray(values)) {
         return [];
@@ -4646,7 +4687,7 @@
 
       return [...new Set(
         values.filter((value) => typeof value === 'string' && value && servicesByKey[value] && value !== primaryService)
-      )];
+      )].slice(0, maxSelectedServices - 1);
     };
 
     const initialDate = oldValues.service ? (oldValues.appointment_date || bookingConfig.minDate) : '';
@@ -4802,6 +4843,39 @@
       });
     };
 
+    const getSelectedServiceKeys = () => [
+      state.service,
+      ...state.additionalServices,
+    ].filter(Boolean);
+
+    const renderServiceSelectionState = () => {
+      const selectedKeys = getSelectedServiceKeys();
+
+      serviceCards.forEach((card) => {
+        const isApparatusCard = card.dataset.serviceKind === 'apparatus';
+        const isSelected = isApparatusCard
+          ? Boolean(state.apparatusBase && card.dataset.apparatusBase === state.apparatusBase)
+          : selectedKeys.includes(card.dataset.serviceKey || '');
+        const order = isApparatusCard
+          ? selectedKeys.indexOf(state.service)
+          : selectedKeys.indexOf(card.dataset.serviceKey || '');
+        const orderBadge = card.querySelector('.service-order');
+
+        card.classList.toggle('active', isSelected);
+
+        if (orderBadge) {
+          orderBadge.textContent = order >= 0 ? String(order + 1) : (isSelected ? '✓' : '');
+        }
+      });
+
+      if (servicesSelectionHint) {
+        const count = selectedKeys.length;
+        servicesSelectionHint.textContent = count
+          ? `Обрано ${count} з ${maxSelectedServices}. Перша послуга основна, наступні виконуються після неї в одному записі.`
+          : 'Можна одразу обрати 1-3 послуги. Перша послуга буде основною, інші додадуться до цього ж запису.';
+      }
+    };
+
     const renderPriceMasterGroups = (masterId) => {
       const selectedMasterId = masterId || priceMasterTabs[0]?.dataset.priceMaster || '';
 
@@ -4831,7 +4905,7 @@
 
       setBlockVisible(servicesBlock, hasMaster);
       setBlockVisible(dateTimeBlock, hasMasterAndService);
-      setBlockVisible(additionalServicesBlock, hasMasterAndService);
+      setBlockVisible(additionalServicesBlock, false);
     };
 
     const renderServicesForMaster = () => {
@@ -4850,6 +4924,7 @@
       });
 
       servicesEmpty.hidden = !state.masterId || visibleCount > 0;
+      renderServiceSelectionState();
     };
 
     const renderApparatusDurationPicker = () => {
@@ -4894,7 +4969,6 @@
       dateInput.value = '';
       state.time = '';
       timeInput.value = '';
-      resetAdditionalServices();
     };
 
     const selectServiceKey = (serviceKey) => {
@@ -4910,16 +4984,78 @@
       syncAdditionalServiceInputs();
     };
 
+    const applySelectedServiceKeys = (serviceKeys) => {
+      const normalizedKeys = [...new Set(serviceKeys)]
+        .filter((serviceKey) => serviceKey && servicesByKey[serviceKey] && String(servicesByKey[serviceKey].master_id) === state.masterId)
+        .slice(0, maxSelectedServices);
+      const previousKeys = getSelectedServiceKeys().join('|');
+      const nextKeys = normalizedKeys.join('|');
+
+      state.service = normalizedKeys[0] || '';
+      state.additionalServices = normalizeAdditionalServices(normalizedKeys.slice(1), state.service);
+      serviceInput.value = state.service;
+
+      if (!servicesByKey[state.service]?.is_apparatus) {
+        resetApparatusSelection();
+      }
+
+      if (previousKeys !== nextKeys) {
+        resetSelectedDateTime();
+      }
+
+      syncAdditionalServiceInputs();
+      renderServiceSelectionState();
+    };
+
+    const removeSelectedService = (serviceKey) => {
+      applySelectedServiceKeys(getSelectedServiceKeys().filter((selectedKey) => selectedKey !== serviceKey));
+      renderBookingStepVisibility();
+      renderServicesForMaster();
+      renderApparatusDurationPicker();
+      renderAdditionalServices();
+      updateSummary();
+      loadMonthAvailability();
+    };
+
+    const toggleRegularService = (serviceKey) => {
+      if (!serviceKey) {
+        return;
+      }
+
+      const selectedKeys = getSelectedServiceKeys();
+
+      if (selectedKeys.includes(serviceKey)) {
+        removeSelectedService(serviceKey);
+        return;
+      }
+
+      if (selectedKeys.length >= maxSelectedServices) {
+        showBookingMessage('Можна обрати максимум 3 послуги в одному записі.', 'Ліміт послуг');
+        return;
+      }
+
+      if (state.apparatusBase && !state.service) {
+        resetApparatusSelection();
+      }
+      applySelectedServiceKeys([...selectedKeys, serviceKey]);
+      renderBookingStepVisibility();
+      renderServicesForMaster();
+      renderApparatusDurationPicker();
+      renderAdditionalServices();
+      updateSummary();
+      loadMonthAvailability();
+    };
+
     function selectApparatusVariant(variant, discuss) {
       selectServiceKey(variant.key);
       state.apparatusDiscuss = discuss;
       apparatusDiscussInput.value = discuss ? '1' : '';
       state.apparatusDurationMinutes = Number(variant.duration_minutes) || 60;
       apparatusDurationInput.value = String(state.apparatusDurationMinutes);
-      setActiveCard(serviceCards, (element) => element.dataset.apparatusBase === state.apparatusBase);
       renderApparatusDurationPicker();
       renderBookingStepVisibility();
       renderAdditionalServices();
+      renderServiceSelectionState();
       updateSummary();
       loadMonthAvailability();
     }
@@ -4937,6 +5073,10 @@
     };
 
     const getAvailableAdditionalServices = () => {
+      if (getSelectedServiceKeys().length >= maxSelectedServices) {
+        return [];
+      }
+
       const remainingKeys = services
         .filter((service) => String(service.master_id) === state.masterId)
         .map((service) => service.key)
@@ -5066,7 +5206,7 @@
       const selectedService = servicesByKey[state.service];
       const selectedAdditionalServices = state.additionalServices.map((serviceKey) => servicesByKey[serviceKey]).filter(Boolean);
       const selectedMaster = mastersById[state.masterId];
-      const totalPrice = getServicePrice(selectedService) + selectedAdditionalServices.reduce((sum, service) => sum + (service.price || 0), 0);
+      const totalPrice = getServicePrice(selectedService) + selectedAdditionalServices.reduce((sum, service) => sum + getServicePrice(service), 0);
       const totalDuration = (selectedService ? getDurationMinutes(selectedService) : 0)
         + selectedAdditionalServices.reduce((sum, service) => sum + getDurationMinutes(service), 0);
 
@@ -5089,7 +5229,9 @@
           })
           .join('\n');
       } else {
-        summaryAdditional.textContent = 'Без додаткових послуг';
+        summaryAdditional.textContent = selectedAdditionalServices.length
+          ? selectedAdditionalServices.map((service) => service.label).join(', ')
+          : 'Без додаткових послуг';
       }
 
       if (selectedService) {
@@ -5178,8 +5320,8 @@
       additionalServicesPicker.style.display = state.isAdditionalPickerOpen && canAddServices ? 'grid' : 'none';
       selectedServicesList.innerHTML = '';
       additionalPickerList.innerHTML = '';
-      selectedServicesList.hidden = state.additionalServices.length === 0;
-      selectedServicesLabel.hidden = state.additionalServices.length === 0;
+      selectedServicesList.hidden = getSelectedServiceKeys().length === 0;
+      selectedServicesLabel.hidden = getSelectedServiceKeys().length === 0;
       availableServicesLabel.hidden = !(state.isAdditionalPickerOpen && canAddServices && availableAdditionalServices.length);
 
       if (!state.time) {
@@ -5198,20 +5340,20 @@
         additionalServicesHint.textContent = 'На вибраний час не можна додати ще одну послугу, тому що салон зайнятий іншим клієнтом. Оберіть інший час для двох або більше процедур, або залиште запис тільки на основну процедуру.';
       }
 
-      state.additionalServices
+      getSelectedServiceKeys()
         .map((serviceKey) => servicesByKey[serviceKey])
         .filter(Boolean)
-        .forEach((service) => {
+        .forEach((service, index) => {
           const card = document.createElement('div');
           card.className = 'selected-service-card';
           card.innerHTML = `
             <div class="selected-service-head">
-              <strong>${service.label}</strong>
+              <strong>${index + 1}. ${index === 0 ? formatServiceSummaryName(service) : service.label}</strong>
               <button type="button" class="remove-service-btn" data-remove-service="${service.key}" aria-label="Видалити послугу">×</button>
             </div>
             <div class="selected-service-meta">
-              <span>${formatPrice(service.price || 0)}</span>
-              <span>${service.duration || ''}</span>
+              <span>${formatPrice(getServicePrice(service))}</span>
+              <span>${formatDurationValue(getDurationMinutes(service))}</span>
             </div>
           `;
           selectedServicesList.appendChild(card);
@@ -5219,11 +5361,7 @@
 
       selectedServicesList.querySelectorAll('[data-remove-service]').forEach((button) => {
         button.addEventListener('click', () => {
-          state.additionalServices = state.additionalServices.filter((serviceKey) => serviceKey !== button.dataset.removeService);
-          syncAdditionalServiceInputs();
-          renderAdditionalServices();
-          updateSummary();
-          loadAvailability();
+          removeSelectedService(button.dataset.removeService);
         });
       });
 
@@ -5247,11 +5385,14 @@
         `;
         button.addEventListener('click', () => {
           state.additionalServices = [...state.additionalServices, service.key];
+          state.additionalServices = normalizeAdditionalServices(state.additionalServices, state.service);
           state.isAdditionalPickerOpen = false;
+          resetSelectedDateTime();
           syncAdditionalServiceInputs();
+          renderServiceSelectionState();
           renderAdditionalServices();
           updateSummary();
-          loadAvailability();
+          loadMonthAvailability();
         });
         additionalPickerList.appendChild(button);
       });
@@ -5312,7 +5453,6 @@
           dateInput.value = day.iso;
           state.time = '';
           timeInput.value = '';
-          resetAdditionalServices();
           renderDays();
           renderAdditionalServices();
           updateSummary();
@@ -5396,10 +5536,6 @@
           state.time = slot;
           timeInput.value = slot;
 
-          if (previousTime !== slot) {
-            resetAdditionalServices();
-          }
-
           renderTimes();
           renderAdditionalServices();
           updateSummary();
@@ -5428,7 +5564,6 @@
           dateInput.value = state.date;
           state.time = '';
           timeInput.value = '';
-          resetAdditionalServices();
         }
       }
 
@@ -5479,7 +5614,6 @@
         state.availableSlots = [];
         state.time = '';
         timeInput.value = '';
-        resetAdditionalServices();
         renderDays();
         renderTimes();
         slotHint.textContent = 'Не вдалося завантажити календар доступності. Оновіть сторінку або спробуйте ще раз.';
@@ -5493,7 +5627,6 @@
         state.availableAdditionalServiceKeys = [];
         state.time = '';
         timeInput.value = '';
-        resetAdditionalServices();
         renderTimes();
         updateSummary();
         return;
@@ -5530,7 +5663,6 @@
         if (!state.availableSlots.includes(state.time)) {
           state.time = '';
           timeInput.value = '';
-          resetAdditionalServices();
         }
 
         renderTimes();
@@ -5540,7 +5672,6 @@
         state.availableAdditionalServiceKeys = [];
         state.time = '';
         timeInput.value = '';
-        resetAdditionalServices();
         renderTimes();
         slotHint.textContent = 'Сталася помилка під час завантаження слотів. Оновіть сторінку або спробуйте ще раз.';
         showBookingMessage('Сталася помилка під час завантаження слотів. Оновіть сторінку або спробуйте ще раз.', 'Помилка');
@@ -5557,10 +5688,12 @@
           state.apparatusVariants = JSON.parse(card.dataset.apparatusVariants || '[]');
           state.service = '';
           serviceInput.value = '';
+          state.additionalServices = [];
           state.apparatusDiscuss = false;
           apparatusDiscussInput.value = '';
           resetSelectedDateTime();
-          setActiveCard(serviceCards, (element) => element === card);
+          syncAdditionalServiceInputs();
+          renderServiceSelectionState();
           renderApparatusDurationPicker();
           renderBookingStepVisibility();
           renderAdditionalServices();
@@ -5568,15 +5701,7 @@
           return;
         }
 
-        resetApparatusSelection();
-        selectServiceKey(card.dataset.serviceKey || '');
-        setActiveCard(serviceCards, (element) => element.dataset.serviceKey === state.service);
-        renderBookingStepVisibility();
-        renderServicesForMaster();
-        renderApparatusDurationPicker();
-        renderAdditionalServices();
-        updateSummary();
-        loadMonthAvailability();
+        toggleRegularService(card.dataset.serviceKey || '');
       });
     });
 
@@ -5593,13 +5718,14 @@
         if (masterChanged) {
           state.service = '';
           serviceInput.value = '';
+          state.additionalServices = [];
           resetApparatusSelection();
-          resetAdditionalServices();
           resetSelectedDateTime();
+          syncAdditionalServiceInputs();
         }
 
         setActiveCard(masterCards, (element) => element.dataset.masterId === state.masterId);
-        setActiveCard(serviceCards, () => false);
+        renderServiceSelectionState();
         renderBookingStepVisibility();
         renderServicesForMaster();
         renderApparatusDurationPicker();
@@ -5652,7 +5778,12 @@
         }
 
         if (!service) {
+          state.service = '';
+          serviceInput.value = '';
+          state.additionalServices = [];
           resetApparatusSelection();
+          resetSelectedDateTime();
+          syncAdditionalServiceInputs();
           renderBookingStepVisibility();
           renderServicesForMaster();
           renderAdditionalServices();
@@ -5661,8 +5792,7 @@
         }
 
         resetApparatusSelection();
-        selectServiceKey(service);
-        setActiveCard(serviceCards, (element) => element.dataset.serviceKey === service);
+        applySelectedServiceKeys([service]);
         renderBookingStepVisibility();
         renderServicesForMaster();
         renderAdditionalServices();
@@ -5773,7 +5903,6 @@
         state.dayPage = 0;
         state.time = '';
         timeInput.value = '';
-        resetAdditionalServices();
         loadMonthAvailability();
       }
     });
@@ -5786,7 +5915,6 @@
         state.dayPage = 0;
         state.time = '';
         timeInput.value = '';
-        resetAdditionalServices();
         loadMonthAvailability();
       }
     });
@@ -5809,7 +5937,7 @@
 
     if (state.service) {
       serviceInput.value = state.service;
-      setActiveCard(serviceCards, (element) => element.dataset.serviceKey === state.service);
+      renderServiceSelectionState();
     }
 
     if (state.masterId) {
