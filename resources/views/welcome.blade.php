@@ -3407,7 +3407,7 @@
 
       <nav class="nav-links">
         <a href="#services">Послуги</a>
-        <a href="#prepare">Підготовка</a>
+        <a href="#prepare">Рекомендації</a>
         <a href="#reviews">Відгуки</a>
         <a href="#about">Про нас</a>
         <a href="#contact">Контакти</a>
@@ -3565,7 +3565,7 @@
 
     <section class="section site-dark-section prepare-section" id="prepare">
       <div class="container">
-        <h2 class="section-title">Підготовка до масажу</h2>
+        <h2 class="section-title">Рекомендації перед масажем</h2>
         <p class="section-text">
           Кілька простих кроків перед сеансом допоможуть зробити масаж комфортнішим і ефективнішим.
         </p>
@@ -3868,7 +3868,7 @@
     @if (false)
     <section class="section site-dark-section prepare-section" id="prepare">
       <div class="container">
-        <h2 class="section-title">Підготовка до масажу</h2>
+        <h2 class="section-title">Рекомендації перед масажем</h2>
         <p class="section-text">
           Кілька простих кроків перед сеансом допоможуть зробити масаж комфортнішим і ефективнішим.
         </p>
