@@ -158,7 +158,7 @@ class MassageService extends Model
             'apparatus_base' => $apparatusBase,
             'duration_minutes' => $this->duration_minutes,
             'minute_price' => $minutePrice,
-            'duration' => $isApparatus && $this->is_price_per_minute ? 'Оберіть час' : $this->duration_minutes . ' хв',
+            'duration' => $isApparatus && $this->is_price_per_minute ? 'Оберіть час' : $this->displayDurationLabel(),
             'price' => $this->price,
             'old_price' => null,
             'badge' => $this->discount_percent > 0 ? "-{$this->discount_percent}%" : '',
@@ -175,8 +175,10 @@ class MassageService extends Model
         foreach ([
             'Міостимуляція' => 'Міостимуляція',
             'Кавітація' => 'Кавітація',
-            'RF-ліфтинг' => 'RF- ліфтинг',
-            'RF- ліфтинг' => 'RF- ліфтинг',
+            'Ендосфера' => 'Ендосфера',
+            'ЕНДОСФЕРА' => 'Ендосфера',
+            'RF-ліфтинг' => 'RF-ліфтинг',
+            'RF- ліфтинг' => 'RF-ліфтинг',
             'Вакуумний масаж' => 'Вакуумний масаж',
             'Пресотерапія' => 'Пресотерапія',
         ] as $prefix => $displayLabel) {
@@ -190,6 +192,22 @@ class MassageService extends Model
 
     private function normalizeApparatusLabel(string $label): string
     {
-        return str_starts_with($label, 'RF-') ? 'RF- ліфтинг' : $label;
+        if (str_starts_with($label, 'RF-')) {
+            return 'RF-ліфтинг';
+        }
+
+        return $label === 'ЕНДОСФЕРА' ? 'Ендосфера' : $label;
+    }
+
+    private function displayDurationLabel(): string
+    {
+        return match ($this->key) {
+            'olesia-zagalnii-masaz-tila-120',
+            'serhii-zagalnii-masaz-tila-120' => '90-120 хв',
+            'serhii-miopresura-shkz-90',
+            'serhii-spina-ruki-shiya-90',
+            'serhii-miopresura-nig-90' => '60-90 хв',
+            default => $this->duration_minutes . ' хв',
+        };
     }
 }
