@@ -25,6 +25,7 @@
 
     html {
       scroll-behavior: smooth;
+      scroll-padding-top: 110px;
     }
 
     body {
@@ -1696,8 +1697,8 @@
     .prep-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 22px;
-      margin-top: 34px;
+      gap: 14px;
+      margin-top: 22px;
     }
 
     .prepare-section {
@@ -1711,8 +1712,8 @@
 
     .prep-card {
       display: grid;
-      gap: 12px;
-      padding: 26px;
+      gap: 8px;
+      padding: 16px 18px;
       text-align: center;
     }
 
@@ -1720,20 +1721,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       margin: 0;
-      font-size: 22px;
+      font-size: 19px;
     }
 
     .prep-card h3 span {
       display: inline-grid;
-      width: 34px;
-      height: 34px;
+      width: 28px;
+      height: 28px;
       place-items: center;
       border-radius: 999px;
       background: rgba(182, 132, 107, 0.16);
       color: #fff;
-      font-size: 17px;
+      font-size: 14px;
     }
 
     .prep-card ul,
@@ -1749,6 +1750,11 @@
     .prep-card li,
     .about-profile-text p {
       margin: 0;
+    }
+
+    .prep-card li {
+      font-size: 15px;
+      line-height: 1.45;
     }
 
     .about-profiles {
@@ -3191,6 +3197,24 @@
         font-size: 15px;
       }
 
+      .prep-grid {
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .prep-card.info-card {
+        padding: 14px 16px;
+      }
+
+      .prep-card h3 {
+        font-size: 18px;
+      }
+
+      .prep-card li {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
       .form-card .btn {
         width: 100%;
       }
@@ -3436,7 +3460,8 @@
       </div>
 
       <nav class="nav-links">
-        <a href="#services">Послуги</a>
+        <a href="#service-details">Послуги</a>
+        <a href="#price">Прайс</a>
         <a href="#prepare">Рекомендації</a>
         <a href="#reviews">Відгуки</a>
         <a href="#about">Про нас</a>
@@ -3497,7 +3522,7 @@
         <h2 class="section-title">Наші послуги</h2>
         <p class="section-text">Короткий список послуг наших майстрів</p>
 
-        <div class="services-columns">
+        <div class="services-columns" id="price">
           @foreach (['Олеся', 'Сергій'] as $serviceMasterName)
             @php
               $serviceMaster = $masters->firstWhere('name', $serviceMasterName);
@@ -3544,7 +3569,7 @@
             </article>
           @endforeach
 
-          <div class="services-details">
+          <div class="services-details" id="service-details">
             <p>* Ви можете прочитати про кожен вид масажу тут</p>
             <div class="service-accordion">
               @php
