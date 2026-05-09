@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class ClientRequestForm
 {
@@ -16,7 +17,11 @@ class ClientRequestForm
             ->components([
                 Select::make('master_id')
                     ->label('Майстер')
-                    ->relationship('master', 'name')
+                    ->relationship(
+                        'master',
+                        'name',
+                        modifyQueryUsing: fn (Builder $query): Builder => $query->orderBy('sort_order')->orderBy('name'),
+                    )
                     ->required()
                     ->searchable()
                     ->preload(),

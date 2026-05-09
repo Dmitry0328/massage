@@ -1773,6 +1773,11 @@
       font-size: 26px;
     }
 
+    #about > .container {
+      display: flex;
+      flex-direction: column;
+    }
+
     .about-master-card {
       display: grid;
       grid-template-columns: 0.88fr 1.12fr;
@@ -1788,6 +1793,14 @@
     }
 
     .about-master-card--reverse .about-master-photo {
+      order: 2;
+    }
+
+    .about-master-card--sergiy {
+      order: 1;
+    }
+
+    .about-master-card--olesya {
       order: 2;
     }
 
@@ -3523,7 +3536,7 @@
         <p class="section-text">Короткий список послуг наших майстрів</p>
 
         <div class="services-columns" id="price">
-          @foreach (['Олеся', 'Сергій'] as $serviceMasterName)
+          @foreach (['Сергій', 'Олеся'] as $serviceMasterName)
             @php
               $serviceMaster = $masters->firstWhere('name', $serviceMasterName);
               $serviceItems = $serviceMaster
@@ -3743,7 +3756,7 @@
       <div class="container">
         <h2 class="section-title">Про нас</h2>
 
-        <article class="about-master-card">
+        <article class="about-master-card about-master-card--olesya">
           <div class="about-master-photo">
             <img
               src="{{ asset('images/about/olesya-1200.jpg') }}"
@@ -3776,7 +3789,7 @@
           </div>
         </article>
 
-        <article class="about-master-card about-master-card--reverse">
+        <article class="about-master-card about-master-card--reverse about-master-card--sergiy">
           <div class="about-master-photo">
             <img
               src="{{ asset('images/about/sergiy-1400.jpg') }}"
@@ -4023,8 +4036,8 @@
             <div class="contact-list">
               <div class="contact-item">
                 <strong>Телефон</strong>
-                <span>Олеся: <a href="tel:+380678764183">+380 (67) 876-41-83</a></span>
                 <span>Сергій: <a href="tel:+380966059823">+380 (96) 605-98-23</a></span>
+                <span>Олеся: <a href="tel:+380678764183">+380 (67) 876-41-83</a></span>
               </div>
               <div class="contact-item">
                 <strong>Instagram</strong>

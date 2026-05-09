@@ -16,6 +16,7 @@ class ListServices extends ListRecords
     public function getTabs(): array
     {
         return Master::query()
+            ->orderBy('sort_order')
             ->orderBy('name')
             ->get()
             ->mapWithKeys(fn (Master $master): array => [

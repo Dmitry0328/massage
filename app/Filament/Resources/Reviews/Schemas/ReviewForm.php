@@ -21,7 +21,7 @@ class ReviewForm
                     ->maxLength(255),
                 Select::make('master_id')
                     ->label('Майстер')
-                    ->options(fn (): array => Master::query()->orderBy('name')->pluck('name', 'id')->all())
+                    ->options(fn (): array => Master::query()->orderBy('sort_order')->orderBy('name')->pluck('name', 'id')->all())
                     ->searchable()
                     ->preload(),
                 TextInput::make('rating')
