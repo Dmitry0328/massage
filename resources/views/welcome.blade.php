@@ -2230,6 +2230,11 @@
       overflow: hidden;
     }
 
+    body.is-booking-modal-open .floating-booking-btn,
+    body.is-booking-modal-open .sticky-cta {
+      display: none;
+    }
+
     .floating-booking-btn {
       position: fixed;
       right: clamp(16px, 4vw, 42px);
@@ -2780,6 +2785,20 @@
       opacity: 0.72;
     }
 
+    .time-chip.active,
+    .site-dark-section .time-chip.active {
+      background: #2f95ad;
+      border-color: #2f95ad;
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(47, 149, 173, 0.26);
+    }
+
+    .time-chip.active small,
+    .site-dark-section .time-chip.active small {
+      color: #fff;
+      opacity: 0.9;
+    }
+
     .time-grid.is-disabled {
       pointer-events: none;
     }
@@ -2859,7 +2878,7 @@
     .booking-jump-confirm-btn {
       position: fixed;
       left: 50%;
-      bottom: calc(18px + env(safe-area-inset-bottom));
+      bottom: var(--booking-jump-bottom, calc(18px + env(safe-area-inset-bottom)));
       z-index: 1250;
       width: min(calc(100% - 36px), 620px);
       transform: translateX(-50%);
@@ -2874,6 +2893,7 @@
       text-align: center;
       letter-spacing: 0.01em;
       box-shadow: 0 14px 34px rgba(47, 149, 173, 0.32);
+      transition: bottom 0.2s ease, background 0.2s ease, border-color 0.2s ease;
     }
 
     .booking-jump-confirm-btn:hover {
@@ -3886,7 +3906,7 @@
             <div class="about-master-kicker">Майстер Сергій</div>
             <h3>Досвід, уважність і результативний масаж</h3>
             <div class="about-master-text" id="sergiy-about-text" data-about-text>
-              <p>Я — Сергій, у нашому містечку мене часто знають як Сергія Юрійовича. Понад 15 років працював керівником фізичного виховання, тому добре знаю анатомію людини, причини болю та затисків у тілі.</p>
+              <p>Я — Сергій, у нашому містечку мене часто знають як Сергія Юрійовича. Понад 15 років працював вчителем фіз. виховання, тому добре знаю анатомію людини, причини болю та затисків у тілі.</p>
               <p>Більше 3 років професійно займаюсь масажем. Працюю не на кількість, а на результат — щоб після сеансу ви реально відчули ефект масажу.</p>
               <p>Я завжди уважно вислухаю вашу проблему, підберу підхід саме під ваш стан та, за потреби, підкажу вправи для підтримки здоровʼя вашого тіла.</p>
               <p>Про мою роботу найкраще говорять відгуки клієнтів, з якими можете ознайомитись тут на сайті.</p>
@@ -4080,7 +4100,7 @@
           <article class="about-profile-card hero-card">
             <h3>Сергій</h3>
             <div class="about-profile-text">
-              <p>Я — Сергій, у нашому містечку мене часто знають як Сергія Юрійовича. Понад 15 років працював керівником фізичного виховання, тому добре знаю анатомію людини, причини болю та затисків у тілі.</p>
+              <p>Я — Сергій, у нашому містечку мене часто знають як Сергія Юрійовича. Понад 15 років працював вчителем фіз. виховання, тому добре знаю анатомію людини, причини болю та затисків у тілі.</p>
               <p>Більше 3 років професійно займаюсь масажем. Працюю не на кількість, а на результат, щоб після сеансу ви реально відчули ефект масажу.</p>
               <p>Я завжди уважно вислухаю вашу проблему, підберу підхід саме під ваш стан та, за потреби, підкажу вправи для підтримки здоровʼя вашого тіла.</p>
               <p>Про мою роботу найкраще говорять відгуки клієнтів, з якими можете ознайомитись тут на сайті.</p>
@@ -4528,6 +4548,50 @@
       })();
 
       bookingJumpConfirm.hidden = !(state.service && (isModalOpen || isInlineFormVisible));
+
+      if (bookingJumpConfirm.hidden) {
+        bookingJumpConfirm.style.removeProperty('--booking-jump-bottom');
+        return;
+      }
+
+      requestAnimationFrame(updateBookingJumpConfirmOffset);
+    };
+
+    const updateBookingJumpConfirmOffset = () => {
+      if (!bookingJumpConfirm || bookingJumpConfirm.hidden) {
+        return;
+      }
+
+      bookingJumpConfirm.style.removeProperty('--booking-jump-bottom');
+
+      const jumpRect = bookingJumpConfirm.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const obstacles = document.querySelectorAll('.floating-booking-btn, .sticky-cta');
+      let bottomOffset = 18;
+
+      obstacles.forEach((element) => {
+        if (element === bookingJumpConfirm) {
+          return;
+        }
+
+        const styles = window.getComputedStyle(element);
+
+        if (element.hidden || styles.display === 'none' || styles.visibility === 'hidden') {
+          return;
+        }
+
+        const rect = element.getBoundingClientRect();
+        const intersectsHorizontally = jumpRect.left < rect.right && jumpRect.right > rect.left;
+        const intersectsVertically = jumpRect.top < rect.bottom && jumpRect.bottom > rect.top;
+
+        if (intersectsHorizontally && intersectsVertically) {
+          bottomOffset = Math.max(bottomOffset, Math.ceil(viewportHeight - rect.top + 12));
+        }
+      });
+
+      if (bottomOffset > 18) {
+        bookingJumpConfirm.style.setProperty('--booking-jump-bottom', `${bottomOffset}px`);
+      }
     };
 
     const updateSummary = () => {
@@ -6046,6 +6110,50 @@
       })();
 
       bookingJumpConfirm.hidden = !(state.service && (isModalOpen || isInlineFormVisible));
+
+      if (bookingJumpConfirm.hidden) {
+        bookingJumpConfirm.style.removeProperty('--booking-jump-bottom');
+        return;
+      }
+
+      requestAnimationFrame(updateBookingJumpConfirmOffset);
+    };
+
+    const updateBookingJumpConfirmOffset = () => {
+      if (!bookingJumpConfirm || bookingJumpConfirm.hidden) {
+        return;
+      }
+
+      bookingJumpConfirm.style.removeProperty('--booking-jump-bottom');
+
+      const jumpRect = bookingJumpConfirm.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const obstacles = document.querySelectorAll('.floating-booking-btn, .sticky-cta');
+      let bottomOffset = 18;
+
+      obstacles.forEach((element) => {
+        if (element === bookingJumpConfirm) {
+          return;
+        }
+
+        const styles = window.getComputedStyle(element);
+
+        if (element.hidden || styles.display === 'none' || styles.visibility === 'hidden') {
+          return;
+        }
+
+        const rect = element.getBoundingClientRect();
+        const intersectsHorizontally = jumpRect.left < rect.right && jumpRect.right > rect.left;
+        const intersectsVertically = jumpRect.top < rect.bottom && jumpRect.bottom > rect.top;
+
+        if (intersectsHorizontally && intersectsVertically) {
+          bottomOffset = Math.max(bottomOffset, Math.ceil(viewportHeight - rect.top + 12));
+        }
+      });
+
+      if (bottomOffset > 18) {
+        bookingJumpConfirm.style.setProperty('--booking-jump-bottom', `${bottomOffset}px`);
+      }
     };
 
     const updateSummary = () => {
