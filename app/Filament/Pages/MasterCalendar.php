@@ -25,7 +25,7 @@ class MasterCalendar extends Page
 
     protected static ?string $title = 'Календар майстра';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 20;
 
     public string $monthKey = '';
 

@@ -28,7 +28,7 @@ class MasterResource extends Resource
 
     protected static ?string $pluralModelLabel = 'майстри';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 90;
 
     public static function form(Schema $schema): Schema
     {

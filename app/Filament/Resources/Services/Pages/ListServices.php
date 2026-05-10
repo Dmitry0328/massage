@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Services\Pages;
 use App\Filament\Resources\Services\ServiceResource;
 use App\Models\Master;
 use Filament\Actions\CreateAction;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,6 +13,18 @@ use Illuminate\Database\Eloquent\Builder;
 class ListServices extends ListRecords
 {
     protected static string $resource = ServiceResource::class;
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        Notification::make()
+            ->title('!Бажано не змінювати данні!')
+            ->body('Цей розділ впливає на послуги, ціни та запис клієнтів на сайті.')
+            ->warning()
+            ->persistent()
+            ->send();
+    }
 
     public function getTabs(): array
     {

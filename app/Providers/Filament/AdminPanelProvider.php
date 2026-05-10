@@ -39,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationItem::make('Головна сторінка')
                     ->icon(Heroicon::OutlinedHome)
                     ->url(fn (): string => url('/'))
-                    ->sort(5),
+                    ->sort(0),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([])

@@ -28,7 +28,7 @@ class ServiceResource extends Resource
 
     protected static ?string $pluralModelLabel = 'послуги';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 91;
 
     public static function form(Schema $schema): Schema
     {

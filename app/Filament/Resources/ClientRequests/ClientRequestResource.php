@@ -22,13 +22,27 @@ class ClientRequestResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'client_name';
 
-    protected static ?string $navigationLabel = 'Запити клієнтів';
+    protected static ?string $navigationLabel = "Зворотній зв'язок";
 
-    protected static ?string $modelLabel = 'запит клієнта';
+    protected static ?string $modelLabel = "зворотній зв'язок";
 
-    protected static ?string $pluralModelLabel = 'запити клієнтів';
+    protected static ?string $pluralModelLabel = "зворотній зв'язок";
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 30;
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = ClientRequest::query()
+            ->where('status', ClientRequest::STATUS_NEW)
+            ->count();
+
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
 
     public static function form(Schema $schema): Schema
     {

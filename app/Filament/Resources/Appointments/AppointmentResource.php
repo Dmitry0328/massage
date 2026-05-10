@@ -28,7 +28,21 @@ class AppointmentResource extends Resource
 
     protected static ?string $pluralModelLabel = 'записи клієнтів';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 10;
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Appointment::query()
+            ->where('status', Appointment::STATUS_PENDING)
+            ->count();
+
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
 
     public static function form(Schema $schema): Schema
     {

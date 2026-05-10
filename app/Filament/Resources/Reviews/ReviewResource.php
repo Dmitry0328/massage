@@ -30,7 +30,21 @@ class ReviewResource extends Resource
 
     protected static ?string $pluralModelLabel = 'відгуки';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 40;
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = Review::query()
+            ->where('status', Review::STATUS_DRAFT)
+            ->count();
+
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
 
     public static function form(Schema $schema): Schema
     {
