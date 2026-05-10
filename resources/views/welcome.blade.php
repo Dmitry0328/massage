@@ -2863,23 +2863,23 @@
       z-index: 1250;
       width: min(calc(100% - 36px), 620px);
       transform: translateX(-50%);
-      border: 1px solid #b88a72;
+      border: 1px solid #2f95ad;
       border-radius: 12px;
-      background: #fff6f0;
-      color: #7a5d50;
+      background: #2f95ad;
+      color: #fff;
       padding: 14px 18px;
       font-size: 14px;
       font-weight: 900;
       cursor: pointer;
       text-align: center;
       letter-spacing: 0.01em;
-      box-shadow: 0 12px 34px rgba(43, 36, 33, 0.22);
+      box-shadow: 0 14px 34px rgba(47, 149, 173, 0.32);
     }
 
     .booking-jump-confirm-btn:hover {
-      background: #f3ded2;
-      border-color: #9a6d58;
-      color: #5f463b;
+      background: #287f96;
+      border-color: #287f96;
+      color: #fff;
     }
 
     .booking-summary strong {
@@ -4515,7 +4515,7 @@
         return;
       }
 
-      bookingJumpConfirm.hidden = !(state.date && state.time);
+      bookingJumpConfirm.hidden = !state.service;
     };
 
     const updateSummary = () => {
@@ -5575,31 +5575,13 @@
     };
 
     const renderDateTimePlacement = () => {
-      if (!state.service || dateTimeBlock.hidden) {
-        if (additionalServicesBlock.parentElement && dateTimeBlock.nextElementSibling !== additionalServicesBlock) {
-          additionalServicesBlock.insertAdjacentElement('beforebegin', dateTimeBlock);
-        }
-
+      if (!dateTimeBlock || !bookingSummary) {
         return;
       }
 
-      const selectedService = servicesByKey[state.service];
-      const selectedCard = findSelectedServiceCard();
-
-      if (!selectedService || !selectedCard) {
-        return;
+      if (bookingSummary.previousElementSibling !== dateTimeBlock) {
+        bookingSummary.insertAdjacentElement('beforebegin', dateTimeBlock);
       }
-
-      if (selectedService.is_apparatus) {
-        if (!state.apparatusDurationMinutes) {
-          return;
-        }
-
-        apparatusDurationBox.insertAdjacentElement('afterend', dateTimeBlock);
-        return;
-      }
-
-      selectedCard.insertAdjacentElement('afterend', dateTimeBlock);
     };
 
     const renderCalendarLoadingState = () => {
@@ -6039,7 +6021,7 @@
         return;
       }
 
-      bookingJumpConfirm.hidden = !(state.date && state.time);
+      bookingJumpConfirm.hidden = !state.service;
     };
 
     const updateSummary = () => {
@@ -6768,9 +6750,9 @@
     });
 
     bookingJumpConfirm?.addEventListener('click', () => {
-      bookingSummary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      dateTimeBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => {
-        bookingSummary.querySelector('button:not([hidden]), input, textarea')?.focus({ preventScroll: true });
+        dateTimeBlock.querySelector('button:not([hidden]):not(:disabled), input, textarea')?.focus({ preventScroll: true });
       }, 250);
     });
 
