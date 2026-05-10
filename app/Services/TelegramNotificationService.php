@@ -73,6 +73,8 @@ class TelegramNotificationService
     private function send(array $lines): void
     {
         if (! config('services.telegram.enabled')) {
+            Log::info('Telegram notification skipped: disabled');
+
             return;
         }
 
@@ -80,6 +82,11 @@ class TelegramNotificationService
         $chatId = (string) config('services.telegram.chat_id');
 
         if ($token === '' || $chatId === '') {
+            Log::warning('Telegram notification skipped: missing bot token or chat id', [
+                'has_token' => $token !== '',
+                'has_chat_id' => $chatId !== '',
+            ]);
+
             return;
         }
 
