@@ -6182,6 +6182,14 @@
       }
     };
 
+    const renderBookingConfirmHint = () => {
+      if (!bookingConfirmHint) {
+        return;
+      }
+
+      bookingConfirmHint.hidden = !(state.date && state.time);
+    };
+
     const updateSummary = () => {
       const selectedService = servicesByKey[state.service];
       const selectedAdditionalServices = state.additionalServices.map((serviceKey) => servicesByKey[serviceKey]).filter(Boolean);
@@ -6216,9 +6224,7 @@
       summaryDatetime.textContent = state.date && state.time
         ? `${formatSelectedDate(state.date)}, ${state.time}`
         : 'Оберіть дату та вільний слот';
-      if (bookingConfirmHint) {
-        bookingConfirmHint.hidden = !(state.date && state.time);
-      }
+      renderBookingConfirmHint();
       if (summaryChangeTime) {
         summaryChangeTime.hidden = !(state.date && state.time);
       }
@@ -6599,6 +6605,7 @@
           const previousTime = state.time;
           state.time = slot;
           timeInput.value = slot;
+          renderBookingConfirmHint();
 
           renderTimes();
           renderAdditionalServices();
