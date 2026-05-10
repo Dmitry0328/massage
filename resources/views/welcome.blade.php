@@ -5800,6 +5800,7 @@
         .filter((serviceKey) => serviceKey && servicesByKey[serviceKey] && String(servicesByKey[serviceKey].master_id) === state.masterId)
         .slice(0, maxSelectedServices);
       const previousPrimaryService = state.service;
+      const previousServiceSignature = getSelectedServiceKeys().join('|');
       const nextPrimaryService = normalizedKeys[0] || '';
 
       state.service = nextPrimaryService;
@@ -5815,6 +5816,14 @@
       if (previousPrimaryService !== nextPrimaryService) {
         bookingJumpDismissed = false;
         resetSelectedDateTime();
+      }
+
+      if (!normalizedKeys.length) {
+        bookingJumpDismissed = false;
+      }
+
+      if (normalizedKeys.length && previousServiceSignature !== normalizedKeys.join('|')) {
+        bookingJumpDismissed = false;
       }
 
       syncAdditionalServiceInputs();
@@ -6134,8 +6143,18 @@
 
         return rect.bottom > 0 && rect.top < viewportHeight;
       })();
+      const isDateTimeBlockVisible = (() => {
+        if (!dateTimeBlock || dateTimeBlock.hidden) {
+          return false;
+        }
 
-      bookingJumpConfirm.hidden = !(state.service && (isModalOpen || isInlineFormVisible));
+        const rect = dateTimeBlock.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+        return rect.bottom > 0 && rect.top < viewportHeight;
+      })();
+
+      bookingJumpConfirm.hidden = !(state.service && !bookingJumpDismissed && !isDateTimeBlockVisible && (isModalOpen || isInlineFormVisible));
 
       if (bookingJumpConfirm.hidden) {
         bookingJumpConfirm.style.removeProperty('--booking-jump-bottom');
