@@ -4515,7 +4515,19 @@
         return;
       }
 
-      bookingJumpConfirm.hidden = !state.service;
+      const isModalOpen = Boolean(bookingModal && !bookingModal.hidden);
+      const isInlineFormVisible = (() => {
+        if (!bookingCard || isModalOpen) {
+          return false;
+        }
+
+        const rect = bookingCard.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+        return rect.bottom > 0 && rect.top < viewportHeight;
+      })();
+
+      bookingJumpConfirm.hidden = !(state.service && (isModalOpen || isInlineFormVisible));
     };
 
     const updateSummary = () => {
@@ -6021,7 +6033,19 @@
         return;
       }
 
-      bookingJumpConfirm.hidden = !state.service;
+      const isModalOpen = Boolean(bookingModal && !bookingModal.hidden);
+      const isInlineFormVisible = (() => {
+        if (!bookingCard || isModalOpen) {
+          return false;
+        }
+
+        const rect = bookingCard.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+        return rect.bottom > 0 && rect.top < viewportHeight;
+      })();
+
+      bookingJumpConfirm.hidden = !(state.service && (isModalOpen || isInlineFormVisible));
     };
 
     const updateSummary = () => {
