@@ -2577,6 +2577,18 @@
       white-space: pre-line;
     }
 
+    .booking-confirm-hint {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(211, 66, 47, 0.28);
+      border-radius: 12px;
+      background: #fff1ef;
+      color: #9b2d1f;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
     .additional-service-box {
       margin-top: 14px;
       display: grid;
@@ -4269,6 +4281,7 @@
 
                   <div class="slot-hint appointment-time-breakdown" id="appointment-time-breakdown" hidden></div>
                   <div class="time-grid is-disabled" id="time-grid"></div>
+                  <div class="booking-confirm-hint" id="booking-confirm-hint" hidden>Прогорніть сторінку нижче та заповніть форму для підтвердження прийому.</div>
                 </div>
 
                 <div class="booking-block" id="additional-services-block" {{ old('master_id') && old('service') ? '' : 'hidden' }}>
@@ -4546,8 +4559,18 @@
 
         return rect.bottom > 0 && rect.top < viewportHeight;
       })();
+      const isDateTimeBlockVisible = (() => {
+        if (!dateTimeBlock || dateTimeBlock.hidden) {
+          return false;
+        }
 
-      bookingJumpConfirm.hidden = !(state.service && (isModalOpen || isInlineFormVisible));
+        const rect = dateTimeBlock.getBoundingClientRect();
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+        return rect.bottom > 0 && rect.top < viewportHeight;
+      })();
+
+      bookingJumpConfirm.hidden = !(state.service && !bookingJumpDismissed && !isDateTimeBlockVisible && (isModalOpen || isInlineFormVisible));
 
       if (bookingJumpConfirm.hidden) {
         bookingJumpConfirm.style.removeProperty('--booking-jump-bottom');
@@ -5359,9 +5382,11 @@
     const availableServicesLabel = document.getElementById('available-services-label');
     const additionalServicesPicker = document.getElementById('additional-services-picker');
     const additionalPickerList = document.getElementById('additional-picker-list');
+    const bookingConfirmHint = document.getElementById('booking-confirm-hint');
     const clientNameInput = bookingForm.elements.client_name;
     const phoneInput = bookingForm.elements.phone;
     let isBookingConfirmed = false;
+    let bookingJumpDismissed = false;
 
     const servicesByKey = Object.fromEntries(services.map((service) => [service.key, service]));
     const mastersById = Object.fromEntries(masters.map((master) => [String(master.id), master]));
@@ -5788,6 +5813,7 @@
       }
 
       if (previousPrimaryService !== nextPrimaryService) {
+        bookingJumpDismissed = false;
         resetSelectedDateTime();
       }
 
@@ -6190,6 +6216,9 @@
       summaryDatetime.textContent = state.date && state.time
         ? `${formatSelectedDate(state.date)}, ${state.time}`
         : 'Оберіть дату та вільний слот';
+      if (bookingConfirmHint) {
+        bookingConfirmHint.hidden = !(state.date && state.time);
+      }
       if (summaryChangeTime) {
         summaryChangeTime.hidden = !(state.date && state.time);
       }
@@ -6882,6 +6911,8 @@
     });
 
     bookingJumpConfirm?.addEventListener('click', () => {
+      bookingJumpDismissed = true;
+      updateBookingJumpConfirmVisibility();
       dateTimeBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => {
         dateTimeBlock.querySelector('button:not([hidden]):not(:disabled), input, textarea')?.focus({ preventScroll: true });

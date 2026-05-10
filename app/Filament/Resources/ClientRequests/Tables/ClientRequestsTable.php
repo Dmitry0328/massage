@@ -8,6 +8,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -29,12 +30,14 @@ class ClientRequestsTable
                 TextColumn::make('master.name')
                     ->label('Майстер')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
                 TextColumn::make('message')
                     ->label('Запит')
                     ->limit(120)
                     ->wrap()
-                    ->searchable(),
+                    ->searchable()
+                    ->visibleFrom('lg'),
                 TextColumn::make('status')
                     ->label('Статус')
                     ->badge()
@@ -47,7 +50,8 @@ class ClientRequestsTable
                 TextColumn::make('created_at')
                     ->label('Створено')
                     ->dateTime('d.m.Y H:i')
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -55,6 +59,7 @@ class ClientRequestsTable
                     ->options(ClientRequest::statusOptions()),
             ])
             ->recordActions([
+                ViewAction::make(),
                 Action::make('markContacted')
                     ->label('Передзвонили')
                     ->icon('heroicon-o-phone')

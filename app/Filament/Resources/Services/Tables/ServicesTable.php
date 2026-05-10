@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -23,11 +24,13 @@ class ServicesTable
                 TextColumn::make('category')
                     ->label('Тема')
                     ->placeholder('—')
-                    ->toggleable(),
+                    ->toggleable()
+                    ->visibleFrom('md'),
                 TextColumn::make('master.name')
                     ->label('Майстер')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->visibleFrom('md'),
                 TextColumn::make('duration_minutes')
                     ->label('Тривалість')
                     ->formatStateUsing(fn (int $state, $record): string => $record->is_price_per_minute ? 'Обирає клієнт' : "{$state} хв")
@@ -48,6 +51,7 @@ class ServicesTable
                     ->visibleFrom('lg'),
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([
