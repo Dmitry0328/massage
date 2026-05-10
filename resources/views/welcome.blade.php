@@ -2343,6 +2343,10 @@
       background: #fcf8f5;
     }
 
+    .services-picker > .booking-block {
+      grid-column: 1 / -1;
+    }
+
     .booking-block h4 {
       margin: 0 0 12px;
       font-size: 18px;
@@ -2394,7 +2398,13 @@
     }
 
     .service-option {
-      padding-right: 54px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) max-content;
+      grid-template-areas:
+        "service-title service-meta"
+        "service-description service-meta";
+      align-items: center;
+      column-gap: 18px;
     }
 
     .master-option {
@@ -2458,6 +2468,10 @@
       display: grid;
     }
 
+    .service-option.active .service-meta {
+      padding-right: 36px;
+    }
+
     .master-option.active::after {
       background: rgba(255, 255, 255, 0.58);
       box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.16);
@@ -2470,6 +2484,12 @@
       margin-bottom: 6px;
     }
 
+    .service-option strong {
+      grid-area: service-title;
+      min-width: 0;
+      padding-right: 6px;
+    }
+
     .service-meta,
     .master-meta {
       display: flex;
@@ -2478,6 +2498,17 @@
       align-items: center;
       font-size: 14px;
       color: var(--muted);
+    }
+
+    .service-meta {
+      grid-area: service-meta;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 6px;
+      min-width: 88px;
+      text-align: right;
+      white-space: nowrap;
     }
 
     .master-phone {
@@ -2494,6 +2525,7 @@
     }
 
     .service-option p {
+      grid-area: service-description;
       margin: 10px 0 0;
       font-size: 14px;
     }
@@ -2534,6 +2566,10 @@
 
     .apparatus-duration-box small {
       color: var(--muted);
+    }
+
+    .appointment-time-breakdown {
+      white-space: pre-line;
     }
 
     .additional-service-box {
@@ -2801,6 +2837,49 @@
     .booking-summary p,
     #summary-duration {
       white-space: pre-line;
+    }
+
+    .summary-change-time-btn {
+      justify-self: start;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--text);
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .summary-change-time-btn:hover {
+      border-color: #2f95ad;
+      color: #2f8dad;
+    }
+
+    .booking-jump-confirm-btn {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      z-index: 1250;
+      width: min(calc(100% - 36px), 620px);
+      transform: translateX(-50%);
+      border: 1px solid #b88a72;
+      border-radius: 12px;
+      background: #fff6f0;
+      color: #7a5d50;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      text-align: center;
+      letter-spacing: 0.01em;
+      box-shadow: 0 12px 34px rgba(43, 36, 33, 0.22);
+    }
+
+    .booking-jump-confirm-btn:hover {
+      background: #f3ded2;
+      border-color: #9a6d58;
+      color: #5f463b;
     }
 
     .booking-summary strong {
@@ -4129,7 +4208,9 @@
                             <span class="service-badge">{{ $service['badge'] }}</span>
                           @endif
                         </div>
-                        <p>{{ $service['description'] ?? '' }}</p>
+                        @if (! empty($service['uses_duration_picker']))
+                          <p>{{ $service['description'] ?? '' }}</p>
+                        @endif
                       </button>
                     @endforeach
                   </div>
@@ -4139,6 +4220,7 @@
                     <div class="apparatus-duration-options" id="apparatus-duration-options"></div>
                     <button type="button" class="apparatus-discuss-btn" id="apparatus-discuss-btn">Обговорити час з майстром на прийомі</button>
                     <small>Якщо обрати “обговорити час”, вікно буде заброньовано на 60 хв.</small>
+                    <div class="slot-hint appointment-time-breakdown" id="apparatus-time-breakdown" hidden></div>
                   </div>
                   <div id="additional-services-inputs"></div>
                   <div class="services-section-label" id="selected-services-label" hidden>Обрано</div>
@@ -4165,6 +4247,7 @@
 
                   <div class="slot-hint" id="slot-hint" style="margin-top: 14px;">Оберіть майстра, а потім послугу, щоб побачити доступний час.</div>
 
+                  <div class="slot-hint appointment-time-breakdown" id="appointment-time-breakdown" hidden></div>
                   <div class="time-grid is-disabled" id="time-grid"></div>
                 </div>
 
@@ -4196,6 +4279,7 @@
                   <div class="booking-summary-line">
                     <small>Дата і час</small>
                     <p id="summary-datetime">Оберіть дату та вільний слот</p>
+                    <button type="button" class="summary-change-time-btn" id="summary-change-time" hidden>Змінити дату та час прийому</button>
                   </div>
 
                   <div class="booking-summary-line">
@@ -4221,6 +4305,8 @@
                 </div>
               </div>
             </form>
+
+            <button type="button" class="booking-jump-confirm-btn" id="booking-jump-confirm" hidden>Перейти до замовлення ↓</button>
 
             <div class="message-popup" id="booking-message-popup" hidden role="dialog" aria-modal="true" aria-labelledby="booking-message-title">
               <div class="message-popup-backdrop" data-popup-close></div>
@@ -4422,6 +4508,14 @@
         state.additionalService = '';
         additionalServiceSelect.value = '';
       }
+    };
+
+    const updateBookingJumpConfirmVisibility = () => {
+      if (!bookingJumpConfirm) {
+        return;
+      }
+
+      bookingJumpConfirm.hidden = !(state.date && state.time);
     };
 
     const updateSummary = () => {
@@ -5123,6 +5217,7 @@
     const bookingCard = document.getElementById('booking');
     const bookingInlineSlot = document.getElementById('booking-inline-slot');
     const bookingModal = document.getElementById('booking-modal');
+    const bookingModalDialog = bookingModal?.querySelector('.booking-modal-dialog');
     const bookingModalSlot = document.getElementById('booking-modal-slot');
     const bookingModalOpenButtons = document.querySelectorAll('[data-booking-modal-open]');
     const bookingModalCloseButtons = document.querySelectorAll('[data-booking-modal-close]');
@@ -5149,11 +5244,13 @@
     const servicesBlock = document.getElementById('services-block');
     const dateTimeBlock = document.getElementById('date-time-block');
     const additionalServicesBlock = document.getElementById('additional-services-block');
+    const bookingJumpConfirm = document.getElementById('booking-jump-confirm');
     const servicesEmpty = document.getElementById('services-empty');
     const apparatusDurationBox = document.getElementById('apparatus-duration-box');
     const apparatusDurationTitle = document.getElementById('apparatus-duration-title');
     const apparatusDurationOptions = document.getElementById('apparatus-duration-options');
     const apparatusDiscussBtn = document.getElementById('apparatus-discuss-btn');
+    const apparatusTimeBreakdown = document.getElementById('apparatus-time-breakdown');
     const serviceCards = document.querySelectorAll('.service-option');
     const masterCards = document.querySelectorAll('.master-option');
     const priceMasterTabs = document.querySelectorAll('.price-master-tab');
@@ -5166,14 +5263,17 @@
     const monthLabel = document.getElementById('month-label');
     const timeGrid = document.getElementById('time-grid');
     const rangeLabel = document.getElementById('calendar-range-label');
+    const appointmentTimeBreakdown = document.getElementById('appointment-time-breakdown');
     const monthPicker = monthPrev.closest('.month-picker');
     const dateSlider = daysPrev.closest('.date-slider');
+    const bookingSummary = document.getElementById('booking-summary');
     const summaryService = document.getElementById('summary-service');
     const summaryAdditional = document.getElementById('summary-additional');
     const summaryMaster = document.getElementById('summary-master');
     const summaryPrice = document.getElementById('summary-price');
     const summaryDatetime = document.getElementById('summary-datetime');
     const summaryDuration = document.getElementById('summary-duration');
+    const summaryChangeTime = document.getElementById('summary-change-time');
     const servicesSelectionHint = document.getElementById('services-selection-hint');
     const addServiceTrigger = document.getElementById('add-service-trigger');
     const additionalServicesHint = document.getElementById('additional-services-hint');
@@ -5261,8 +5361,8 @@
         return state.apparatusDurationMinutes;
       }
 
-      const numericValue = Number.parseInt(String(service?.duration || '').replace(/[^\d]/g, ''), 10);
-      return Number.isFinite(numericValue) ? numericValue : 0;
+      const durationNumbers = getDurationNumbers(service);
+      return durationNumbers.length ? Math.max(...durationNumbers) : 0;
     };
 
     const getServicePrice = (service) => {
@@ -5308,6 +5408,25 @@
       }
 
       return parts.join(' ');
+    };
+
+    const getDurationNumbers = (service) => String(service?.duration || '')
+      .match(/\d+/g)
+      ?.map((value) => Number.parseInt(value, 10))
+      .filter((value) => Number.isFinite(value) && value > 0) || [];
+
+    const getDisplayDurationMinutes = (service) => {
+      if (service?.is_apparatus && state.apparatusDurationMinutes) {
+        return state.apparatusDurationMinutes;
+      }
+
+      const durationNumbers = getDurationNumbers(service);
+
+      if (!durationNumbers.length) {
+        return 0;
+      }
+
+      return durationNumbers[durationNumbers.length - 1];
     };
 
     const addMinutesToTime = (time, minutes) => {
@@ -5433,6 +5552,64 @@
       element.style.display = isVisible ? '' : 'none';
     };
 
+    const findSelectedServiceCard = () => {
+      const selectedService = servicesByKey[state.service];
+
+      if (!selectedService) {
+        return null;
+      }
+
+      if (selectedService.is_apparatus) {
+        return [...serviceCards].find((card) => (
+          !card.hidden
+          && String(card.dataset.masterId) === String(state.masterId)
+          && JSON.parse(card.dataset.apparatusVariants || '[]').some((variant) => variant.key === state.service)
+        )) || null;
+      }
+
+      return [...serviceCards].find((card) => (
+        !card.hidden
+        && String(card.dataset.masterId) === String(state.masterId)
+        && card.dataset.serviceKey === state.service
+      )) || null;
+    };
+
+    const renderDateTimePlacement = () => {
+      if (!state.service || dateTimeBlock.hidden) {
+        if (additionalServicesBlock.parentElement && dateTimeBlock.nextElementSibling !== additionalServicesBlock) {
+          additionalServicesBlock.insertAdjacentElement('beforebegin', dateTimeBlock);
+        }
+
+        return;
+      }
+
+      const selectedService = servicesByKey[state.service];
+      const selectedCard = findSelectedServiceCard();
+
+      if (!selectedService || !selectedCard) {
+        return;
+      }
+
+      if (selectedService.is_apparatus) {
+        if (!state.apparatusDurationMinutes) {
+          return;
+        }
+
+        apparatusDurationBox.insertAdjacentElement('afterend', dateTimeBlock);
+        return;
+      }
+
+      selectedCard.insertAdjacentElement('afterend', dateTimeBlock);
+    };
+
+    const renderCalendarLoadingState = () => {
+      setCalendarNavVisible(Boolean(state.service && state.masterId));
+      dayGrid.innerHTML = '<div class="empty-state" style="grid-column: 1 / -1;">Завантаження доступних дат...</div>';
+      timeGrid.classList.add('is-disabled');
+      timeGrid.innerHTML = '';
+      slotHint.textContent = 'Завантаження календаря...';
+    };
+
     const renderBookingStepVisibility = () => {
       const hasMaster = Boolean(state.masterId);
       const hasMasterAndService = Boolean(state.masterId && state.service);
@@ -5440,6 +5617,7 @@
       setBlockVisible(servicesBlock, hasMaster);
       setBlockVisible(dateTimeBlock, hasMasterAndService);
       setBlockVisible(additionalServicesBlock, false);
+      renderDateTimePlacement();
     };
 
     const renderServicesForMaster = () => {
@@ -5459,6 +5637,7 @@
 
       servicesEmpty.hidden = !state.masterId || visibleCount > 0;
       renderServiceSelectionState();
+      renderDateTimePlacement();
     };
 
     const renderApparatusDurationPicker = () => {
@@ -5487,7 +5666,10 @@
       state.apparatusVariants.forEach((variant) => {
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = `apparatus-duration-option${getSelectedServiceKeys().includes(variant.key) && !state.apparatusDiscuss ? ' active' : ''}`;
+        const isActiveDuration = getSelectedServiceKeys().includes(variant.key)
+          && Number(state.apparatusDurationMinutes) === Number(variant.duration_minutes)
+          && !state.apparatusDiscuss;
+        button.className = `apparatus-duration-option${isActiveDuration ? ' active' : ''}`;
         button.textContent = `${variant.duration_minutes} хв - ${formatPrice(variant.price)}`;
         button.addEventListener('click', () => {
           selectApparatusVariant(variant, false);
@@ -5496,6 +5678,8 @@
       });
 
       apparatusDiscussBtn.classList.toggle('active', Boolean(state.apparatusDiscuss));
+      renderApparatusTimeBreakdown();
+      renderDateTimePlacement();
     };
 
     const resetApparatusSelection = () => {
@@ -5532,10 +5716,10 @@
       const normalizedKeys = [...new Set(serviceKeys)]
         .filter((serviceKey) => serviceKey && servicesByKey[serviceKey] && String(servicesByKey[serviceKey].master_id) === state.masterId)
         .slice(0, maxSelectedServices);
-      const previousKeys = getSelectedServiceKeys().join('|');
-      const nextKeys = normalizedKeys.join('|');
+      const previousPrimaryService = state.service;
+      const nextPrimaryService = normalizedKeys[0] || '';
 
-      state.service = normalizedKeys[0] || '';
+      state.service = nextPrimaryService;
       state.additionalServices = normalizeAdditionalServices(normalizedKeys.slice(1), state.service);
       serviceInput.value = state.service;
 
@@ -5545,7 +5729,7 @@
         resetApparatusSelection();
       }
 
-      if (previousKeys !== nextKeys) {
+      if (previousPrimaryService !== nextPrimaryService) {
         resetSelectedDateTime();
       }
 
@@ -5594,7 +5778,6 @@
 
     function selectApparatusVariant(variant, discuss) {
       const selectedKeys = getSelectedServiceKeys();
-      const previousDuration = state.apparatusDurationMinutes;
       const nextDuration = Number(variant.duration_minutes) || 60;
       const isAlreadySelected = selectedKeys.includes(variant.key);
 
@@ -5604,10 +5787,6 @@
       apparatusDurationInput.value = String(state.apparatusDurationMinutes);
 
       if (isAlreadySelected) {
-        if (previousDuration !== nextDuration) {
-          resetSelectedDateTime();
-        }
-
         syncAdditionalServiceInputs();
       } else {
         applySelectedServiceKeys([...selectedKeys, variant.key]);
@@ -5781,6 +5960,7 @@
       bookingModalSlot.appendChild(bookingCard);
       bookingModal.hidden = false;
       document.body.classList.add('is-booking-modal-open');
+      updateBookingJumpConfirmVisibility();
       bookingCard.querySelector('button, input, select, textarea, a')?.focus({ preventScroll: true });
     };
 
@@ -5792,6 +5972,7 @@
       bookingInlineSlot.after(bookingCard);
       bookingModal.hidden = true;
       document.body.classList.remove('is-booking-modal-open');
+      updateBookingJumpConfirmVisibility();
     };
 
     const openClientRequestPopup = () => {
@@ -5853,6 +6034,14 @@
       return state.availableSlots.includes(state.time);
     };
 
+    const updateBookingJumpConfirmVisibility = () => {
+      if (!bookingJumpConfirm) {
+        return;
+      }
+
+      bookingJumpConfirm.hidden = !(state.date && state.time);
+    };
+
     const updateSummary = () => {
       const selectedService = servicesByKey[state.service];
       const selectedAdditionalServices = state.additionalServices.map((serviceKey) => servicesByKey[serviceKey]).filter(Boolean);
@@ -5887,6 +6076,12 @@
       summaryDatetime.textContent = state.date && state.time
         ? `${formatSelectedDate(state.date)}, ${state.time}`
         : 'Оберіть дату та вільний слот';
+      if (summaryChangeTime) {
+        summaryChangeTime.hidden = !(state.date && state.time);
+      }
+      updateBookingJumpConfirmVisibility();
+      renderAppointmentTimeBreakdown();
+      renderApparatusTimeBreakdown();
     };
 
     const getSelectedTotalDuration = () => {
@@ -5937,6 +6132,88 @@
       }
 
       return consumed;
+    };
+
+    const renderAppointmentTimeBreakdown = () => {
+      if (!appointmentTimeBreakdown) {
+        return;
+      }
+
+      const selectedService = servicesByKey[state.service];
+      const apparatusServices = state.additionalServices
+        .map((serviceKey) => servicesByKey[serviceKey])
+        .filter((service) => service?.is_apparatus);
+
+      if (!state.time || !selectedService || selectedService.is_apparatus || apparatusServices.length === 0) {
+        appointmentTimeBreakdown.hidden = true;
+        appointmentTimeBreakdown.textContent = '';
+        return;
+      }
+
+      const primaryDuration = getDisplayDurationMinutes(selectedService);
+      let nextStartTime = primaryDuration ? addMinutesToTime(state.time, primaryDuration) : '';
+      const lines = [
+        `Час основного прийому: ${state.time} (${selectedService.label}, ${selectedService.duration}).`,
+      ];
+
+      apparatusServices.forEach((service) => {
+        const duration = getDisplayDurationMinutes(service);
+        const startLabel = nextStartTime ? `орієнтовно з ${nextStartTime}` : 'після основного прийому';
+        lines.push(`Час апаратного масажу "${service.apparatus_base || service.label}": ${startLabel}, ${formatDurationValue(duration)}.`);
+
+        if (nextStartTime && duration) {
+          nextStartTime = addMinutesToTime(nextStartTime, duration);
+        }
+      });
+
+      appointmentTimeBreakdown.textContent = lines.join('\n');
+      appointmentTimeBreakdown.hidden = false;
+    };
+
+    const renderApparatusTimeBreakdown = () => {
+      if (!apparatusTimeBreakdown) {
+        return;
+      }
+
+      const selectedService = servicesByKey[state.service];
+
+      if (!state.time || !selectedService || selectedService.is_apparatus || !state.apparatusBase) {
+        apparatusTimeBreakdown.hidden = true;
+        apparatusTimeBreakdown.textContent = '';
+        return;
+      }
+
+      const selectedAdditionalServices = state.additionalServices
+        .map((serviceKey) => servicesByKey[serviceKey])
+        .filter(Boolean);
+      const currentApparatusService = selectedAdditionalServices
+        .find((service) => service?.is_apparatus && service.apparatus_base === state.apparatusBase);
+      const scheduleServices = [selectedService, ...selectedAdditionalServices];
+
+      if (!currentApparatusService && state.apparatusBase) {
+        scheduleServices.push({
+          label: state.apparatusBase,
+          apparatus_base: state.apparatusBase,
+          is_apparatus: true,
+        });
+      }
+
+      let nextStartTime = state.time;
+      const lines = scheduleServices.map((service, index) => {
+        const label = service.apparatus_base || service.label;
+        const duration = service.key ? getDisplayDurationMinutes(service) : 0;
+        const durationLabel = duration ? formatDurationValue(duration) : 'оберіть тривалість';
+        const line = `${index + 1}. ${label}: орієнтовно з ${nextStartTime}, ${durationLabel}.`;
+
+        if (duration) {
+          nextStartTime = addMinutesToTime(nextStartTime, duration);
+        }
+
+        return line;
+      });
+
+      apparatusTimeBreakdown.textContent = lines.join('\n');
+      apparatusTimeBreakdown.hidden = false;
     };
 
     const renderAdditionalServices = () => {
@@ -6017,13 +6294,12 @@
             <span>${service.duration || ''}</span>
             ${service.badge ? `<span class="service-badge">${service.badge}</span>` : ''}
           </div>
-          <p>${service.description || ''}</p>
+          ${service.is_apparatus ? `<p>${service.description || ''}</p>` : ''}
         `;
         button.addEventListener('click', () => {
           state.additionalServices = [...state.additionalServices, service.key];
           state.additionalServices = normalizeAdditionalServices(state.additionalServices, state.service);
           state.isAdditionalPickerOpen = false;
-          resetSelectedDateTime();
           syncAdditionalServiceInputs();
           renderServiceSelectionState();
           renderAdditionalServices();
@@ -6230,6 +6506,8 @@
         return;
       }
 
+      renderBookingStepVisibility();
+      renderCalendarLoadingState();
       rangeLabel.textContent = 'Завантаження днів...';
 
       const params = new URLSearchParams({
@@ -6333,6 +6611,17 @@
             const variants = JSON.parse(card.dataset.apparatusVariants || '[]');
             const variantKeys = variants.map((variant) => variant.key);
             const isSelected = selectedKeys.some((serviceKey) => variantKeys.includes(serviceKey));
+
+            if (isSelected) {
+              applySelectedServiceKeys(selectedKeys.filter((serviceKey) => !variantKeys.includes(serviceKey)));
+              resetApparatusSelection();
+              renderBookingStepVisibility();
+              renderServicesForMaster();
+              renderAdditionalServices();
+              updateSummary();
+              loadMonthAvailability();
+              return;
+            }
 
             if (!isSelected && selectedKeys.length >= maxSelectedServices) {
               showBookingMessage('Можна обрати максимум 3 послуги в одному записі.', 'Ліміт послуг');
@@ -6469,6 +6758,25 @@
       addServiceTrigger.textContent = state.isAdditionalPickerOpen ? 'Закрити список послуг' : '+ Додати ще послугу';
       renderAdditionalServices();
     });
+
+    summaryChangeTime?.addEventListener('click', () => {
+      renderBookingStepVisibility();
+      dateTimeBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => {
+        dateTimeBlock.querySelector('button:not([hidden]):not(:disabled)')?.focus({ preventScroll: true });
+      }, 250);
+    });
+
+    bookingJumpConfirm?.addEventListener('click', () => {
+      bookingSummary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => {
+        bookingSummary.querySelector('button:not([hidden]), input, textarea')?.focus({ preventScroll: true });
+      }, 250);
+    });
+
+    bookingModalDialog?.addEventListener('scroll', updateBookingJumpConfirmVisibility, { passive: true });
+    window.addEventListener('scroll', updateBookingJumpConfirmVisibility, { passive: true });
+    window.addEventListener('resize', updateBookingJumpConfirmVisibility);
 
     bookingModalOpenButtons.forEach((button) => {
       button.addEventListener('click', openBookingModal);

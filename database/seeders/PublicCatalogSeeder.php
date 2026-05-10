@@ -100,6 +100,7 @@ class PublicCatalogSeeder extends Seeder
                 $this->fixed('serhii-masaz-ruk-45', 'Масаж рук', 45, 500, 'Приємний розслабляючий масаж для відновлення рук після навантаження чи тривалої роботи.'),
                 $this->fixed('serhii-vognianii-masaz-propraciuvannia-miaziv-45', 'Вогняний масаж з пропрацюванням м’язів', 45, 1200, 'Незвичайна процедура з потужним прогріваючим ефектом для глибокого розслаблення м’язів.'),
                 $this->fixed('serhii-masaz-bleidami-45', 'Масаж блейдами', 45, 1000, 'Сучасна техніка масажу для глибокого опрацювання м’язів і фасцій.'),
+                ...$this->apparatus('master-2', $apparatus),
             ],
         ];
     }
