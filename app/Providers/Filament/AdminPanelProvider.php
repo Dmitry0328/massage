@@ -36,7 +36,9 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([])
-            ->routes(fn (): mixed => Route::get('/', fn () => redirect(url('/admin/appointments'))))
+            ->routes(function (): void {
+                Route::get('/', fn () => redirect(url('/admin/appointments')));
+            })
             ->navigationItems([
                 NavigationItem::make('Головна сторінка')
                     ->icon(Heroicon::OutlinedHome)
