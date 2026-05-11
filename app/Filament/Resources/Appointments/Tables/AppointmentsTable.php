@@ -34,10 +34,10 @@ class AppointmentsTable
                     ->wrap(),
                 TextColumn::make('additional_services')
                     ->label('Додаткові послуги')
-                    ->formatStateUsing(function (?array $state, Appointment $record): string {
+                    ->formatStateUsing(function (mixed $state, Appointment $record): string {
                         $services = array_values(array_unique(array_filter([
                             $record->additional_service,
-                            ...($state ?? []),
+                            ...self::normalizeAdditionalServices($state),
                         ])));
 
                         if (! filled($services)) {
@@ -101,5 +101,31 @@ class AppointmentsTable
                 ]),
             ])
             ->defaultSort('appointment_date');
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private static function normalizeAdditionalServices(mixed $state): array
+    {
+        if (blank($state)) {
+            return [];
+        }
+
+        if (is_array($state)) {
+            return array_filter($state, is_string(...));
+        }
+
+        if (is_string($state)) {
+            $decoded = json_decode($state, true);
+
+            if (is_array($decoded)) {
+                return array_filter($decoded, is_string(...));
+            }
+
+            return [$state];
+        }
+
+        return [];
     }
 }
