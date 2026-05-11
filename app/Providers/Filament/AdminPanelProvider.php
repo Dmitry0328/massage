@@ -49,10 +49,6 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::HEAD_END,
                 fn (): string => view('filament.admin-mobile-css')->render(),
             )
-            ->renderHook(
-                PanelsRenderHook::TOPBAR_END,
-                fn (): string => view('filament.admin-site-link')->render(),
-            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

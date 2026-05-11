@@ -160,31 +160,6 @@
             line-height: 1.25 !important;
         }
 
-        .admin-site-link-wrapper {
-            flex: 0 0 auto !important;
-            padding-inline: 4px !important;
-            max-width: 72px !important;
-        }
-
-        .admin-site-link {
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 54px !important;
-            min-height: 40px !important;
-            padding: 8px 10px !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: clip !important;
-            font-size: 0 !important;
-            line-height: 1 !important;
-        }
-
-        .admin-site-link::after {
-            content: 'Сайт';
-            font-size: 13px;
-            font-weight: 800;
-        }
     }
 
     @media (max-width: 480px) {
