@@ -48,9 +48,7 @@ class ReviewTest extends TestCase
         $this->assertNull($review->published_at);
         $this->assertSame('4.5', $review->rating);
 
-        Http::assertSent(fn ($request): bool => str_contains($request->url(), '/bottest-token/sendMessage')
-            && $request['chat_id'] === '-100'
-            && str_contains($request['text'], 'Новий відгук на модерацію'));
+        Http::assertNothingSent();
     }
 
     public function test_review_rating_accepts_only_half_step_values(): void

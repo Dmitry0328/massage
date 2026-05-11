@@ -168,7 +168,7 @@ class BookingController extends Controller
             'apparatus_duration_minutes' => ['nullable', 'integer', Rule::in([15, 30, 45, 60])],
             'appointment_date' => ['required', 'date'],
             'appointment_time' => ['required', 'date_format:H:i'],
-            'social_contact' => ['required', 'string', 'max:255'],
+            'social_contact' => ['nullable', 'string', 'max:255'],
             'message' => ['nullable', 'string', 'max:2000'],
             'apparatus_discuss' => ['nullable', 'boolean'],
         ], [
@@ -182,7 +182,6 @@ class BookingController extends Controller
             'appointment_date.required' => 'Оберіть дату запису.',
             'appointment_time.required' => 'Оберіть вільний час запису.',
             'appointment_time.date_format' => 'Оберіть час у правильному форматі.',
-            'social_contact.required' => 'Вкажіть Telegram, Instagram або Viber.',
         ]);
 
         $additionalServices = collect($validated['additional_services'] ?? [])

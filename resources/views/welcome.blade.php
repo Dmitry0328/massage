@@ -1757,6 +1757,25 @@
       line-height: 1.45;
     }
 
+    .contraindications-section .prep-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      text-align: left;
+    }
+
+    .contraindications-section .prep-card {
+      text-align: left;
+    }
+
+    .contraindications-section .prep-card h3 {
+      justify-content: flex-start;
+      font-size: 17px;
+    }
+
+    .contraindications-section .important-note {
+      margin-top: 22px;
+      text-align: left;
+    }
+
     .about-profiles {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3245,6 +3264,7 @@
       .services-columns,
       .quick-steps,
       .prep-grid,
+      .contraindications-section .prep-grid,
       .reviews-grid,
       .benefits-grid,
       .gallery-grid,
@@ -3587,6 +3607,7 @@
         <a href="#service-details">Послуги</a>
         <a href="#price">Прайс</a>
         <a href="#prepare">Рекомендації</a>
+        <a href="#contraindications">Протипоказання</a>
         <a href="#reviews">Відгуки</a>
         <a href="#about">Про нас</a>
         <a href="#contact">Контакти</a>
@@ -3791,6 +3812,63 @@
               <li>Висловлюйте свої побажання та повідомляйте про будь-який дискомфорт чи біль.</li>
             </ul>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section site-dark-section prepare-section contraindications-section" id="contraindications">
+      <div class="container">
+        <h2 class="section-title">Протипоказання до масажу</h2>
+        <p class="section-text">
+          З метою безпеки та збереження здоров’я, масаж не проводиться або потребує консультації лікаря при наступних станах:
+        </p>
+
+        <div class="prep-grid">
+          <article class="prep-card info-card">
+            <h3><span>!</span>Загальний стан</h3>
+            <ul>
+              <li>Підвищена температура тіла, ГРВІ, застуда, грип, загальне нездужання.</li>
+              <li>Гострі запальні процеси в організмі.</li>
+              <li>Гострий біль нез’ясованого походження.</li>
+              <li>Загострення хронічних захворювань.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>!</span>Захворювання</h3>
+            <ul>
+              <li>Онкологічні захворювання (без дозволу лікаря).</li>
+              <li>Захворювання крові, схильність до кровотеч.</li>
+              <li>Тромбоз, тромбофлебіт, варикоз у стадії загострення.</li>
+              <li>Серцево-судинні захворювання у стадії декомпенсації, гіпертонічний криз.</li>
+              <li>Збільшені лімфовузли, гнійні процеси.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>!</span>Шкіра та травми</h3>
+            <ul>
+              <li>Інфекційні та грибкові захворювання шкіри, висипання, відкриті рани, опіки.</li>
+              <li>Переломи, свіжі травми, післяопераційний період (без дозволу лікаря).</li>
+              <li>Грижі в стадії загострення.</li>
+            </ul>
+          </article>
+
+          <article class="prep-card info-card">
+            <h3><span>!</span>Окремі стани</h3>
+            <ul>
+              <li>Вагітність (деякі види масажу — лише після консультації та за відсутності протипоказань).</li>
+              <li>Алкогольне або наркотичне сп’яніння.</li>
+              <li>Психічні розлади у фазі загострення.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="info-card important-note">
+          <h3>Важливо</h3>
+          <p>
+            Будь ласка, повідомляйте про хронічні захворювання, перенесені операції, алергії та особливості стану здоров’я перед процедурою. Це необхідно для вашої безпеки та правильного підбору техніки масажу.
+          </p>
         </div>
       </div>
     </section>
@@ -4331,7 +4409,7 @@
                   <div class="contact-fields">
                     <input type="text" name="client_name" placeholder="Введіть Ваше ім'я" value="{{ old('client_name') }}" autocomplete="name" minlength="2" maxlength="80" required />
                     <input type="tel" name="phone" placeholder="Введіть Ваш номер телефону для зв'язку з Вами" value="{{ old('phone', '+380') }}" autocomplete="tel" inputmode="tel" maxlength="19" data-phone-mask required />
-                    <input type="text" name="social_contact" placeholder="Введіть Telegram / Instagram / Viber" value="{{ old('social_contact') }}" required />
+                    <input type="text" name="social_contact" placeholder="Telegram / Instagram / Viber (необов’язково)" value="{{ old('social_contact') }}" />
                     <textarea name="message" placeholder="Коментар до запису: можливо, маєте питання або побажання">{{ old('message') }}</textarea>
                     <button class="btn btn-primary" type="submit" {{ $masters->isEmpty() ? 'disabled' : '' }}>Підтвердити запис</button>
                   </div>

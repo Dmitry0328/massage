@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Appointment;
 use App\Models\ClientRequest;
 use App\Models\MassageService;
-use App\Models\Review;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -22,20 +21,25 @@ class TelegramNotificationService
         ])
             ->filter()
             ->unique()
-            ->map(fn (string $service): string => MassageService::labelFor($service))
+            ->map(fn (string $service): string => $this->escape(MassageService::labelFor($service)))
             ->implode("\n- ");
 
         $this->send([
-            'Новий запис на масаж',
+            '✨ <b>Новий запис на масаж</b>',
             '',
-            "Клієнт: {$appointment->client_name}",
-            "Телефон: {$appointment->phone}",
-            $appointment->social_contact ? "Telegram / Instagram / Viber: {$appointment->social_contact}" : null,
-            'Майстер: ' . ($appointment->master?->name ?? 'не вказано'),
-            'Послуги: ' . ($services ? "\n- {$services}" : 'не вказано'),
-            "Дата: {$appointment->appointment_date?->format('d.m.Y')}",
-            "Час: {$appointment->appointment_time}",
-            $appointment->message ? "Коментар:\n{$appointment->message}" : null,
+            "👤 <b>Клієнт</b>\n"
+                . 'Ім’я: ' . $this->escape($appointment->client_name) . "\n"
+                . 'Телефон: ' . $this->escape($appointment->phone)
+                . ($appointment->social_contact ? "\nСоцмережі: " . $this->escape($appointment->social_contact) : ''),
+            '',
+            "📅 <b>Запис</b>\n"
+                . 'Майстер: ' . $this->escape($appointment->master?->name ?? 'не вказано') . "\n"
+                . 'Дата: ' . $this->escape($appointment->appointment_date?->format('d.m.Y') ?? 'не вказано') . "\n"
+                . 'Час: ' . $this->escape($appointment->appointment_time ?? 'не вказано'),
+            '',
+            "💆 <b>Послуги</b>"
+                . ($services ? "\n- {$services}" : "\nне вказано"),
+            $appointment->message ? "\n📝 <b>Коментар</b>\n" . $this->escape($appointment->message) : null,
         ]);
     }
 
@@ -44,26 +48,12 @@ class TelegramNotificationService
         $clientRequest->loadMissing('master');
 
         $this->send([
-            'Новий запит на зворотній дзвінок',
+            '📞 <b>Новий запит на зворотній дзвінок</b>',
             '',
-            "Клієнт: {$clientRequest->client_name}",
-            "Телефон: {$clientRequest->phone}",
-            'Майстер: ' . ($clientRequest->master?->name ?? 'не вказано'),
-            $clientRequest->message,
-        ]);
-    }
-
-    public function reviewCreated(Review $review): void
-    {
-        $review->loadMissing('master');
-
-        $this->send([
-            'Новий відгук на модерацію',
-            '',
-            "Клієнт: {$review->client_name}",
-            'Майстер: ' . ($review->master?->name ?? 'не вказано'),
-            "Оцінка: {$review->rating}",
-            "Текст:\n{$review->text}",
+            'Клієнт: ' . $this->escape($clientRequest->client_name),
+            'Телефон: ' . $this->escape($clientRequest->phone),
+            'Майстер: ' . $this->escape($clientRequest->master?->name ?? 'не вказано'),
+            $clientRequest->message ? $this->escape($clientRequest->message) : null,
         ]);
     }
 
@@ -100,6 +90,7 @@ class TelegramNotificationService
                 ->post("https://api.telegram.org/bot{$token}/sendMessage", [
                     'chat_id' => $chatId,
                     'text' => $text,
+                    'parse_mode' => 'HTML',
                     'disable_web_page_preview' => true,
                 ])
                 ->throw();
@@ -108,5 +99,10 @@ class TelegramNotificationService
                 'message' => $exception->getMessage(),
             ]);
         }
+    }
+
+    private function escape(?string $value): string
+    {
+        return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }
