@@ -15,6 +15,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -57,6 +58,13 @@ class BookingController extends Controller
         $serviceCards = $this->serviceCards($services);
         $priceServicesByMaster = $this->priceServicesByMaster($services);
         $maxDate = $this->maxBookingDate((int) $settings->max_advance_months);
+        $contentOverrides = Schema::hasTable('content_overrides')
+            ? ContentOverride::query()
+                ->forPage('home')
+                ->get()
+                ->map(fn (ContentOverride $override): array => $override->toEditorArray())
+                ->values()
+            : collect();
 
         return view('welcome', [
             'masters' => $activeMasters,
@@ -80,11 +88,7 @@ class BookingController extends Controller
             ],
             'showQuickBookBlock' => (bool) $settings->show_quick_book_block,
             'reviews' => $this->reviewsForSite(),
-            'contentOverrides' => ContentOverride::query()
-                ->forPage('home')
-                ->get()
-                ->map(fn (ContentOverride $override): array => $override->toEditorArray())
-                ->values(),
+            'contentOverrides' => $contentOverrides,
             'canEditContent' => auth()->check() && request()->boolean('edit_mode'),
         ]);
     }
