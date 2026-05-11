@@ -3287,11 +3287,14 @@
       }
 
       .date-slider {
-        grid-template-columns: 38px minmax(0, 1fr) 38px;
+        grid-template-columns: minmax(0, 1fr);
         gap: 8px;
       }
 
-      .date-slider .calendar-nav,
+      .date-slider .calendar-nav {
+        display: none;
+      }
+
       .month-picker .calendar-nav {
         width: 38px;
         height: 44px;
@@ -3301,11 +3304,17 @@
         display: flex;
         gap: 8px;
         min-width: 0;
+        width: 100%;
         overflow-x: auto;
         overscroll-behavior-x: contain;
         scroll-snap-type: x proximity;
         -webkit-overflow-scrolling: touch;
-        padding: 2px 2px 8px;
+        scrollbar-width: none;
+        padding: 2px 2px 10px;
+      }
+
+      .days-grid::-webkit-scrollbar {
+        display: none;
       }
 
       .day-chip {
@@ -4572,8 +4581,6 @@
       availableDays: {},
     };
 
-    const pageSizeDays = 7;
-
     const formatPrice = (value) => `${new Intl.NumberFormat('uk-UA').format(value)} грн`;
 
     const formatSelectedDate = (isoDate) => {
@@ -4604,6 +4611,18 @@
       }
 
       return items;
+    };
+
+    const scrollSelectedDayIntoView = () => {
+      const activeDay = dayGrid.querySelector('.day-chip.active');
+
+      if (!activeDay) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        activeDay.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
     };
 
     const updateAdditionalServiceOptions = () => {
@@ -4735,8 +4754,7 @@
       }
 
       const allDays = getMonthDays(state.monthKey);
-      const start = state.dayPage * pageSizeDays;
-      const visibleDays = allDays.slice(start, start + pageSizeDays);
+      const visibleDays = allDays;
       const monthDate = getCurrentMonthDate();
 
       dayGrid.innerHTML = '';
@@ -4784,8 +4802,9 @@
         dayGrid.appendChild(button);
       });
 
-      daysPrev.disabled = state.dayPage === 0;
-      daysNext.disabled = start + pageSizeDays >= allDays.length;
+      scrollSelectedDayIntoView();
+      daysPrev.disabled = false;
+      daysNext.disabled = false;
       monthPrev.disabled = monthKeys.indexOf(state.monthKey) === 0;
       monthNext.disabled = monthKeys.indexOf(state.monthKey) === monthKeys.length - 1;
     };
@@ -4867,12 +4886,7 @@
         }
       }
 
-      if (state.date) {
-        const selectedDayIndex = monthDays.findIndex((date) => date === state.date);
-        state.dayPage = selectedDayIndex >= 0 ? Math.floor(selectedDayIndex / pageSizeDays) : 0;
-      } else {
-        state.dayPage = 0;
-      }
+      state.dayPage = 0;
     };
 
     const loadMonthAvailability = async () => {
@@ -5050,19 +5064,11 @@
     });
 
     daysPrev.addEventListener('click', () => {
-      if (state.dayPage > 0) {
-        state.dayPage -= 1;
-        renderDays();
-      }
+      dayGrid.scrollBy({ left: -Math.max(180, dayGrid.clientWidth * 0.8), behavior: 'smooth' });
     });
 
     daysNext.addEventListener('click', () => {
-      const totalDays = getMonthDays(state.monthKey).length;
-
-      if ((state.dayPage + 1) * pageSizeDays < totalDays) {
-        state.dayPage += 1;
-        renderDays();
-      }
+      dayGrid.scrollBy({ left: Math.max(180, dayGrid.clientWidth * 0.8), behavior: 'smooth' });
     });
 
     if (state.service) {
@@ -5089,12 +5095,6 @@
     if (state.masterId) {
       masterInput.value = state.masterId;
       setActiveCard(masterCards, (element) => element.dataset.masterId === state.masterId);
-    }
-
-    if (state.date) {
-      const initialMonthDays = getMonthDays(state.monthKey).map((day) => day.iso);
-      const selectedDayIndex = initialMonthDays.findIndex((date) => date === state.date);
-      state.dayPage = selectedDayIndex >= 0 ? Math.floor(selectedDayIndex / pageSizeDays) : 0;
     }
 
     dateInput.value = state.date || '';
@@ -5523,8 +5523,6 @@
       apparatusDurationMinutes: Number.parseInt(apparatusDurationInput.value || '0', 10) || 0,
     };
 
-    const pageSizeDays = 7;
-
     const formatPrice = (value) => `${new Intl.NumberFormat('uk-UA').format(value)} грн`;
 
     const formatSelectedDate = (isoDate) => {
@@ -5654,6 +5652,18 @@
       }
 
       return items;
+    };
+
+    const scrollSelectedDayIntoView = () => {
+      const activeDay = dayGrid.querySelector('.day-chip.active');
+
+      if (!activeDay) {
+        return;
+      }
+
+      requestAnimationFrame(() => {
+        activeDay.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
     };
 
     const setCalendarNavVisible = (isVisible) => {
@@ -6570,8 +6580,7 @@
       }
 
       const allDays = getMonthDays(state.monthKey);
-      const start = state.dayPage * pageSizeDays;
-      const visibleDays = allDays.slice(start, start + pageSizeDays);
+      const visibleDays = allDays;
       const monthDate = getCurrentMonthDate();
 
       dayGrid.innerHTML = '';
@@ -6619,8 +6628,9 @@
         dayGrid.appendChild(button);
       });
 
-      daysPrev.disabled = state.dayPage === 0;
-      daysNext.disabled = start + pageSizeDays >= allDays.length;
+      scrollSelectedDayIntoView();
+      daysPrev.disabled = false;
+      daysNext.disabled = false;
       monthPrev.disabled = monthKeys.indexOf(state.monthKey) === 0;
       monthNext.disabled = monthKeys.indexOf(state.monthKey) === monthKeys.length - 1;
     };
@@ -6735,12 +6745,7 @@
         }
       }
 
-      if (state.date) {
-        const selectedDayIndex = monthDays.findIndex((date) => date === state.date);
-        state.dayPage = selectedDayIndex >= 0 ? Math.floor(selectedDayIndex / pageSizeDays) : 0;
-      } else {
-        state.dayPage = 0;
-      }
+      state.dayPage = 0;
     };
 
     const loadMonthAvailability = async () => {
@@ -7182,19 +7187,11 @@
     });
 
     daysPrev.addEventListener('click', () => {
-      if (state.dayPage > 0) {
-        state.dayPage -= 1;
-        renderDays();
-      }
+      dayGrid.scrollBy({ left: -Math.max(180, dayGrid.clientWidth * 0.8), behavior: 'smooth' });
     });
 
     daysNext.addEventListener('click', () => {
-      const totalDays = getMonthDays(state.monthKey).length;
-
-      if ((state.dayPage + 1) * pageSizeDays < totalDays) {
-        state.dayPage += 1;
-        renderDays();
-      }
+      dayGrid.scrollBy({ left: Math.max(180, dayGrid.clientWidth * 0.8), behavior: 'smooth' });
     });
 
     if (state.service) {
@@ -7205,12 +7202,6 @@
     if (state.masterId) {
       masterInput.value = state.masterId;
       setActiveCard(masterCards, (element) => element.dataset.masterId === state.masterId);
-    }
-
-    if (state.date) {
-      const initialMonthDays = getMonthDays(state.monthKey).map((day) => day.iso);
-      const selectedDayIndex = initialMonthDays.findIndex((date) => date === state.date);
-      state.dayPage = selectedDayIndex >= 0 ? Math.floor(selectedDayIndex / pageSizeDays) : 0;
     }
 
     syncAdditionalServiceInputs();
