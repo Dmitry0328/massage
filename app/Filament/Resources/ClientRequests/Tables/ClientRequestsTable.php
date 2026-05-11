@@ -5,7 +5,6 @@ namespace App\Filament\Resources\ClientRequests\Tables;
 use App\Models\ClientRequest;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -69,7 +68,6 @@ class ClientRequestsTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                CreateAction::make(),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
