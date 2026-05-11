@@ -13,7 +13,9 @@ class CreateReview extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         if (($data['status'] ?? null) === Review::STATUS_PUBLISHED) {
-            $data['published_at'] = now();
+            $data['published_at'] = $data['published_at'] ?: now();
+        } else {
+            $data['published_at'] = null;
         }
 
         return $data;

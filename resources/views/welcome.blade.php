@@ -4626,7 +4626,10 @@
       }
 
       requestAnimationFrame(() => {
-        activeDay.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        dayGrid.scrollTo({
+          left: activeDay.offsetLeft - ((dayGrid.clientWidth - activeDay.offsetWidth) / 2),
+          behavior: 'smooth',
+        });
       });
     };
 
@@ -5667,7 +5670,10 @@
       }
 
       requestAnimationFrame(() => {
-        activeDay.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        dayGrid.scrollTo({
+          left: activeDay.offsetLeft - ((dayGrid.clientWidth - activeDay.offsetWidth) / 2),
+          behavior: 'smooth',
+        });
       });
     };
 
@@ -5678,6 +5684,29 @@
 
       monthPicker.classList.toggle('is-nav-hidden', !isVisible);
       dateSlider.classList.toggle('is-nav-hidden', !isVisible);
+    };
+
+    const keepBookingScrollPosition = (callback) => {
+      const windowScrollX = window.scrollX;
+      const windowScrollY = window.scrollY;
+      const modalScrollTop = bookingModalDialog?.scrollTop ?? null;
+      const result = callback();
+
+      const restore = () => {
+        window.scrollTo({ top: windowScrollY, left: windowScrollX, behavior: 'auto' });
+
+        if (bookingModalDialog && modalScrollTop !== null) {
+          bookingModalDialog.scrollTop = modalScrollTop;
+        }
+      };
+
+      restore();
+      requestAnimationFrame(() => {
+        restore();
+        requestAnimationFrame(restore);
+      });
+
+      return result;
     };
 
     const setActiveCard = (collection, predicate) => {
@@ -5848,7 +5877,9 @@
         button.className = `apparatus-duration-option${isActiveDuration ? ' active' : ''}`;
         button.textContent = `${variant.duration_minutes} хв - ${formatPrice(variant.price)}`;
         button.addEventListener('click', () => {
-          selectApparatusVariant(variant, false);
+          keepBookingScrollPosition(() => {
+            selectApparatusVariant(variant, false);
+          });
         });
         apparatusDurationOptions.appendChild(button);
       });
@@ -6860,6 +6891,7 @@
 
       serviceCards.forEach((card) => {
         card.addEventListener('click', () => {
+          keepBookingScrollPosition(() => {
           clearBookingError();
           const isApparatus = card.dataset.serviceKind === 'apparatus';
 
@@ -6898,6 +6930,7 @@
           }
 
         toggleRegularService(card.dataset.serviceKey || '');
+          });
       });
     });
 

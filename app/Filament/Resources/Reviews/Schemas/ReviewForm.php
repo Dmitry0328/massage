@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Reviews\Schemas;
 
 use App\Models\Review;
 use App\Models\Master;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -36,6 +37,10 @@ class ReviewForm
                     ->options(Review::statusOptions())
                     ->default(Review::STATUS_DRAFT)
                     ->required(),
+                DateTimePicker::make('published_at')
+                    ->label('Дата публікації')
+                    ->native(false)
+                    ->seconds(false),
                 Textarea::make('text')
                     ->label('Текст відгуку')
                     ->rows(6)
