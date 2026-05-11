@@ -184,6 +184,8 @@
     }
 
     .mobile-salon-name {
+      color: inherit;
+      text-decoration: none;
       max-width: 150px;
       font-size: 13px;
       font-weight: 800;
@@ -196,6 +198,8 @@
       display: grid;
       justify-items: end;
       gap: 3px;
+      color: inherit;
+      text-decoration: none;
       font-size: 13px;
       letter-spacing: 0.24em;
       text-transform: uppercase;
@@ -3578,9 +3582,9 @@
   <header class="topbar">
     <div class="container nav">
       <div class="mobile-brand-row" aria-label="Mobile header details">
-        <div class="mobile-salon-name">Tsaruk Massage</div>
+        <a class="mobile-salon-name" href="{{ route('booking.index') }}">Tsaruk Massage</a>
 
-        <div class="mobile-location" aria-label="Location">
+        <a class="mobile-location" href="https://maps.app.goo.gl/rEQXh84ndFvyroz79?g_st=it" target="_blank" rel="noopener" aria-label="Відкрити локацію на Google Maps">
           <div class="mobile-location-head">
             <small>Місто</small>
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -3589,7 +3593,7 @@
             </svg>
           </div>
           <span>Нова Одеса</span>
-        </div>
+        </a>
       </div>
 
       <a class="logo" href="#home">Масаж у Новій Одесі</a>
