@@ -98,7 +98,7 @@ class AppointmentsTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('appointment_date');
+            ->defaultSort('created_at', 'desc');
     }
 
     /**

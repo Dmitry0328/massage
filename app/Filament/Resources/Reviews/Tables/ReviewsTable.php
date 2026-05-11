@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Reviews\Tables;
 use App\Models\Review;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -99,7 +98,6 @@ class ReviewsTable
                 ForceDeleteAction::make(),
             ])
             ->toolbarActions([
-                CreateAction::make(),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     RestoreBulkAction::make(),
