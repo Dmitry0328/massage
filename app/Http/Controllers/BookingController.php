@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\BookingSetting;
+use App\Models\ContentOverride;
 use App\Models\Master;
 use App\Models\MassageService;
 use App\Models\Review;
@@ -79,6 +80,12 @@ class BookingController extends Controller
             ],
             'showQuickBookBlock' => (bool) $settings->show_quick_book_block,
             'reviews' => $this->reviewsForSite(),
+            'contentOverrides' => ContentOverride::query()
+                ->forPage('home')
+                ->get()
+                ->map(fn (ContentOverride $override): array => $override->toEditorArray())
+                ->values(),
+            'canEditContent' => auth()->check() && request()->boolean('edit_mode'),
         ]);
     }
 

@@ -7230,5 +7230,6 @@
       openClientRequestPopup();
     }
   </script>
+  @include('partials.content-editor')
 </body>
 </html>
