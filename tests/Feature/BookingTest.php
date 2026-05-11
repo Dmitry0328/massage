@@ -380,6 +380,51 @@ class BookingTest extends TestCase
         $this->assertNotContains('12:00', $response->json('slots'));
     }
 
+    public function test_master_block_hides_slot_only_for_selected_master(): void
+    {
+        $blockedMaster = Master::query()->create([
+            'name' => 'Olesia',
+            'slug' => 'olesia-master-block',
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $availableMaster = Master::query()->create([
+            'name' => 'Serhii',
+            'slug' => 'serhii-master-block',
+            'is_active' => true,
+            'sort_order' => 2,
+        ]);
+
+        $date = now()->addDay()->toDateString();
+
+        ScheduleBlock::query()->create([
+            'master_id' => $blockedMaster->id,
+            'block_date' => $date,
+            'is_full_day' => false,
+            'start_time' => '12:00',
+            'end_time' => '13:00',
+            'note' => 'Master-only block',
+        ]);
+
+        $blockedResponse = $this->getJson(route('booking.availability', [
+            'master_id' => $blockedMaster->id,
+            'date' => $date,
+            'service' => 'classic',
+        ]));
+
+        $availableResponse = $this->getJson(route('booking.availability', [
+            'master_id' => $availableMaster->id,
+            'date' => $date,
+            'service' => 'classic',
+        ]));
+
+        $blockedResponse->assertOk();
+        $availableResponse->assertOk();
+        $this->assertNotContains('12:00', $blockedResponse->json('slots'));
+        $this->assertContains('12:00', $availableResponse->json('slots'));
+    }
+
     public function test_one_month_setting_allows_only_current_calendar_month(): void
     {
         BookingSetting::current()->update([

@@ -45,6 +45,8 @@ class MasterCalendar extends Page
 
     public ?int $selectedAppointmentId = null;
 
+    public string $blockMasterId = '';
+
     public function mount(): void
     {
         Carbon::setLocale('uk');
@@ -95,16 +97,20 @@ class MasterCalendar extends Page
             return;
         }
 
+        $master = $this->blockMaster();
+
         ScheduleBlock::query()->firstOrCreate([
-            'master_id' => null,
+            'master_id' => $master?->id,
             'block_date' => $this->selectedDate,
             'is_full_day' => true,
         ], [
-            'note' => 'Блокування всього дня з календаря салону',
+            'note' => $master
+                ? "Блокування всього дня для майстра {$master->name}"
+                : 'Блокування всього дня з календаря салону',
         ]);
 
         Notification::make()
-            ->title('День заблоковано для записів')
+            ->title($master ? "День заблоковано для {$master->name}" : 'День заблоковано для записів')
             ->success()
             ->send();
     }
@@ -117,18 +123,22 @@ class MasterCalendar extends Page
 
         $start = Carbon::parse(sprintf('%s %s', $this->selectedDate, $time), config('app.timezone'));
 
+        $master = $this->blockMaster();
+
         ScheduleBlock::query()->firstOrCreate([
-            'master_id' => null,
+            'master_id' => $master?->id,
             'block_date' => $this->selectedDate,
             'is_full_day' => false,
             'start_time' => $start->format('H:i'),
             'end_time' => $start->copy()->addMinutes($this->slotStepInMinutes())->format('H:i'),
         ], [
-            'note' => 'Блокування часу з календаря салону',
+            'note' => $master
+                ? "Блокування часу для майстра {$master->name}"
+                : 'Блокування часу з календаря салону',
         ]);
 
         Notification::make()
-            ->title("Час {$time} заблоковано")
+            ->title($master ? "Час {$time} заблоковано для {$master->name}" : "Час {$time} заблоковано")
             ->success()
             ->send();
     }
@@ -181,7 +191,7 @@ class MasterCalendar extends Page
         $monthEnd = $monthStart->copy()->endOfMonth();
         $minDate = now(config('app.timezone'))->startOfDay();
         $maxDate = $this->maxBookingDate();
-        $master = $this->previewMaster();
+        $master = $this->blockMaster() ?? $this->previewMaster();
 
         $defaultServiceKey = $master ? MassageService::activeForMaster($master->id)->first()?->key : null;
         $servicesForPreview = $defaultServiceKey ? [$defaultServiceKey] : [];
@@ -242,6 +252,7 @@ class MasterCalendar extends Page
                     'master' => $appointment?->master?->name,
                     'block_id' => $block?->id,
                     'block_note' => $block?->note,
+                    'block_master' => $block?->master?->name,
                 ];
             })
             ->all();
@@ -275,10 +286,27 @@ class MasterCalendar extends Page
         }
 
         return ScheduleBlock::query()
-            ->whereNull('master_id')
             ->whereDate('block_date', $this->selectedDate)
             ->where('is_full_day', true)
+            ->where(function ($query): void {
+                $query->whereNull('master_id');
+
+                if ($masterId = $this->blockMasterId()) {
+                    $query->orWhere('master_id', $masterId);
+                }
+            })
+            ->orderByRaw('CASE WHEN master_id IS NULL THEN 0 ELSE 1 END')
             ->first();
+    }
+
+    public function activeMasters()
+    {
+        return Master::active()->get();
+    }
+
+    public function blockTargetLabel(): string
+    {
+        return $this->blockMaster()?->name ?? 'всіх майстрів';
     }
 
     public function serviceLabel(?string $serviceKey): string
@@ -346,6 +374,22 @@ class MasterCalendar extends Page
         return Master::active()->first();
     }
 
+    private function blockMaster(): ?Master
+    {
+        $masterId = $this->blockMasterId();
+
+        if (! $masterId) {
+            return null;
+        }
+
+        return Master::active()->whereKey($masterId)->first();
+    }
+
+    private function blockMasterId(): ?int
+    {
+        return filled($this->blockMasterId) ? (int) $this->blockMasterId : null;
+    }
+
     private function appointmentForSlot(string $slot): ?Appointment
     {
         $slotTime = Carbon::parse(sprintf('%s %s', $this->selectedDate, $slot), config('app.timezone'));
@@ -364,10 +408,16 @@ class MasterCalendar extends Page
         $slotEnd = $slotStart->copy()->addMinutes($this->slotStepInMinutes());
 
         return ScheduleBlock::query()
+            ->with('master')
             ->whereDate('block_date', $this->selectedDate)
             ->where(function ($query): void {
                 $query->whereNull('master_id');
+
+                if ($masterId = $this->blockMasterId()) {
+                    $query->orWhere('master_id', $masterId);
+                }
             })
+            ->orderByRaw('CASE WHEN master_id IS NULL THEN 0 ELSE 1 END')
             ->get()
             ->first(function (ScheduleBlock $block) use ($slotStart, $slotEnd): bool {
                 if ($block->is_full_day) {

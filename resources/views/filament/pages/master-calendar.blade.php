@@ -8,6 +8,8 @@
         .calendar-month-controls { display: flex; align-items: center; justify-content: center; gap: 14px; }
         .calendar-nav, .calendar-save, .calendar-action { display: inline-flex; align-items: center; justify-content: center; min-width: 0; border: 1px solid #d8c0b4; border-radius: 999px; background: #fff; color: #241d1a; padding: 9px 14px; font-weight: 700; }
         .calendar-title { min-width: 180px; color: #241d1a; text-align: center; font-size: 18px; font-weight: 800; overflow-wrap: anywhere; }
+        .calendar-block-target { display: grid; grid-template-columns: minmax(180px, 320px) 1fr; gap: 12px; align-items: end; margin-top: 16px; }
+        .calendar-block-hint { color: #6b5148; font-size: 13px; line-height: 1.45; }
         .calendar-days { display: grid; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); gap: 10px; margin-top: 18px; }
         .calendar-day { display: grid; align-content: center; justify-items: center; min-width: 0; min-height: 92px; border: 1px solid #ead8cf; border-radius: 16px; background: #fff; color: #241d1a; padding: 10px 8px; text-align: center; transition: 0.16s ease; }
         .calendar-day:hover { border-color: #2f95ad; }
@@ -53,7 +55,7 @@
         @media (max-width: 760px) {
             .master-calendar { gap: 14px; }
             .calendar-panel { border-radius: 14px; padding: 14px; }
-            .calendar-toolbar, .calendar-settings-grid, .calendar-detail-row { grid-template-columns: 1fr; }
+            .calendar-toolbar, .calendar-block-target, .calendar-settings-grid, .calendar-detail-row { grid-template-columns: 1fr; }
             .calendar-month-controls { justify-content: space-between; gap: 8px; }
             .calendar-title { min-width: 0; font-size: 17px; }
             .calendar-nav { min-width: 42px; min-height: 42px; padding: 8px 12px; }
@@ -89,11 +91,26 @@
     <div class="master-calendar">
         <section class="calendar-panel">
             <div class="calendar-toolbar">
-                <strong>Календар салону: всі майстри обʼєднані в один графік</strong>
+                <strong>Календар салону: блокування можна ставити для всіх або для одного майстра</strong>
                 <div class="calendar-month-controls">
                     <button type="button" class="calendar-nav" wire:click="previousMonth">‹</button>
                     <div class="calendar-title">{{ $this->monthTitle() }}</div>
                     <button type="button" class="calendar-nav" wire:click="nextMonth">›</button>
+                </div>
+            </div>
+
+            <div class="calendar-block-target">
+                <div>
+                    <label class="calendar-label" for="block-master-id">Кого блокувати</label>
+                    <select id="block-master-id" class="calendar-input" wire:model.live="blockMasterId">
+                        <option value="">Весь салон</option>
+                        @foreach ($this->activeMasters() as $master)
+                            <option value="{{ $master->id }}">{{ $master->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="calendar-block-hint">
+                    Якщо обрати одного майстра, блокування діє тільки для нього. Інші майстри в цей день і час залишаються доступними для запису.
                 </div>
             </div>
 
@@ -118,7 +135,7 @@
 
             @if ($this->selectedDateLabel())
                 <div class="calendar-selected-label">
-                    <span>Обрана дата: {{ $this->selectedDateLabel() }}</span>
+                    <span>Обрана дата: {{ $this->selectedDateLabel() }}. Блокуємо: {{ $this->blockTargetLabel() }}</span>
                     <div class="calendar-actions">
                         @if ($block = $this->fullDayBlock())
                             <button type="button" class="calendar-action is-muted" wire:click="unblock({{ $block->id }})">
@@ -147,7 +164,7 @@
                     @elseif ($slot['status'] === 'blocked')
                         <div class="calendar-slot is-blocked">
                             <span class="calendar-slot-time">{{ $slot['time'] }}</span>
-                            <span class="calendar-slot-meta">Заблоковано</span>
+                            <span class="calendar-slot-meta">Заблоковано{{ $slot['block_master'] ? ': ' . $slot['block_master'] : ' для всіх' }}</span>
                             <div class="calendar-slot-tools">
                                 <button type="button" class="calendar-mini-action" wire:click="unblock({{ $slot['block_id'] }})">Зняти</button>
                             </div>
