@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use BackedEnum;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 
@@ -16,7 +17,42 @@ class VisualEditMode extends Page
 
     protected static ?string $title = 'Edit mode';
 
-    protected static ?int $navigationSort = 16;
+    protected static ?int $navigationSort = 999;
+
+    public string $pin = '';
+
+    public bool $isUnlocked = false;
+
+    public function mount(): void
+    {
+        $this->isUnlocked = false;
+    }
+
+    public function unlock(): void
+    {
+        if ($this->pin !== '1122') {
+            Notification::make()
+                ->title('Невірний PIN код')
+                ->danger()
+                ->send();
+
+            return;
+        }
+
+        $this->isUnlocked = true;
+        $this->pin = '';
+
+        Notification::make()
+            ->title('Edit mode відкрито')
+            ->success()
+            ->send();
+    }
+
+    public function lock(): void
+    {
+        $this->isUnlocked = false;
+        $this->pin = '';
+    }
 
     public function editUrl(): string
     {
