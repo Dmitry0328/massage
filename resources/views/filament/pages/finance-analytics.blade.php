@@ -1,17 +1,19 @@
 <x-filament-panels::page>
     <style>
-        .finance-analytics { display: grid; gap: 18px; }
-        .finance-panel { border: 1px solid #ead8cf; border-radius: 16px; background: #fffaf7; padding: 20px; }
+        .finance-analytics { display: grid; gap: 18px; max-width: 100%; color: #241d1a; color-scheme: light; }
+        .finance-analytics *, .finance-analytics *::before, .finance-analytics *::after { box-sizing: border-box; }
+        .finance-panel { max-width: 100%; overflow: hidden; border: 1px solid #ead8cf; border-radius: 16px; background: #fffaf7; color: #241d1a; padding: 20px; }
         .finance-pin { max-width: 460px; margin: 0 auto; text-align: center; }
         .finance-pin-icon { display: inline-grid; width: 54px; height: 54px; place-items: center; border-radius: 999px; background: #2f95ad; color: #fff; font-size: 24px; font-weight: 900; }
         .finance-title { margin: 12px 0 6px; color: #2b2421; font-size: 24px; font-weight: 900; }
         .finance-muted { color: #6b5148; font-size: 14px; line-height: 1.45; }
         .finance-pin-form { display: grid; gap: 10px; margin-top: 18px; }
-        .finance-input { width: 100%; border: 1px solid #e5cfc4; border-radius: 12px; background: #fff; padding: 11px 13px; font-weight: 700; }
+        .finance-input { width: 100%; min-width: 0; border: 1px solid #d8c0b4; border-radius: 12px; background: #fff; color: #241d1a; -webkit-text-fill-color: #241d1a; color-scheme: light; padding: 11px 13px; font-weight: 700; }
+        .finance-input::placeholder { color: #8d746b; -webkit-text-fill-color: #8d746b; }
         .finance-input:focus { border-color: #2f95ad; outline: 3px solid rgba(47, 149, 173, 0.15); }
         .finance-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #2f95ad; border-radius: 999px; background: #2f95ad; color: #fff; padding: 11px 16px; font-weight: 900; transition: 0.16s ease; }
         .finance-button:hover { filter: brightness(0.96); }
-        .finance-button.is-muted { border-color: #e5cfc4; background: #fff; color: #6b5148; }
+        .finance-button.is-muted { border-color: #d8c0b4; background: #fff; color: #5d463f; }
         .finance-toolbar { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; }
         .finance-toolbar-title { display: grid; gap: 4px; }
         .finance-filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; justify-content: flex-end; }
@@ -19,7 +21,7 @@
         .finance-label { color: #6b5148; font-size: 12px; font-weight: 800; }
         .finance-quick { display: flex; flex-wrap: wrap; gap: 8px; }
         .finance-stats { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; }
-        .finance-card { border: 1px solid #ead8cf; border-radius: 14px; background: #fff; padding: 15px; min-height: 112px; }
+        .finance-card { max-width: 100%; overflow: hidden; border: 1px solid #ead8cf; border-radius: 14px; background: #fff; color: #241d1a; padding: 15px; min-height: 112px; }
         .finance-card.is-blue { border-color: rgba(47, 149, 173, 0.35); background: #eefaff; }
         .finance-card.is-green { border-color: rgba(44, 143, 93, 0.28); background: #f1fff6; }
         .finance-card.is-red { border-color: rgba(211, 66, 47, 0.28); background: #fff4f2; }
@@ -49,9 +51,12 @@
         @media (max-width: 560px) {
             .finance-analytics { gap: 14px; }
             .finance-panel { border-radius: 14px; padding: 14px; }
-            .finance-title { font-size: 21px; }
+            .finance-pin { width: 100%; }
+            .finance-title { font-size: 21px; line-height: 1.18; overflow-wrap: anywhere; }
+            .finance-muted { font-size: 13px; }
             .finance-filters, .finance-quick { display: grid; grid-template-columns: 1fr; width: 100%; }
             .finance-field, .finance-button { width: 100%; }
+            .finance-input, .finance-button { min-height: 46px; }
             .finance-stats { grid-template-columns: 1fr; gap: 10px; }
             .finance-card { min-height: 0; padding: 14px; }
             .finance-card-value { font-size: 25px; }
