@@ -25,6 +25,7 @@
 
         .fi-header {
             gap: 12px !important;
+            margin-bottom: 8px !important;
         }
 
         .fi-header-heading {
@@ -78,6 +79,14 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             border-radius: var(--admin-mobile-radius);
+        }
+
+        .fi-ta-ctn {
+            margin-top: 10px !important;
+        }
+
+        .fi-ta-header-toolbar {
+            align-items: stretch !important;
         }
 
         .fi-ta-table {

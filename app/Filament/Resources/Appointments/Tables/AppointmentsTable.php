@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Appointments\Tables;
 use App\Models\Appointment;
 use App\Models\MassageService;
 use Filament\Actions\BulkActionGroup;
-use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -95,7 +94,6 @@ class AppointmentsTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                CreateAction::make(),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
