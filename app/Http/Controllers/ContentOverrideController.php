@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ContentOverride;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -12,6 +13,8 @@ class ContentOverrideController extends Controller
 {
     public function store(Request $request): JsonResponse
     {
+        abort_if(! Schema::hasTable('content_overrides'), 503, 'Таблиця редактора ще не створена. Запустіть міграції.');
+
         $data = $request->validate([
             'page_key' => ['nullable', 'string', 'max:80'],
             'selector' => ['required', 'string', 'max:1000'],
@@ -56,6 +59,8 @@ class ContentOverrideController extends Controller
 
     public function destroy(Request $request): JsonResponse
     {
+        abort_if(! Schema::hasTable('content_overrides'), 503, 'Таблиця редактора ще не створена. Запустіть міграції.');
+
         $data = $request->validate([
             'page_key' => ['nullable', 'string', 'max:80'],
             'selector' => ['required', 'string', 'max:1000'],

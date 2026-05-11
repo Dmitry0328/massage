@@ -68,4 +68,17 @@ class AdminPanelTest extends TestCase
 
         $response->assertOk();
     }
+
+    public function test_visual_edit_mode_page_opens_for_admin(): void
+    {
+        $admin = User::factory()->create([
+            'email' => 'admin@massage.local',
+        ]);
+
+        $response = $this->actingAs($admin)->get('/admin/visual-edit-mode');
+
+        $response
+            ->assertOk()
+            ->assertSee('Вхід в Edit mode');
+    }
 }

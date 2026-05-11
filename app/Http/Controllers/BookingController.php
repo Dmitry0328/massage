@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class BookingController extends Controller
 {
@@ -58,13 +59,7 @@ class BookingController extends Controller
         $serviceCards = $this->serviceCards($services);
         $priceServicesByMaster = $this->priceServicesByMaster($services);
         $maxDate = $this->maxBookingDate((int) $settings->max_advance_months);
-        $contentOverrides = Schema::hasTable('content_overrides')
-            ? ContentOverride::query()
-                ->forPage('home')
-                ->get()
-                ->map(fn (ContentOverride $override): array => $override->toEditorArray())
-                ->values()
-            : collect();
+        $contentOverrides = $this->contentOverridesForPage('home');
 
         return view('welcome', [
             'masters' => $activeMasters,
@@ -91,6 +86,23 @@ class BookingController extends Controller
             'contentOverrides' => $contentOverrides,
             'canEditContent' => auth()->check() && request()->boolean('edit_mode'),
         ]);
+    }
+
+    private function contentOverridesForPage(string $pageKey)
+    {
+        try {
+            if (! Schema::hasTable('content_overrides')) {
+                return collect();
+            }
+
+            return ContentOverride::query()
+                ->forPage($pageKey)
+                ->get()
+                ->map(fn (ContentOverride $override): array => $override->toEditorArray())
+                ->values();
+        } catch (Throwable) {
+            return collect();
+        }
     }
 
     public function calendar(Request $request): JsonResponse
