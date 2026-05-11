@@ -19,7 +19,7 @@ class FinanceAnalytics extends Page
 {
     protected string $view = 'filament.pages.finance-analytics';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartBar;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
     protected static ?string $navigationLabel = 'Аналітика фінансів';
 
